@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: unless-stopped
+    env_file:
+    - .env
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    env_file:
+    - .env
+  authentication:
+    build:
+      context: ./services/authentication
+    container_name: authentication
+    restart: unless-stopped
+    image: authentication
+    env_file:
+    - .env
+    volumes:
+     - ./services/authentication/app:/app
+    ports:
+    - 8000:8000
+    depends_on:
+    - postgres
+  user-management:
+    build:
+      context: ./services/user-management
+    container_name: user-management
+    restart: unless-stopped
+    image: user-management
+    env_file:
+    - .env
+    volumes:
+     - ./services/authentication/app:/app
+    ports:
+    - 8001:8000
+    depends_on:
+    - postgres
+
+volumes:
+  postgres_data:
