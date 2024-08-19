@@ -7,12 +7,24 @@ services:
     - .env
     volumes:
     - postgres_data:/var/lib/postgresql/data
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_URI=postgres:5432/postgres?sslmode=disable
+      - DATA_SOURCE_USER=postgres
+      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
   redis:
     image: redis:alpine
     container_name: redis
     restart: unless-stopped
-    env_file:
-    - .env
+  redis-exporter:
+    image: oliver006/redis_exporter:alpine
+    container_name: redis-exporter
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://redis:6379
   authentication:
     build:
       context: ./services/authentication
@@ -36,11 +48,37 @@ services:
     env_file:
     - .env
     volumes:
-     - ./services/authentication/app:/app
+     - ./services/user-management/app:/app
     ports:
     - 8001:8000
     depends_on:
     - postgres
-
+  grafana:
+    image: grafana/grafana:11.1.4
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+    - ./services/grafana:/var/lib/grafana
+    ports:
+    - 3000:3000
+  prometheus:
+    image: prom/prometheus:v2.53.2
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+    - prometheus_data:/prometheus
+    - ./services/prometheus/:/etc/prometheus/
+    ports:
+    - 9090:9090
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  alert-manager:
+    image: prom/alertmanager:v0.27.0
+    container_name: alert-manager
+    restart: unless-stopped
+    volumes:
+      - ./services/alertmanager/config.yml:/etc/alertmanager/alertmanager.yml
 volumes:
   postgres_data:
+  prometheus_data:
+  
