@@ -1,0 +1,23 @@
+{% csrf_token %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Lobby</title>
+</head>
+<body>
+<h1>Pong</h1>
+<label>
+    <input type="radio" name="players" value="2" checked> 2 Players
+</label>
+<label>
+    <input type="radio" name="players" value="4"> 4 Players
+</label>
+<button onclick="create()">Create a lobby</button>
+<hr class="solid">
+<input id="lobbyId" placeholder="Lobby ID"></input>
+<button onclick="join()">Join</button>
+</body>
+<script src="{% static 'lobby/index.js' %}"></script>
+</html>
