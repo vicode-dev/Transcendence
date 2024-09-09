@@ -7,10 +7,13 @@ all:
 clean:
 	docker compose down
 
-# fclean: clean
-# 	docker system prune -af
-# 	docker volume prune -f
+fclean: clean
+	docker system prune -af
+	docker volume prune -f
 
 re: fclean all
 
-.PHONY: all clean fclean re
+certificate: clean
+	docker run -it -p 80:80 -v ./services/nginx/certificates:/etc/letsencrypt/archive --rm --name certbot certbot/certbot certonly --standalone -d $(shell grep '^DOMAIN_NAME=' .env | cut -d '=' -f2-)
+
+.PHONY: all clean fclean re certificate

@@ -1,4 +1,5 @@
 services:
+#Postgresql (SQL database software) used for storing app data
   postgres:
     image: postgres:alpine
     container_name: postgres
@@ -7,52 +8,57 @@ services:
     - .env
     volumes:
     - postgres_data:/var/lib/postgresql/data
-  postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter
-    container_name: postgres-exporter
-    restart: unless-stopped
-    environment:
-      - DATA_SOURCE_URI=postgres:5432/postgres?sslmode=disable
-      - DATA_SOURCE_USER=postgres
-      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
+#Redis (in memory database software) used for caching Django dynamic page
   redis:
     image: redis:alpine
     container_name: redis
     restart: unless-stopped
-  redis-exporter:
-    image: oliver006/redis_exporter:alpine
-    container_name: redis-exporter
-    restart: unless-stopped
-    environment:
-      - REDIS_ADDR=redis://redis:6379
+# Django app
   authentication:
     build:
       context: ./services/authentication
     container_name: authentication
     restart: unless-stopped
     image: authentication
-    env_file:
-    - .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
      - ./services/authentication/app:/app
     ports:
     - 8000:8000
     depends_on:
     - postgres
+# Django app
   user-management:
     build:
       context: ./services/user-management
     container_name: user-management
     restart: unless-stopped
     image: user-management
-    env_file:
-    - .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
      - ./services/user-management/app:/app
     ports:
     - 8001:8000
     depends_on:
     - postgres
+# Game 1
+  game1-serv:
+    build:
+      context: ./services/game1-serv
+    container_name: game1-serv
+    restart: unless-stopped
+    image: game1-serv
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+     - ./services/game1-serv/app:/app
+    ports:
+    - 8002:8000
+    depends_on:
+    - postgres
+#Grafana (Dashboard web tools) used for visualition of Prometheus data
   grafana:
     image: grafana/grafana:11.1.4
     container_name: grafana
@@ -61,6 +67,9 @@ services:
     - ./services/grafana:/var/lib/grafana
     ports:
     - 3000:3000
+    depends_on:
+      - prometheus
+#Prometheus (monitoring toolkit)
   prometheus:
     image: prom/prometheus:v2.53.2
     container_name: prometheus
@@ -72,13 +81,104 @@ services:
     - 9090:9090
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      - alert-manager
+#Prometheus alert-manager(alerting toolkit for prometheus)
   alert-manager:
     image: prom/alertmanager:v0.27.0
     container_name: alert-manager
     restart: unless-stopped
     volumes:
       - ./services/alertmanager/config.yml:/etc/alertmanager/alertmanager.yml
+#Prometheus exporter for postgresql
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_URI=postgres:5432/postgres?sslmode=disable
+      - DATA_SOURCE_USER=postgres
+      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+#Prometheus exporter for redis
+  redis-exporter:
+    image: oliver006/redis_exporter:alpine
+    container_name: redis-exporter
+    restart: unless-stopped
+    environment:
+      REDIS_ADDR: redis://redis:6379
+    depends_on:
+      - redis
+#Prometheus exporter for elasticsearch
+  elasticsearch-exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.7.0
+    container_name: elasticsearch-exporter
+    command:
+     - '--es.uri=http://elastic:${ELASTIC_PASSWORD}@elasticsearch:9200'
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+#Elasticsearch (search engine) store logs data
+  elasticsearch:
+    image: elasticsearch:8.15.0
+    container_name: elasticsearch
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enrollment.enabled: false
+      xpack.security.transport.ssl.enabled: false
+      xpack.security.http.ssl.enabled: false
+      xpack.security.enabled: false
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    mem_limit: 4g
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elk
+  logstash:
+    image: logstash:8.15.0
+    container_name: logstash
+    restart: unless-stopped
+    volumes:
+      - ./services/logstash/:/etc/logstash/conf.d/
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - elk
+      - default
+  kibana:
+    image: kibana:8.15.0
+    container_name: kibana
+    restart: unless-stopped
+    # volumes:
+    #   - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    environment:
+      # SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+    networks:
+      - elk
+#Nginx (Proxy server) for all external acces
+  nginx:
+          container_name: nginx
+          restart: unless-stopped
+          image: nginx:stable-alpine3.20
+          ports:
+              - 80:80
+              - 443:443
+          volumes:
+              - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+              - ./services/nginx/certificates/:/etc/certificates/
+          environment:
+            DOMAIN_NAME: ${DOMAIN_NAME}
 volumes:
   postgres_data:
   prometheus_data:
-  
+  elasticsearch_data:
+networks:
+  elk:

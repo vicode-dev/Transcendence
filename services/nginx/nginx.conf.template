@@ -1,0 +1,25 @@
+
+
+    # always redirect to https
+    server {
+        listen 80;
+
+        server_name _;
+
+        return 301 https://$host$request_uri;
+    }
+
+    server {
+        listen 443 ssl;
+        # use the certificates
+        ssl_certificate     /etc/certificates/$DOMAIN_NAME/fullchain1.pem;
+        ssl_certificate_key /etc/certificates/$DOMAIN_NAME/privkey1.pem;
+        server_name $DOMAIN_NAME;
+        root /var/www/html;
+        index index.php index.html index.htm;
+
+
+        location / {
+            proxy_pass http://user-management:8000/;
+        }
+    }
