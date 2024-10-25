@@ -17,8 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+
 urlpatterns = [
     path("", views.index, name="index"),
+    path("setup/", views.setupContract, name="Setup"),
+    path("number", views.getGameNumber, name="number"),
+    path("add", views.add, name="add"),
+	path('games/<int:id>/', views.getGameResult, name="game"),
+    path('show/<str:title>/', views.show, name="show"),
 ]
 # urlpatterns = [
 #     path('admin/', admin.site.urls),

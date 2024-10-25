@@ -39,10 +39,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
      - ./services/user-management/app:/app
+     - ./services/blockchain/artifacts:/artifacts
     ports:
     - 8001:8000
     depends_on:
     - postgres
+    - hardhat
 # Game 1
   game1-serv:
     build:
@@ -58,6 +60,15 @@ services:
     - 8002:8000
     depends_on:
     - postgres
+#Ethereum Blockchain emulator
+  hardhat:
+    build:
+      context: ./services/blockchain
+    image: hardhat
+    container_name: hardhat
+    restart: unless-stopped
+    volumes:
+      - ./services/blockchain/artifacts:/app/artifacts
 #Grafana (Dashboard web tools) used for visualition of Prometheus data
   grafana:
     image: grafana/grafana:11.1.4
@@ -165,17 +176,17 @@ services:
       - elk
 #Nginx (Proxy server) for all external acces
   nginx:
-          container_name: nginx
-          restart: unless-stopped
-          image: nginx:stable-alpine3.20
-          ports:
-              - 80:80
-              - 443:443
-          volumes:
-              - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
-              - ./services/nginx/certificates/:/etc/certificates/
-          environment:
-            DOMAIN_NAME: ${DOMAIN_NAME}
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx:stable-alpine3.20
+    ports:
+        - 80:80
+        - 443:443
+    volumes:
+        - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+        - ./services/nginx/certificates/:/etc/certificates/
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
 volumes:
   postgres_data:
   prometheus_data:
