@@ -66,10 +66,4 @@ from app.views.register import *
 # 	if request.method == "GET":
 # 		return HttpResponse("HTML TEST GET")
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def register(request):
-	if request.method == "GET":
-		return get_register()
-	if request.method == "POST":
-		return post_register()
+
