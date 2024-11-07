@@ -2,40 +2,39 @@ from pong.GameClass import Player, Ball, GameData
 import math, curses, time
 SIZE = 9
 PADDLE_SIZE = 1.5
+PADDLE_WIDTH = 0.25
 BALL_SIZE = 0.25
 TICK_RATE = 1 / 20
+
+def hitPlayer(px, py, x, y):
+    if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE):
+        return True
+    return False
+
+def ballHitPlayer (ball, startAngle, diff, ballPos):
+    ball._angle = (360 + startAngle + (diff / PADDLE_SIZE) * ballPos) % 360
 
 def ballMovement(gameData, ball, p1, p2):
     x = ball._x + math.cos(math.radians(ball._angle)) / 8
     y = ball._y + math.sin(math.radians(ball._angle)) / 8
     
-    if (p1._y <= y <= p1._y + PADDLE_SIZE and x <= p1._x):
-        middleLength = PADDLE_SIZE / 2
-        middle = p1._y + middleLength
-        if (y < middle):
-            ball._angle = 360 - ((80 / middleLength) * (middleLength - (y - p1._y)))
-        elif (y > middle):
-            ball._angle = (80 / middleLength) * (y - middle)
-        else:
-            ball._angle = 0
+    if hitPlayer(p1._x, p1._y, x, y) == True:
+        ballHitPlayer(ball, 280, 160, y - p1._y)
 
-    if (p2._y <= y <= p2._y + PADDLE_SIZE and x >= p2._x):
-        middleLength = PADDLE_SIZE / 2
-        middle = p2._y + middleLength
-        if (y < middle):
-            ball._angle = 260 - ((80 / middleLength) * ((y - p2._y)))
-        elif (y > middle):
-            ball._angle = 100 + ((80 / middleLength) * (middleLength - y + middle))
-        else:
-            ball._angle = 180
+    if hitPlayer(p2._x, p2._y, x, y) == True:
+        ballHitPlayer(ball, 260, -160, y - p2._y)
+
     x = ball._x + math.cos(math.radians(ball._angle)) / 8
     y = ball._y + math.sin(math.radians(ball._angle)) / 8
-    if (0 < x < SIZE): 
+    if (BALL_SIZE < x < SIZE - BALL_SIZE): 
         ball._x = x 
-    if (0 < y < SIZE):
+    if (BALL_SIZE < y < SIZE - BALL_SIZE):
         ball._y = y
-    if (x >= SIZE or x <= 0):
-        if (x <= 0):
+    if (x + BALL_SIZE >= SIZE or x - BALL_SIZE <= 0):
+        if (x - BALL_SIZE <= 0):
             gameData._score[1] += 1
             ball._angle = 0
         else:
@@ -75,7 +74,7 @@ def gameLoop2P(win, stdscr, pad, scale):
         stdscr.erase()
         stdscr.border()
         key = stdscr.getch()
-        if key == ord('q'):
+        if key == ord('q') or key == 27:
             break
         elif key == curses.KEY_RESIZE:
             win.erase()
@@ -85,7 +84,7 @@ def gameLoop2P(win, stdscr, pad, scale):
             scale = int(scale / 10)
             length = (SIZE * scale) + 2
             stdscr.resize(length, length)
-            stdscr.mvwin(0, int(width / 2 - length / 2))
+            stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
         elif key == curses.KEY_UP and p2._y > 0:
             p2._y -= 0.25
@@ -99,6 +98,16 @@ def gameLoop2P(win, stdscr, pad, scale):
         drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
         drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
+
+        # if (ball._x - BALL_SIZE > 0):
+        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x - BALL_SIZE) * scale) + 1, '.')
+        # if (ball._y - BALL_SIZE > 0):
+        #     stdscr.addch(int((ball._y - BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
+        # if (ball._x + BALL_SIZE < SIZE):
+        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x + BALL_SIZE) * scale) + 1, '.')
+        # if (ball._y + BALL_SIZE < SIZE):
+        #     stdscr.addch(int((ball._y + BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
+
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, SIZE * scale)
         stdscr.refresh()

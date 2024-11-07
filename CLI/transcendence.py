@@ -3,6 +3,7 @@ from curses import wrapper
 from menu.Menu import Menu
 from pong.twoPlayers import gameLoop2P
 from pong.fourPlayers import gameLoop4P
+from connect4.connect4 import gameConnectLoop
 from network.login import login
 from network.config import settings
 SIZE= 9
@@ -15,6 +16,7 @@ def cursesInit():
     curses.start_color()
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_CYAN)
+    curses.init_pair(3, 8, curses.COLOR_BLACK)
 
 def launchGame2P(menu):
     height, width = menu.win.getmaxyx()
@@ -26,14 +28,14 @@ def launchGame2P(menu):
     menu.win.refresh()
     gameWin = curses.newwin(length, length, 1, int(width / 2 - length / 2))
     pad = curses.newpad(1, width)
-    try:
-        gameLoop2P(menu.win, gameWin, pad, scale)
-    except:
-        menu.win.erase()
-        menu.win.addstr(0, 0, "Game crashed", )
-        menu.win.refresh()
-        curses.napms(500)
-        menu.win.getch()
+    # try:
+    gameLoop2P(menu.win, gameWin, pad, scale)
+    # except:
+    #     menu.win.erase()
+    #     menu.win.addstr(0, 0, "Game crashed", )
+    #     menu.win.refresh()
+    #     curses.napms(500)
+    #     menu.win.getch()
     menu.skip = True
     return
 
@@ -47,19 +49,31 @@ def launchGame4P(menu):
     menu.win.refresh()
     gameWin = curses.newwin(length, length, 1, int(width / 2 - length / 2))
     pad = curses.newpad(1, width)
-    try:
-        gameLoop4P(menu.win, gameWin, pad, scale)
-    except:
-        menu.win.erase()
-        menu.win.addstr(0, 0, "Game crashed", )
-        menu.win.refresh()
-        curses.napms(500)
-        menu.win.getch()
+    # try:
+    gameLoop4P(menu.win, gameWin, pad, scale)
+    # except:
+    #     menu.win.erase()
+    #     menu.win.addstr(0, 0, "Game crashed", )
+    #     menu.win.refresh()
+    #     curses.napms(500)
+    #     menu.win.getch()
     menu.skip = True
     return
 
-def NewGame(mainmenu):
+def launchConnectGame(menu):
+    height, width = menu.win.getmaxyx()
+    menu.win.erase()
+    menu.win.refresh()
+    gameWin = curses.newwin(14, 23, 2, int(width / 2 - 23 / 2))
+    pad = curses.newpad(1, width)
+    gameConnectLoop(menu.win, gameWin, pad)
+    
+def pongNewGame(mainmenu):
     menu = Menu(mainmenu.win, "New Game:", ["2P", "4P"], [launchGame2P, launchGame4P])
+    menu.display()
+
+def NewGame(mainmenu):
+    menu = Menu(mainmenu.win, "New Game:", ["Pong", "Connect 4"], [pongNewGame, launchConnectGame])
     menu.display()
 
 def join(Menu):
@@ -77,7 +91,7 @@ def main(stdscr):
     #mainMenu Part
     menuTxt = ["New Game", "Join Game", "Settings", "Logout", "Quit"]
     menuFunc = [NewGame, join, settings, logout, quit]
-    mainMenu = Menu(stdscr, "Pong CLI 🏓!", menuTxt, menuFunc)
+    mainMenu = Menu(stdscr, "🔴 Transcendence CLI 🏓!", menuTxt, menuFunc)
     mainMenu.display()
 
 

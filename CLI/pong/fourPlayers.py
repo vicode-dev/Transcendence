@@ -6,50 +6,30 @@ PADDLE_WIDTH = 0.25
 BALL_SIZE = 0.25
 TICK_RATE = 1 / 20
 
+def hitPlayer(px, py, x, y):
+    if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+        or (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE):
+        return True
+    return False
+
+def ballHitPlayer (ball, startAngle, diff, ballPos):
+    ball._angle = (360 + startAngle + (diff / PADDLE_SIZE) * ballPos) % 360
+
 def ballMovement(gameData, ball, p1, p2, p3, p4):
     x = ball._x + math.cos(math.radians(ball._angle)) / 8
     y = ball._y + math.sin(math.radians(ball._angle)) / 8
     
-    if (p1._y <= y <= p1._y + PADDLE_SIZE and x <= p1._x):
-        middleLength = PADDLE_SIZE / 2
-        middle = p1._y + middleLength
-        if (y < middle):
-            ball._angle = 270 + ((90 / middleLength) * (y - p1._y))
-        elif (y > middle):
-            ball._angle = (90 / middleLength) * (y - (middle))
-        else:
-            ball._angle = 0
-
-    elif (p2._y <= y <= p2._y + PADDLE_SIZE and x >= p2._x):
-        middleLength = PADDLE_SIZE / 2
-        middle = p2._y + middleLength
-        if (y < middle):
-            ball._angle = 270 - ((90 / middleLength) * ((y - p2._y)))
-        elif (y > middle):
-            ball._angle = 180 - ((90 / middleLength) * (y - middle))
-        else:
-            ball._angle = 180
-
-    elif (p3._x <= x <= p3._x + PADDLE_SIZE and y <= p3._y):
-        middleLength = PADDLE_SIZE / 2
-        middle = p3._x + middleLength
-        if (x < middle):
-            ball._angle = 180 - ((90 / middleLength) * ((x - p3._x)))
-        elif (x > middle):
-            ball._angle = 90 - ((90 / middleLength) * (x - middle))
-        else:
-            ball._angle = 90
-
-    elif (p4._x <= x <= p4._x + PADDLE_SIZE and y >= p4._y):
-        middleLength = PADDLE_SIZE / 2
-        middle = p4._x + middleLength
-        if (x < middle):
-            ball._angle = 180 + ((90 / middleLength) * ((x - p4._x)))
-        elif (x > middle):
-            ball._angle = 270 + (90 / middleLength) * (x - middle)
-        else:
-            ball._angle = 270
-
+    if hitPlayer(p1._x, p1._y, x, y) == True:
+        ballHitPlayer(ball, 280, 160, y - p1._y)
+    elif hitPlayer(p2._x, p2._y, x, y) == True:
+        ballHitPlayer(ball, 260, -160, y - p2._y)
+    elif hitPlayer(p3._y, p3._x, y, x) == True:
+        ballHitPlayer(ball, 170, -160, x - p3._x)
+    elif hitPlayer(p4._y, p4._x, y, x) == True:
+        ballHitPlayer(ball, 190, 160, x - p4._x)
+    
     x = ball._x + math.cos(math.radians(ball._angle)) / 8
     y = ball._y + math.sin(math.radians(ball._angle)) / 8
     if (0 < x < SIZE): 
@@ -85,7 +65,7 @@ def drawHorizontalPaddle(stdscr, scale, x, y):
         stdscr.addch(y, x + i, '-')
 
 def drawBall(stdscr, ball_x, ball_y):
-    stdscr.addch(ball_y, ball_x, ' ', '੦') #curses.color_pair(1)
+    stdscr.addch(ball_y, ball_x, '੦') #curses.color_pair(1)
 
 def drawScore(pad, gameData):
     pad.erase()
@@ -104,7 +84,6 @@ def gameLoop4P(win, stdscr, pad, scale):
     stdscr.timeout(100)
     stdscr.nodelay(True)
     stdscr.border()
-    
     while True:
         startTime = time.time()
         stdscr.erase()
@@ -120,7 +99,7 @@ def gameLoop4P(win, stdscr, pad, scale):
             scale = int(scale / 10)
             length = (SIZE * scale) + 2
             stdscr.resize(length, length)
-            stdscr.mvwin(0, int(width / 2 - length / 2))
+            stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
         elif key == ord('w') and p1._y > PADDLE_WIDTH:
             p1._y -= 0.25
@@ -145,7 +124,7 @@ def gameLoop4P(win, stdscr, pad, scale):
         drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
         drawScore(pad, gameData)
-        pad.refresh(0, 0, 0, 0, 1, win.getmaxyx()[1])
+        pad.refresh(0, 0, 0, 0, 1, SIZE * scale)
         stdscr.refresh()
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
