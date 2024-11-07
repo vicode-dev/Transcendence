@@ -14,18 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("setup/", views.setupContract, name="Setup"),
-    path("number", views.getGameNumber, name="number"),
-    path("add", views.add, name="add"),
-	path('games/<int:id>/', views.getGameResult, name="game"),
-    path('show/<str:title>/', views.show, name="show"),
+    path("", views.index),
+    path("api/games/setup/", views.setupContract),
+    path("api/games/", views.getGamesNumber),
+    path("api/add", views.add),
+	path('api/games/<int:id>/', views.getGameById),
+    path('api/tournament/<int:id>/', views.getTournamentById),
+    path('api/player/<int:playerId>/', views.getPlayerById),
+    path('api/player/<int:playerId>/games/', views.getPlayerGame),
+    path('api/player/<int:playerId>/avatar/', views.playerAvatar),
+    path('api/player/<int:playerId>/username/', views.getPlayerUsername),
+    path('api/player/<int:playerId>/friends/', views.getPlayerFriends),
+    path('api/player/add', views.addplayer),
+    path('profile/<int:playerId>/', views.profile),
+    path('settings/', views.settings),
+    path('login-temp/', views.login)
 ]
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-# ]

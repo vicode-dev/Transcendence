@@ -1,0 +1,24 @@
+<div>
+    <div class="preview">
+        <p>Current Profile Picture:</p>
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Current Profile Picture">
+        {% else %}
+            <p>No profile picture available</p>
+        {% endif %}
+    </div>
+
+    <!-- Form Section -->
+    <div class="upload-section">
+        <form action="/api/player/{{ playerId }}/avatar" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Profile Picture Field -->
+            <label for="id_profile_picture">Select new picture:</label>
+            <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*" required>
+            
+            <!-- Submit Button -->
+            <button type="submit">Upload Picture</button>
+        </form>
+    </div>
+</div>

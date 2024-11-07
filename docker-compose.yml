@@ -23,7 +23,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-     - ./services/authentication/app:/app
+     - ./services/authentication/auth:/app
     ports:
     - 8000:8000
     depends_on:
@@ -39,6 +39,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
      - ./services/user-management/app:/app
+     - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     ports:
     - 8001:8000

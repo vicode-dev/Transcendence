@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</hed>
+<body>
+    <h1>{{ user.username }}</h1>
+    <img
+  class="fit-picture"
+  src="/api/player/{{ user.playerId }}/avatar"
+  alt="User profile picture" />
+    <h2>Friends</h2>
+    <ul>
+        {% for friend in friends %}
+        <li><a href={{ friend.url }}>{{ friend.username }}</a></li>
+        {% endfor %}
+    </ul>
+    <h2>Game History</h2>
+    <ul>
+        {% for game in games %}
+        <li>
+            <h3>{{ game.type|yesno:"Connect 4,Pong" }}</h3>
+            {% for Id in game.playerIds %}
+            <a href={{ Id.url }}>{{ Id.username }}</a>
+            <p>Score: {{ Id.score }}</p>
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
