@@ -1,0 +1,9 @@
+.Piece{
+    animation: 0.5s cubic-bezier(1, 0, 1.0, 1.0) 0s fall
+}
+
+@keyframes fall {
+    from {
+        cy: 0;
+    }
+}
