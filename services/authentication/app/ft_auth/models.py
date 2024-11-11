@@ -1,20 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-class Book(models.Model):
-	title = models.CharField(max_length=100)
-	author = models.CharField(max_length=100)
-	published_date = models.DateField()
+class User(models.Model):
+	id = models.AutoField(primary_key=True)  
+	login = models.CharField(max_length=32)
+	first_name = models.CharField(max_length=100)
+	last_name = models.CharField(max_length=100)
+	ft_picture = models.CharField(max_length=100)#"https://cdn.intra.42.fr/users/be42245c79dd3e8eb3407c5df494d718/rbarbiot.jpg"
+	ft_id = models.IntegerField()
 
 	def __str__(self):
 		return self.title
-		
-class UserTest(models.Model):
-	user = models.CharField(max_length=20)
-	pwd = models.CharField(max_length=20)
-
-	def __str__(self):
-		return self.user
 
 # class User(models.User):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

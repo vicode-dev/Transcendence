@@ -3,3 +3,4 @@ django-environ
 redis
 psycopg[binary]
 requests
+PyJWT
