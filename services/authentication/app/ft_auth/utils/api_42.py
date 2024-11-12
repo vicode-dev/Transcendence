@@ -1,5 +1,4 @@
 import requests
-from ft_auth.utils.token import generate_jwt
 
 def get_42_user_access(code):
 	url = "https://api.intra.42.fr/oauth/token"
@@ -18,9 +17,7 @@ def get_42_user_access(code):
 
 	response = requests.post(url, json=data)#, headers=headers)
 	response.raise_for_status()
-	# jwt = generate_jwt(response.json())
-	
-	# request.set_cookie("session", jwt)
+
 	return response.json()
 
 def get_42_user(access_token):
@@ -31,5 +28,4 @@ def get_42_user(access_token):
     }
 
 	response = requests.get(url, headers=headers)
-	print(response.text)
 	return response.json()

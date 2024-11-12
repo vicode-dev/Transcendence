@@ -15,9 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path, include
+from django.urls import path
 from ft_auth.views.oauth2 import login_with_42
-from ft_auth.views.routes import register, login, profil
+from ft_auth.views.routes import profil
 
 # from .views import book_list, book_detail, book_get, html_page, html
 

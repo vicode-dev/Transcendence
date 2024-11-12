@@ -7,10 +7,18 @@ class User(models.Model):
 	last_name = models.CharField(max_length=100)
 	ft_picture = models.CharField(max_length=100)#"https://cdn.intra.42.fr/users/be42245c79dd3e8eb3407c5df494d718/rbarbiot.jpg"
 	ft_id = models.IntegerField()
-
+	#token = models.CharField(max_length=100)
 	def __str__(self):
-		return self.title
-
+		return self.login
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"login": self.login,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "ft_picture": self.ft_picture,
+            "ft_id": self.ft_id,
+        }
 # class User(models.User):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
