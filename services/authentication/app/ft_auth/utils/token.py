@@ -1,7 +1,8 @@
 from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
-import datetime
+from datetime import datetime, timezone, timedelta
+from os import environ
 
-SECRET_KEY = "TMP_SECRET_KEY_1234"
+from ft_auth.utils.api_users import get_user
 
 ########################################################
 ###                    Encode                        ###
@@ -15,18 +16,19 @@ def encode_jwt(data):
 	payload = {
 		"id": data["id"],
 		"iat":
-        	datetime.datetime.now(datetime.timezone.utc),
+			datetime.now(timezone.utc),
 		"exp":
-        	(datetime.datetime.now(datetime.timezone.utc)
-        	+ datetime.timedelta(minutes=1))
+			(datetime.now(timezone.utc)
+			+ timedelta(hours=1)),
+		"role": get_user(data["id"], target="role")["role"]
 	}
 
-	jwt_token = encode(payload, SECRET_KEY, algorithm="HS256", headers=header)
+	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
 	return jwt_token
 
 def decode_jwt(token):
 	try:
-		payload = decode(token, SECRET_KEY, algorithms=["HS256"])
+		payload = decode(token, environ['JWT_SECRET_KEY'], algorithms=["HS256"])
 		
 		return payload
 	except ExpiredSignatureError:
@@ -41,14 +43,17 @@ def decode_jwt(token):
 def save_jwt(response, token):
 	response.set_cookie("session", token)
 
+def delete_jwt(response):
+	response.delete_cookie("session")
+
 def get_jwt(request):
 	return request.COOKIES.get("session")
 
 def get_jwt_data(request):
-    token = get_jwt(request)
-    return decode_jwt(token)
+	token = get_jwt(request)
+	return decode_jwt(token)
 
 def generate_jwt(response, data):
-    token = encode_jwt(data)
-    save_jwt(response, token)
-    return (token);
+	token = encode_jwt(data)
+	save_jwt(response, token)
+	return (token);

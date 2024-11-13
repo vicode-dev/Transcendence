@@ -17,24 +17,12 @@ Including another URLconf
 
 from django.urls import path
 from ft_auth.views.oauth2 import login_with_42
-from ft_auth.views.routes import profil
-
-# from .views import book_list, book_detail, book_get, html_page, html
+from ft_auth.views.routes import profil, login, register
 
 urlpatterns = [
-    #   path('', include("django.contrib.auth.urls")),
-	# path('login/', login),
-	# path('register/', register),
-    path('profil', profil),
-    path('42-oauth2', login_with_42)
-
-    # path('books/', book_list, name='book_list'),
-    # path('books/<int:pk>/', book_detail, name='book_detail'),
-	# path('book_get/<str:user_id>/', book_get, name="book_get"),
-	# path('book_html/', html_page, name="html_page"),
-	# path('book_html/html', html, name="html"),
+	#   path('', include("django.contrib.auth.urls")),
+	path('login/', login),
+	path('register/', register),
+	path('profil', profil),
+	path('42-oauth2', login_with_42)
 ]
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-# ]

@@ -2,12 +2,12 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import requests
-from ft_auth.utils.token import generate_jwt
 
+from ft_auth.utils.token import generate_jwt
 from ft_auth.utils.api_42 import \
 	get_42_user_access, get_42_user
 from ft_auth.utils.user import \
-	get_user_id_by_42_id, get_user_by_42_id, create_42_user
+	get_user_by_42_id, create_42_user
 
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -18,14 +18,13 @@ def login_with_42(request):
 
 	try:
 		user_access = get_42_user_access(code)
-		
 		user_42_data = get_42_user(user_access["access_token"])
 		# print(user_access["access_token"])
 		user = get_user_by_42_id(user_42_data["id"])
 		if user == None:
 			user = create_42_user(user_42_data)
 		print(user.to_dict())
-		response = HttpResponse(user)
+		response = HttpResponseRedirect("http://localhost:8000/profil")
 		generate_jwt(response, user.to_dict())
 		return response
 
