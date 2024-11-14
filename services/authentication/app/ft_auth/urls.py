@@ -17,11 +17,13 @@ Including another URLconf
 
 from django.urls import path
 from ft_auth.views.oauth2 import login_with_42
-from ft_auth.views.routes import profil, login, register
+from ft_auth.views.routes import \
+    profil, login, logout, register
 
 urlpatterns = [
 	#   path('', include("django.contrib.auth.urls")),
 	path('login/', login),
+	path('logout/', logout),
 	path('register/', register),
 	path('profil', profil),
 	path('42-oauth2', login_with_42)

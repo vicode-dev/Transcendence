@@ -56,4 +56,4 @@ def get_jwt_data(request):
 def generate_jwt(response, data):
 	token = encode_jwt(data)
 	save_jwt(response, token)
-	return (token);
+	return (token)

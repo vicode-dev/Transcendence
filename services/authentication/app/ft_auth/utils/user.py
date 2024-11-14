@@ -1,6 +1,7 @@
 from hashlib import md5
 from os import environ
 from ft_auth.models import User
+from ft_auth.utils.api_users import create_user
 
 ########################################################
 ###                    Hash                          ###
@@ -18,8 +19,8 @@ def hash_password(password):
 
 def user_login(login, password):
 	try:
-		user = User.objects.get(
-	  		login=login, password=hash_password(password))
+		user = User.objects.filter(
+	  		login=login, password=hash_password(password)).first()
 		return user
 	except User.DoesNotExist:
 		return None
@@ -53,7 +54,7 @@ def get_user_by_login(login):
 
 def get_user_by_login(login):
 	try:
-		user = User.objects.get(login=login)
+		user = User.objects.filter(login=login).first()
 		return user
 	except User.DoesNotExist:
 		return None
@@ -97,14 +98,23 @@ def create_42_user(user_42):
 		ft_picture = user_42["image"]["link"]
 	)
 	user.save()
-	return (get_user_by_42_id(user_42["id"]))
+	user = get_user_by_42_id(user_42["id"])
+	create_user(user.id, user_42["first_name"], user_42["last_name"])
+	return user
 
 def create_classic_user(login, first_name, last_name, password):
+	# user = User.objects.filter(login=login).first()
+	# if User is not None:
+	# 	return user
 	user = User(
 		login=login,
-		first_name = first_name,
-		last_name = last_name
+		password = hash_password(password)
 	)
 	user.save()
-	return (get_user_by_login(login))
+	user = get_user_by_login(login)
+	create_user(user.id, first_name, last_name)
+	return user
 
+def delete_user(login):
+	user = get_user_by_login(login)
+	user.delete()

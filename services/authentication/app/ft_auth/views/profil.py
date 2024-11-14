@@ -17,7 +17,8 @@ def profil(request):
 	if user == None:
 		return HttpResponseForbidden()
 	context = {
-		"user_name": f"{user.first_name} {user.last_name}",
+		"login": f"{user.login}",
+		"id": f"{user.id}",
 		"role" : get_user(user.id, target="role")["role"]
 	}
 	
