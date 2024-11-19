@@ -9,14 +9,11 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ft_auth.utils.token import delete_jwt
-from ft_auth.utils.user import delete_user, user_login
-
-
 ### Utils ###
 
-from ft_auth.utils.user import \
-	get_user_by_42_id, create_42_user, create_classic_user
+from ft_auth.utils.token import \
+    delete_jwt, get_jwt_data
+from ft_auth.utils.user import user_login
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
@@ -27,17 +24,46 @@ def login(request):
 		return post_login(request)
 
 def get_login(request):
-	return render(request, "/app/ft_auth/templates/login.html")
+	data = get_jwt_data(request)
+	if "error" in data:
+		return render(request, "/app/ft_auth/templates/login.html")
+	return HttpResponseRedirect("/profil")
 	return JsonResponse(get_jwt_data(request))
 
 def post_login(request):
-	if request.POST.get('password') is None:
-		return HttpResponse("I need your password");
-	if request.POST.get('login') is None:
-		return HttpResponse("I need your login");
-	user = user_login(request.POST.get('login'), request.POST.get('password'))
+	login = request.POST.get('login')
+	if login is None or len(login) == 0:
+		context = {
+			"error": "You forgot to specify your login name."
+		}
+		return render(
+      			request,
+         		"/app/ft_auth/templates/login.html",
+				context
+           )
+	password = request.POST.get('password')
+	if password is None or len(password) == 0:
+		context = {
+			"error": "You forgot to specify your password.",
+			"login": login
+		}
+		return render(
+      			request,
+         		"/app/ft_auth/templates/login.html",
+				context
+           )
+
+	user = user_login(login, password)
 	if user is None:
-		return HttpResponse("invalid");
+		context = {
+			"error": "Login and password do not match.",
+			"login": login
+		}
+		return render(
+      			request,
+         		"/app/ft_auth/templates/login.html",
+				context
+           )
 	return HttpResponseRedirect("/profil")
 
 @require_http_methods(["GET"])

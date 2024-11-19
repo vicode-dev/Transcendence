@@ -2,7 +2,7 @@ from django.db import models
 
 class User(models.Model):
 	id = models.AutoField(primary_key=True)
-	login = models.CharField(max_length=32)
+	login = models.CharField(max_length=19)
 	password = models.CharField(max_length=100, null=True)
 	ft_picture = models.CharField(max_length=100, null=True)
 	ft_id = models.IntegerField(default=0)
