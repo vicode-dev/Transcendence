@@ -8,6 +8,7 @@ from ft_auth.utils.api_users import create_user
 ########################################################
 
 def hash_password(password):
+	print(password)
 	altered_password = password+environ['SALT']
 	hashed = md5(altered_password.encode())
 	print(hashed.hexdigest())
@@ -21,6 +22,7 @@ def user_login(login, password):
 	try:
 		user = User.objects.filter(
 	  		login=login, password=hash_password(password)).first()
+	  		# login=login, password=password).first()
 		return user
 	except User.DoesNotExist:
 		return None

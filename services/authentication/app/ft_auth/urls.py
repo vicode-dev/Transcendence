@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path, include 
 from ft_auth.views.oauth2 import login_with_42
 from ft_auth.views.routes import \
     profil, login, logout, register
+from two_factor.urls import urlpatterns as tf_urls
 
 urlpatterns = [
 	#   path('', include("django.contrib.auth.urls")),
@@ -26,5 +27,6 @@ urlpatterns = [
 	path('logout/', logout),
 	path('register/', register),
 	path('profil', profil),
-	path('42-oauth2', login_with_42)
+	path('42-oauth2', login_with_42),
+	path('', include(tf_urls)),
 ]

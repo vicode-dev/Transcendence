@@ -4,3 +4,6 @@ redis
 psycopg[binary]
 requests
 PyJWT
+phonenumberslite
+django-otp
+django-two-factor-auth
