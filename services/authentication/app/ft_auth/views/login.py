@@ -27,8 +27,8 @@ def get_login(request):
 	data = get_jwt_data(request)
 	if "error" in data:
 		return render(request, "/app/ft_auth/templates/login.html")
-	return HttpResponseRedirect("/profil")
-	return JsonResponse(get_jwt_data(request))
+	return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
+	# return JsonResponse(get_jwt_data(request))
 
 def post_login(request):
 	login = request.POST.get('login')

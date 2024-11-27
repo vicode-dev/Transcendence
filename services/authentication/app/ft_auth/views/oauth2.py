@@ -22,11 +22,15 @@ def login_with_42(request):
 		user = get_user_by_42_id(user_42_data["id"])
 		if user == None:
 			user = create_42_user(user_42_data)
-		response = HttpResponseRedirect("http://localhost:8000/profil")
+		response = HttpResponse(
+			"<body onload=\"close();\"></body>"
+		)
+		# response = HttpResponse("<a href=\"javascript:close();\">close</a>")
+		# response = HttpResponseRedirect("https://transcendence.vicode.dev/profil")
 		generate_jwt(response, user.to_dict())
 		return response
 
 	except requests.exceptions.RequestException as e:
 		print("error", str(e))
 		return JsonResponse({"error": str(e)}, status=500)
-		return HttpResponseRedirect("https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F42-oauth2&response_type=code");
+		return HttpResponseRedirect("https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&redirect_uri=https%3A%2F%2Ftranscendence.vicode.dev%2F42-oauth2&response_type=code");

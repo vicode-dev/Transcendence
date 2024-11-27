@@ -8,10 +8,8 @@ from ft_auth.utils.api_users import create_user
 ########################################################
 
 def hash_password(password):
-	print(password)
 	altered_password = password+environ['SALT']
 	hashed = md5(altered_password.encode())
-	print(hashed.hexdigest())
 	return hashed.hexdigest()
 
 ########################################################
