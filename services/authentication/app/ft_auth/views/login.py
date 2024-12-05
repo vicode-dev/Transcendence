@@ -14,21 +14,27 @@ from django.views.decorators.http import require_http_methods
 from ft_auth.utils.token import \
     delete_jwt, get_jwt_data, generate_jwt
 from ft_auth.utils.user import user_login
+from ft_auth.utils.single_page import single_page_redirection
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def login(request):
+	data = get_jwt_data(request)
+	if not "error" in data:
+		return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
 	if request.method == "GET":
 		return get_login(request)
 	if request.method == "POST":
 		return post_login(request)
 
 def get_login(request):
-	data = get_jwt_data(request)
-	if "error" in data:
-		return render(request, "/app/ft_auth/templates/login.html")
-	return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
-	# return JsonResponse(get_jwt_data(request))
+	redirection = single_page_redirection(request)
+	if redirection != None:
+		return redirection
+	return render(
+		request,
+		"/app/ft_auth/templates/login.html"
+	)
 
 def post_login(request):
 	login = request.POST.get('login')
@@ -71,6 +77,5 @@ def post_login(request):
 @require_http_methods(["GET"])
 def logout(request):
 	response = HttpResponseRedirect("/login")
-	# delete_user("test")
 	delete_jwt(response)
 	return response

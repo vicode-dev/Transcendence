@@ -16,21 +16,30 @@ from django.views.decorators.http import \
 from ft_auth.utils.user import \
     create_classic_user, check_user, \
     getLogin, getFirstName, getLastName
-from ft_auth.utils.token import generate_jwt
+from ft_auth.utils.token import generate_jwt, get_jwt_data
+from ft_auth.utils.single_page import single_page_redirection
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def register(request):
+	# data = get_jwt_data(request)
+	# if not "error" in data:
+	# 	return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
 	if request.method == "GET":
 		return get_register(request)
 	if request.method == "POST":
 		return post_register(request)
 
 def get_register(request):
+	data = get_jwt_data(request)
+	redirection = single_page_redirection(request)
+	if redirection != None:
+		return redirection
 	return render(
-     		request,
-            "/app/ft_auth/templates/register.html"
-        )
+			request,
+			"/app/ft_auth/templates/register.html"
+		)
+
 
 def post_register(request):
 	login = getLogin(request)
