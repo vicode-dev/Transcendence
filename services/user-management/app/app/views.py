@@ -1,109 +1,240 @@
 from django.http import HttpResponse, FileResponse
 from django.http import JsonResponse
 from django.core import serializers
-from django.http import Http404
-from django.shortcuts import render
+from django.http import Http404, HttpResponseBadRequest
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
+from django.db.models import F, Func, Value
 from . import blockchain
 from app.models import User
+from app.utils.token import get_jwt_data
+from app.eloUpdater import elo
 import requests, json, os
 
-def index(request):
-    html = "<html><body>%s</body></html>" % blockchain.test()
-    return HttpResponse(html)
+def render_redirect(request):
+    jwtData = get_jwt_data(request)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and "error" not in jwtData:
+        return None
+    url = request.path
+    query_params = request.GET.copy()
+    query_params["redirect_url"] = url[1:]
+    if "error" in jwtData:
+        new_url = f"/login/?{query_params.urlencode()}"
+    else:
+        new_url = f"/?{query_params.urlencode()}"
+    return redirect(new_url)
 
+@require_http_methods(["GET"])
 def setupContract(request):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     blockchain.setup()
-    return HttpResponse("<h1>Ok</h1>")
+    return HttpResponse(status=204)
 
+#temp #players, score, pong/connect, startime
+@csrf_exempt
+@require_http_methods(["POST"])
+def add(request):
+    game = json.loads(request.body.decode('utf-8'))
+    elo(game)
+    blockchain.addGame(game["players"], game["score"], game["gameType"], int(game["endTime"] - game["startTime"]), game["startTime"], game["endTime"])
+    return HttpResponse(status=204)
+
+@require_http_methods(["GET"])
 def getGamesNumber(request):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     return JsonResponse({'GameNumber': blockchain.getGamesNumber()}, status=200)
 
-def add(request):
-    blockchain.addGame([1, 2], [2, 3], False, 24, 0, 23)
-    return HttpResponse("<h1>Ok</h1>")
+@require_http_methods(["GET"])
+def addPlayer(request):
+    playerId = int(request.GET.get('playerId', 0))
+    if playerId == 0:
+        return HttpResponseBadRequest()
+    username = request.GET.get('username', "Arthur Dent")
+    newUser = User(playerId=playerId, username=username)
+    newUser.save()
+    return HttpResponse(status=204)
 
+@require_http_methods(["GET"])
 def getGameById(request, id):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     return JsonResponse(blockchain.getGameById(id).to_dict())
 
+@require_http_methods(["GET"])
 def getTournamentById(request, id):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     return JsonResponse(blockchain.getTournamentById(id).to_dict())
 
-
+@require_http_methods(["GET"])
 def getPlayerById(request, playerId):
-    # try:
-        result = User.objects.get(pk=playerId)
-        return JsonResponse(result.json())
-    # except:
-    #     raise Http404("User not found")
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
+    if not User.objects.filter(pk=playerId).exists():
+        raise Http404("User not found")
+    result = User.objects.get(pk=playerId)
+    return JsonResponse(result.json())
 
+@require_http_methods(["GET"])
+def playerHTML(request, playerId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
+    if not User.objects.filter(pk=playerId).exists():
+        raise Http404("User not found")
+    username = User.objects.filter(pk=playerId).values_list("username", flat=True).first()
+    return render(request, "userComponent.html", {"user": {"username": username, "playerId": playerId}})
+
+@require_http_methods(["GET"])
 def getPlayerGame(request, playerId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     gameObject = blockchain.getGamesByPlayer(playerId)
     return JsonResponse([t.to_dict() for t in gameObject], safe=False)
 
+@require_http_methods(["GET"])
+def playerRole(request, playerId):
+    value = User.objects.filter(pk=playerId).values_list("role", flat=True).first()
+    if value:
+        return JsonResponse({"role": value})
+    else:
+        raise Http404("User not found")
+
+@require_http_methods(["GET"])
+def playerElo(request, playerId):
+    eloPong, eloConnect = User.objects.filter(pk=playerId).values_list("eloPong", "eloConnect").first()
+    if eloPong:
+        return JsonResponse({"eloPong": eloPong, "eloConnect": eloConnect})
+    else:
+        raise Http404("User not found")
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def playerAvatar(request, playerId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     if request.method == "GET":
         if os.path.exists(f"/static/{playerId}.jpg"):
             return FileResponse(open(f"/static/{playerId}.jpg", 'rb'))
         elif os.path.exists(f"/static/{playerId}.jpeg"):
             return FileResponse(open(f"/static/{playerId}.jpeg", 'rb'))
+        elif os.path.exists(f"/static/{playerId}.png"):
+            return FileResponse(open(f"/static/{playerId}.png", 'rb'))
         else:
             return FileResponse(open("app/static/default.jpg", 'rb'))
-        # value = User.objects.filter(pk=playerId).values_list("profilePicture", flat=True).first()
         if value:
             return JsonResponse({"avatar": value})
         else:
             raise Http404("User not found")
-    elif request.method == "POST":
-        return
+    else:
+        if jwtData["id"] != playerId and jwtData["role"] == "D":
+            return HttpResponse(jwtData["error"], status=401)
+        if not "profile_picture" in request.FILES:
+            return HttpResponseBadRequest("No file turned in")
+        file = request.FILES["profile_picture"]
+        if file.content_type != "image/jpeg" and file.content_type != "image/png":
+            return HttpResponseBadRequest("Wrong content Type")
+        if os.path.exists(f"/static/{playerId}.jpg"):
+            os.remove(f"/static/{playerId}.jpg")
+        if os.path.exists(f"/static/{playerId}.jpeg"):
+            os.remove(f"/static/{playerId}.jpeg")
+        if os.path.exists(f"/static/{playerId}.png"):
+            os.remove(f"/static/{playerId}.png")
+        newFile = open(f"/static/{playerId}.{file.name.split('.')[-1]}", "wb")
+        for chunk in file.chunks():
+            newFile.write(chunk)
+        newFile.close()
+        return HttpResponse(status=204)
 
+@require_http_methods(["GET"])
 def getPlayerUsername(request, playerId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     value = User.objects.filter(pk=playerId).values_list("username", flat=True).first()
     if value:
         return JsonResponse({"username": value})
     else:
         raise Http404("User not found")
 
+@require_http_methods(["GET"])
 def getPlayerFriends(request, playerId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
     value = User.objects.filter(pk=playerId).values_list("friends", flat=True).first()
     if value:
         return JsonResponse({"friends": value})
     else:
         raise Http404("User not found")
 
-def addplayer(request):
-    test = User(1, "Rachel", 130, [3], "Member")
-    test.save()
-    return HttpResponse("<h1>Ok</h1>")
+@csrf_exempt
+@require_http_methods(["POST"])
+def addFriend(request):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
+    friendId = int(request.GET.get('playerId', -1))
+    if not User.objects.filter(pk=friendId).exists():
+        return HttpResponseBadRequest()
+    User.objects.filter(pk=jwtData["id"]).update(friends=Func(F('friends'), Value(friendId), function='array_append'))
+    return HttpResponse(status=204)
 
-def profile(request, playerId):
+@csrf_exempt
+@require_http_methods(["POST"])
+def removeFriend(request):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
+    friendId = int(request.GET.get('playerId', -1))
+    User.objects.filter(pk=jwtData["id"]).update(
+            friends=Func(F('friends'), Value(friendId), function='array_remove')
+        )
+    return HttpResponse(status=204)
+
+@require_http_methods(["GET"])
+def profil(request, playerId):
+    redirect = render_redirect(request)
+    if redirect:
+        return redirect
     if User.objects.filter(pk=playerId).exists():
-        result = User.objects.get(pk=playerId)
+        user = User.objects.get(pk=playerId)
     else:
         playerId = 0
-        result = User.objects.get(pk=playerId)
+        user = User.objects.get(pk=playerId)
     games = blockchain.getGamesByPlayer(playerId)
-    for j in range(len(games)):
-        for i in range(len(games[j].playerIds)):
-            games[j].playerIds[i] = {
-                "username": User.objects.filter(pk=games[j].playerIds[i]).values_list("username", flat=True).first(), 
-                "url": f"/profile/{games[j].playerIds[i]}", 
-                "score": games[j].score[i]
-                }
-            if not games[j].playerIds[i]:
-                games[j].playerIds[i].username = "unkown"
-    friends= [None] * len(result.friends)
-    for i in range(len(result.friends)):
-        friends[i] = {
-            "username": User.objects.filter(pk=result.friends[i]).values_list("username", flat=True).first(), 
-            "url": f"/profile/{result.friends[i]}"
-            }
-    return render(request, "profile.html", {"user": result, "games": games, "friends": friends})
+    for i in range(len(games)):
+        games[i].combined = list(zip(games[i].playerIds, games[i].score))
+    jwtData = get_jwt_data(request)
+    return render(request, "profil.html", {"user": user, "games": games, "id": jwtData["id"]})
 
+@require_http_methods(["GET"])
+def authProfil(request):
+    redirect = render_redirect(request)
+    if redirect:
+        return redirect
+    jwtData = get_jwt_data(request)
+    if User.objects.filter(pk=jwtData["id"]).exists():
+        user = User.objects.get(pk=jwtData["id"])
+    games = blockchain.getGamesByPlayer(jwtData["id"])
+    for i in range(len(games)):
+        games[i].combined = list(zip(games[i].playerIds, games[i].score))
+    return render(request, "profil.html", {"user": user, "games": games, "id": jwtData["id"]})
+
+@require_http_methods(["GET"])
 def settings(request):
-    return render(request, "settings/index.html", {"playerId": 0})
-
-#Temp function
-def login(request):
-    return render(request, "login-temp.html")
-def auth(request):
-        return request.COOKIES["id"]
+    redirect = render_redirect(request)
+    if redirect:
+        return redirect
+    jwtData = get_jwt_data(request)
+    return render(request, "settings/index.html", {"playerId": jwtData["id"]})

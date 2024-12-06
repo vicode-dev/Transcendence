@@ -1,0 +1,13 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'user-management/profil.css' %}">
+
+{% if visibility %}
+<script src="{% static 'user-management/friendButton.js' %}"></script>
+{% if not friendStatus %}
+<button style="color: var(--background-color);" class="rounded-2 addFriendBtn friendButton" id="friendButton" onclick="addFriend({{ friendId }})">add as friend</button>
+{% endif %}
+{% if friendStatus %}
+<button style="color: var(--background-color);" class="rounded-2 removeFriendBtn friendButton" id="friendButton" onclick="removeFriend({{ friendId }})">remove as friend</button>
+{% endif %}
+{% endif %}
+<div id="updateBtn"></div>
