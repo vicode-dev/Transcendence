@@ -3,58 +3,285 @@ import math, curses, time
 SIZE = 9
 PADDLE_SIZE = 1.5
 PADDLE_WIDTH = 0.25
-BALL_SIZE = 0.25
+BALL_SIZE = 0.125
 TICK_RATE = 1 / 20
+MAX_SPEED = 10
 
-def hitPlayer(px, py, x, y):
-    if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
-        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE) \
-        or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
-        or (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE):
+# def hitPlayer(px, py, x, y):
+#     if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+#         or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE) \
+#         or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
+#         or (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE):
+#         return True
+#     return False
+
+# def willHitPlayerV(ball, px, py, x, y):
+#     if ((px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._x = px + PADDLE_WIDTH + BALL_SIZE
+#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._x = px - PADDLE_WIDTH - BALL_SIZE
+#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._x = px - PADDLE_WIDTH - BALL_SIZE
+#     elif (px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE):
+#         ball._x = px + PADDLE_WIDTH + BALL_SIZE
+#     else:
+#         return False
+#     return True
+
+# def willHitPlayerH(ball, px, py, x, y):
+#     if ((px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._y = px + PADDLE_WIDTH + BALL_SIZE
+#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._y = px - PADDLE_WIDTH - BALL_SIZE
+#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+#         ball._y = px - PADDLE_WIDTH - BALL_SIZE
+#     elif (px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE):
+#         ball._y = px + PADDLE_WIDTH + BALL_SIZE
+#     else:
+#         return False
+#     return True
+
+# def ballHitPlayer (ball, startAngle, diff, ballPos):
+#     ball._angle = (360 + startAngle + (diff / PADDLE_SIZE) * ballPos) % 360
+
+# def ballHitWall(x):
+#     if x - BALL_SIZE <= 0 or x + BALL_SIZE >= SIZE:
+#         return True
+#     return False
+
+# def willHitWall(x):
+#     if (x - BALL_SIZE < 0 or x + BALL_SIZE > SIZE):
+#         return True
+#     return False
+
+# def ballReachObstacle(ball, p1, p2, p3, p4, x, y):
+#     if willHitPlayerV(ball, p1._x, p1._y, x, y) == True:
+#         ballHitPlayer(ball, 280, 160, y - p1._y)
+#     elif willHitPlayerV(ball, p2._x, p2._y, x, y) == True:
+#         ballHitPlayer(ball, 260, -160, y - p2._y)
+#     elif willHitPlayerH(ball, p3._y, p3._x, y, x) == True:
+#         ballHitPlayer(ball, 170, -160, x - p3._x)
+#     elif willHitPlayerH(ball, p4._y, p4._x, y, x) == True:
+#         ballHitPlayer(ball, 190, 160, x - p4._x)
+#     elif willHitWall(x) == True:
+#         if ball._x < SIZE / 2:
+#             ball._x = BALL_SIZE
+#         else:
+#             ball._x = SIZE - BALL_SIZE
+#     elif willHitWall(y) == True:
+#         if ball._y < SIZE / 2:
+#             ball._y = BALL_SIZE
+#         else:
+#             ball._y = SIZE - BALL_SIZE
+#     else:
+#         return False
+#     return True
+
+# def ballMovement(gameData, ball, p1, p2, p3, p4):
+#     if ballHitWall(ball._x) or ballHitWall(ball._y):
+#         if ballHitWall(ball._x):
+#             if ball._x - BALL_SIZE <= 0:
+#                 ball._angle = 0
+#                 gameData._score[0] -= 1
+#             else:
+#                 ball._angle = 180
+#                 gameData._score[1] -= 1
+#         else:
+#             if ball._y - BALL_SIZE <= 0:
+#                 ball._angle = 90
+#                 gameData._score[2] -= 1
+#             else:
+#                 ball._angle = 270
+#                 gameData._score[3] -= 1
+#         ball._x = 4.25
+#         ball._y = 4.25
+#     x = ball._x + math.cos(math.radians(ball._angle)) / 8
+#     y = ball._y + math.sin(math.radians(ball._angle)) / 8
+
+#     if ballReachObstacle(ball, p1, p2, p3, p4, x, y):
+#         return
+#     ball._x = x
+#     ball._y = y
+    # x = ball._x + math.cos(math.radians(ball._angle)) / 8
+    # y = ball._y + math.sin(math.radians(ball._angle)) / 8
+    
+    # if hitPlayer(p1._x, p1._y, x, y) == True:
+    #     ballHitPlayer(ball, 280, 160, y - p1._y)
+    # elif hitPlayer(p2._x, p2._y, x, y) == True:
+    #     ballHitPlayer(ball, 260, -160, y - p2._y)
+    # elif hitPlayer(p3._y, p3._x, y, x) == True:
+    #     ballHitPlayer(ball, 170, -160, x - p3._x)
+    # elif hitPlayer(p4._y, p4._x, y, x) == True:
+    #     ballHitPlayer(ball, 190, 160, x - p4._x)
+    
+    # x = ball._x + math.cos(math.radians(ball._angle)) / 8
+    # y = ball._y + math.sin(math.radians(ball._angle)) / 8
+    # if (ballHitWall(x) == False): 
+    #     ball._x = x 
+    # if (ballHitWall(y) == False):
+    #     ball._y = y
+    # if (ballHitWall(x)):
+    #     if (x <= SIZE - 1):
+    #         gameData._score[0] -= 1
+    #         ball._angle = 0
+    #     else:
+    #         gameData._score[1] -= 1
+    #         ball._angle = 180
+    #     ball._x = 4.25
+    #     ball._y = 4.25
+
+    # elif (ballHitWall(y)):
+    #     if (y <= SIZE - 1):
+    #         gameData._score[2] -= 1
+    #         ball._angle = 90
+    #     else:
+    #         gameData._score[3] -= 1
+    #         ball._angle = 270
+    #     ball._x = 4.25
+    #     ball._y = 4.25
+
+def willHitLeftPaddle(ball, px, py, x, y):
+    if ((x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+        ball._x = px + PADDLE_WIDTH + BALL_SIZE
+    elif (x - BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE):
+        ball._x = px + PADDLE_WIDTH + BALL_SIZE
+    else:
+        return False
+    return True
+
+def willHitRightPaddle(ball, px, py, x, y):
+    if ((px < x + BALL_SIZE and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE)):
+        ball._x = px - PADDLE_WIDTH - BALL_SIZE
+    elif ((px < x + BALL_SIZE and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
+        ball._x = px - PADDLE_WIDTH - BALL_SIZE
+    else:
+        return False
+    return True
+
+def willHitTopPaddle(ball, px, py, x, y):
+    if ((y - BALL_SIZE < py + PADDLE_WIDTH and px <= x - BALL_SIZE and x - BALL_SIZE <= px + PADDLE_SIZE)):
+        ball.y = py + PADDLE_WIDTH + BALL_SIZE
+    elif ((y - BALL_SIZE < py + PADDLE_WIDTH and px <= x + BALL_SIZE and x + BALL_SIZE <= px + PADDLE_SIZE)):
+        ball.y = py + PADDLE_WIDTH + BALL_SIZE
+    else:
+        return False
+    return True
+
+def willHitBottomPaddle(ball, px, py, x, y):
+    if ((py < y + BALL_SIZE and px <= x + BALL_SIZE and x + BALL_SIZE <= px + PADDLE_SIZE)):
+        ball.y = py - BALL_SIZE
+    elif (py < y + BALL_SIZE and px <= x - BALL_SIZE and x - BALL_SIZE <= px + PADDLE_SIZE):
+        ball.y = py - BALL_SIZE
+    else:
+        return False
+    return True
+
+def hitWall(x):
+    if x - BALL_SIZE <= 0 or x + BALL_SIZE >= SIZE:
         return True
     return False
 
-def ballHitPlayer (ball, startAngle, diff, ballPos):
-    ball._angle = (360 + startAngle + (diff / PADDLE_SIZE) * ballPos) % 360
+def willHitWall(x):
+    if (x - BALL_SIZE < 0 or x + BALL_SIZE > SIZE):
+        return True
+    return False
 
-def ballMovement(gameData, ball, p1, p2, p3, p4):
-    x = ball._x + math.cos(math.radians(ball._angle)) / 8
-    y = ball._y + math.sin(math.radians(ball._angle)) / 8
-    
-    if hitPlayer(p1._x, p1._y, x, y) == True:
+def ballHitPlayer(ball, startAngle, diff, ballPos):
+    ball._angle = (360 + startAngle + (diff / (PADDLE_SIZE + 2 * BALL_SIZE)) * (ballPos + BALL_SIZE)) % 360
+
+def newPoint(score, idx):
+    score[idx] -= 1
+    for i in range(4):
+        if i != idx and score[i] <= 0 and score[idx] == 0:
+            score[i] -= 1
+
+def ballReachObstacle(ball, score, p1, p2, p3, p4, x, y):
+    if score[0] > 0 and willHitLeftPaddle(ball, p1._x, p1._y, x, y) == True:
         ballHitPlayer(ball, 280, 160, y - p1._y)
-    elif hitPlayer(p2._x, p2._y, x, y) == True:
+        ball._speed += 0.1
+    elif score[1] > 0 and willHitRightPaddle(ball, p2._x, p2._y, x, y) == True:
         ballHitPlayer(ball, 260, -160, y - p2._y)
-    elif hitPlayer(p3._y, p3._x, y, x) == True:
+        ball._speed += 0.1
+    elif score[2] > 0 and willHitTopPaddle(ball, p3._x, p3._y, x, y) == True:
         ballHitPlayer(ball, 170, -160, x - p3._x)
-    elif hitPlayer(p4._y, p4._x, y, x) == True:
+        ball._speed += 0.1
+    elif score[3] > 0 and willHitBottomPaddle(ball, p4._x, p4._y, x, y) == True:
         ballHitPlayer(ball, 190, 160, x - p4._x)
-    
-    x = ball._x + math.cos(math.radians(ball._angle)) / 8
-    y = ball._y + math.sin(math.radians(ball._angle)) / 8
-    if (0 < x < SIZE): 
-        ball._x = x 
-    if (0 < y < SIZE):
-        ball._y = y
-    if (x >= SIZE or x <= 0):
-        if (x <= 0):
-            gameData._score[0] -= 1
-            ball._angle = 0
+        ball._speed += 0.1
+    elif willHitWall(x) == True:
+        if ball._x < SIZE / 2:
+            ball._x = BALL_SIZE
+            if score[0] <= 0:
+                if ball._angle % 90 == 0:
+                    ball._angle = 180 + ball._angle
+                else:
+                    ball._angle = (360 + 180 - ball._angle) % 360
         else:
-            gameData._score[1] -= 1
-            ball._angle = 180
-        ball._x = 4.25
-        ball._y = 4.25
+            ball._x = SIZE - BALL_SIZE
+            if score[1] <= 0:
+                if ball._angle % 90 == 0:
+                    ball._angle = 180 + ball._angle
+                else:
+                    ball._angle = (360 + 180 - ball._angle) % 360
+    elif willHitWall(y) == True:
+        if ball._y < SIZE / 2:
+            ball._y = BALL_SIZE
+            if score[2] <= 0:
+                if ball._angle % 180 == 0:
+                    ball._angle = (ball._angle + 180) % 360
+                else:
+                    ball._angle = 360 - ball._angle
+        else:
+            ball._y = SIZE - BALL_SIZE
+            if score[3] <= 0:
+                if ball._angle % 180 == 0:
+                    ball._angle = (ball._angle + 180) % 360
+                else:
+                    ball._angle = 360 - ball._angle
+    else:
+        return False
+    return True
 
-    elif (y <= 0 or y >= SIZE):
-        if (y <= 0):
-            gameData._score[2] -= 1
-            ball._angle = 90
+def resetAngle(idx, score):
+    angles = [180, 0, 270, 90]
+    for i in range(idx, idx + 4):
+        j = i % 4
+        if j != idx and score[j] > 0:
+            return angles[j]
+    return 0
+
+def ballMovement(score, ball, p1, p2, p3, p4):
+    if hitWall(ball._x) or hitWall(ball._y):
+        playersAreWall = True
+        if hitWall(ball._x):
+            if score[0] > 0 and ball._x - BALL_SIZE <= 0:
+                playersAreWall = False
+                ball._angle = resetAngle(0, score)
+                newPoint(score, 0)
+            elif score[1] > 0 and ball._x + BALL_SIZE >= SIZE:
+                playersAreWall = False
+                ball._angle = resetAngle(1, score)
+                newPoint(score, 1)
         else:
-            gameData._score[3] -= 1
-            ball._angle = 270
-        ball._x = 4.25
-        ball._y = 4.25
+            if score[2] > 0 and ball._y - BALL_SIZE <= 0:
+                playersAreWall = False
+                ball._angle = resetAngle(2, score)
+                newPoint(score, 2)
+            elif score[3] > 0 and ball._y + BALL_SIZE >= SIZE:
+                playersAreWall = False
+                ball._angle = resetAngle(3, score)
+                newPoint(score, 3)
+        if playersAreWall == False:
+            ball._x = 4.5
+            ball._y = 4.5
+            ball._speed = 1
+    x = ball._x + (math.cos(math.radians(ball._angle)) / 8) * ball._speed
+    y = ball._y + (math.sin(math.radians(ball._angle)) / 8) * ball._speed
+
+    if ballReachObstacle(ball, score, p1, p2, p3, p4, x, y):
+        return
+    ball._x = x
+    ball._y = y
 
 def drawVerticalPaddle(stdscr, scale, x, y):
     for i in range(0, math.floor(1.5 * scale)):
@@ -69,9 +296,27 @@ def drawBall(stdscr, ball_x, ball_y):
 
 def drawScore(pad, gameData):
     pad.erase()
-    s = "Player 1: " + str(gameData._score[0]) + " | Player 2: " + str(gameData._score[1]) \
-        + " | Player 3: " + str(gameData._score[2]) + " | Player 4: " + str(gameData._score[3])
+    score1 = str(gameData._score[0]) if gameData._score[0] >= 0 else "0"
+    score2 = str(gameData._score[1]) if gameData._score[1] >= 0 else "0"
+    score3 = str(gameData._score[2]) if gameData._score[2] >= 0 else "0"
+    score4 = str(gameData._score[3]) if gameData._score[3] >= 0 else "0"
+    s = "Player 1: " + score1 + " | Player 2: " + score2 \
+        + " | Player 3: " + score3 + " | Player 4: " + score4
     pad.addstr(0, 0, s)
+
+def defeat(score):
+    count = 0
+    win = 0
+    for i in range(4):    
+        if (score[i] <= 0):
+            count += 1
+        else:
+            win = i
+        if (count == 3):
+            score[win] -= score[win] - 1
+            newPoint(score, win)
+            score = [i * -1 for i in score]
+            return True
 
 def gameLoop4P(win, stdscr, pad, scale):
     p1 = Player(0, 3.75)
@@ -79,12 +324,27 @@ def gameLoop4P(win, stdscr, pad, scale):
     p3 = Player(3.75, 0)
     p4 = Player(3.75, 8.75)
     ball = Ball(4.25, 4.25)
-    gameData = GameData(10)
+    gameData = GameData(5)
     stdscr.keypad(True)
     stdscr.timeout(100)
     stdscr.nodelay(True)
     stdscr.border()
     while True:
+        if defeat(gameData._score) == True:
+            pad.clear()
+            if gameData._score[0] > 0:
+                pad.addstr(0, 0, "Player 1 won! Congratulations!")
+            elif gameData._score[1] > 0:
+                pad.addstr(0, 0, "Player 2 won! Congratulations!")
+            elif gameData._score[2] > 0:
+                pad.addstr(0, 0, "Player 3 won! Congratulations!")
+            else:
+                pad.addstr(0, 0, "Player 4 won!")
+            pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            key = stdscr.getch()
+            # while key != ord('q') and key != 27:
+            #     continue
+            break
         startTime = time.time()
         stdscr.erase()
         stdscr.border()
@@ -117,14 +377,14 @@ def gameLoop4P(win, stdscr, pad, scale):
             p4._x -= 0.25
         elif key == curses.KEY_RIGHT and p4._x < SIZE - PADDLE_WIDTH - PADDLE_SIZE:
             p4._x += 0.25
-        ballMovement(gameData, ball, p1, p2, p3, p4)
+        ballMovement(gameData._score, ball, p1, p2, p3, p4)
         drawVerticalPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
         drawVerticalPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
         drawHorizontalPaddle(stdscr, scale, int((p3._x) * scale) + 1, int((p3._y) * scale) + 1)
         drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
         drawScore(pad, gameData)
-        pad.refresh(0, 0, 0, 0, 1, SIZE * scale)
+        pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))

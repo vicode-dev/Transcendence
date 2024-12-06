@@ -4,6 +4,7 @@ class Ball:
         self._x = x
         self._y = y
         self._angle = 180
+        self._speed = 1
 
 class Player:
 

@@ -30,7 +30,7 @@ class Prompt:
         sen = self.textDisplay.split('\n')
         for i in range(len(sen)):
             if (startH >= height):
-                return
+                return startH
             if len(sen[i]) < width - 2 * self.widthBorder:
                 self.stdscr.addstr(startH, startW, sen[i])
             else:
@@ -45,7 +45,7 @@ class Prompt:
                         self.stdscr.addch(startH, startWidth, '\n')
                         startH += 1
                         if (startH >= height):
-                            return
+                            return startH
                         startWidth = startW
                         if (len(words[j]) > width - 2 * self.widthBorder):
                             for letter in words[j]:
@@ -56,7 +56,7 @@ class Prompt:
                                     startWidth = startW
                                     startH += 1
                                     if (startH >= height):
-                                        return
+                                        return startH
                                     self.stdscr.addch(startH, startWidth)
                                 startWidth += 1
                         else:
@@ -77,12 +77,13 @@ class Prompt:
         s = "Default value: " + self.placeHolder + " (press any key to edit)"
         i = 0
         while (i < width - 2 * self.widthBorder - 2 and i < len(s)):
-            win.addch(0, i, s[i], curses.color_pair(1))
+            win.addch(0, i, s[i], curses.color_pair(3))
             i += 1
         win.refresh()
         if win.getch() != 27:
             box = Textbox(win)
             curses.echo()
+            curses.curs_set(1) #setsyx & getsyx ?
             while self.checkFunc(self.input) == False:
                 self.exit = False
                 win.clear()
@@ -91,7 +92,10 @@ class Prompt:
                 box.edit(self.enter)
                 self.input = box.gather().strip()
                 if self.exit == True:
+                    self.input = self.placeHolder
                     break
             curses.noecho()
+            curses.curs_set(0)
+
 
     
