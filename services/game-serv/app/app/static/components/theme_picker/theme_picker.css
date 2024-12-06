@@ -1,0 +1,146 @@
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: transparent;
+  background: none;
+  text-shadow: 0 0 0 #000;
+  cursor: pointer;
+  height: 1.5rem;
+  border: none;
+  margin: 2px;
+  /* border-radius: 100%; */
+  padding: 0;
+  border-radius: 12px;
+  /* Rounded corners for the input box */
+}
+
+/* h2 {
+    font-family: "Jacquard 12", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 3rem;
+} */
+
+/* #color-picker label,
+#color-picker input {
+    margin: 10px;
+} */
+
+/* #submit-theme {
+    font-family: "Jacquard 12", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    /* font-style: italic; */
+/* font-stretch: condensed;
+    font-kerning: none; */
+/* } */
+
+.pill {
+  display: flex;
+  border-radius: 50px;
+  width: 300px;
+  height: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pill-section {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style for the color input box */
+/* .color-input {
+    width: 80%;
+    height: 80%;
+    border: none;
+    border-radius: 12px; /* Rounded corners for the input box */
+/* cursor: pointer; */
+/* padding: 0; */
+/* background: none; */
+/* -webkit-appearance: none; Remove default styling in Webkit browsers */
+/* -moz-appearance: none; Remove default styling in Firefox */
+/* } */
+
+.color-input::-webkit-color-swatch {
+  border-radius: 12px;
+  /* Rounded corners for the color swatch in Webkit browsers */
+  border: none;
+}
+
+.color-input::-moz-color-swatch {
+  border-radius: 12px;
+  /* Rounded corners for the color swatch in Firefox */
+  border: none;
+}
+
+
+/*
+.wrapper {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
+  
+  .typing-demo {
+    width: 10ch;
+    animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    font-family: monospace;
+    font-size: 2em;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0
+    }
+  }
+      
+  @keyframes blink {
+    50% {
+      border-color: transparent
+    }
+  }
+  */
+
+/*
+  .typewriter h2 {
+    overflow: hidden;
+    border-right: .15em solid var(--secondary-color);
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: .12em;
+    animation: 
+      typing 3.5s steps(40, end),
+      blink-caret .75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 60% }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--secondary-color); }
+  }
+  */
+/* #submit-theme {
+  background-color: var(--background-color);
+}
+
+#submit-theme:hover {
+  background-color: var(--background-color);
+  box-shadow: 0 0 10px .1rem var(--accent-color);
+} */
+
+#color1 {
+  border: solid .05rem var(--secondary-color);
+  /* box-shadow: 0 0 10px .1rem var(--accent-color); */
+}

@@ -1,0 +1,23 @@
+{% load static %}
+
+    <h1>Tournament</h1>
+    <p id="userCount">{{ playercount }}</p>
+    <h3>Users list:</h3>
+    <ul id="playersList" style="list-style-type: none;">
+    </ul>
+    {% block javascripts %}
+        <script src="{% static 'tournament/room.js' %}"></script>
+    {% endblock %}
+    {% if admin == True %}
+    <div id="main">
+        {% endif %}
+        <button id="launchButton" onclick="launchGame()" disabled>Launch</button>
+
+        <div>
+            <input type="radio" name="visibility" id="private" onchange="handleVisibility()" checked>
+            <label for="private" class="slider-label">Private</label>      
+            <input type="radio" name="visibility" id="public" onchange="handleVisibility()" >
+            <label for="public" class="slider-label">Public</label>
+        </div>
+    </div>
+    {% include "chat/room.html" %}

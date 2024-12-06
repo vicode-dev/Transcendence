@@ -1,0 +1,67 @@
+{%load static %}
+
+<link rel="stylesheet" href="{% static 'connect4/main.css' %}">
+
+<div data-partial="game" class="d-flex justify-content-center">
+    <div class="m-2">
+      <button id="player-btn-1" class="player-btn">
+        player 1<br>
+        score:<p id="player1-score"></p>
+    </button>
+    </div>
+    <div class="m-2">
+        <button id="player-btn-2" class="player-btn">
+            player 2<br>
+            score:<p id="player2-score"></p>
+        </button>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center m-2 p-3">
+<svg width="350" height="300" xmlns="http://www.w3.org/2000/svg" id="board" viewBox="0 0 350 300">
+    <!-- Define a pattern with circles to create a reusable hole grid -->
+    <defs>
+        <!-- Define a grid pattern of circles -->
+        <pattern id="hole-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+            <!-- <circle cx="25" cy="25" r="20" fill="black" /> -->
+            <circle cx="25" cy="25" r="20" fill="black" />
+        </pattern>
+        
+        <!-- Mask that uses the circle pattern -->
+        <mask id="connect-mask">
+            <!-- Mask background (white means visible, black means hidden) -->
+            <rect width="100%" height="100%" fill="white" />
+            <!-- Apply the pattern as the mask's fill -->
+            <rect width="350" height="300" fill="url(#hole-pattern)" />
+        </mask>
+    </defs>
+    
+    <g id="pieces" class="pieces"></g>>
+    <!-- Blue rectangles with the hole mask applied -->
+    <!-- <rect x="0" width="50" height="300" id="c1" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="50" width="50" height="300" id="c2" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="100" width="50" height="300" id="c3" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="150" width="50" height="300" id="c4" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="200" width="50" height="300" id="c5" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="250" width="50" height="300" id="c6" fill="#0055B4" mask="url(#connect-mask)" />
+    <rect x="300" width="50" height="300" id="c7" fill="#0055B4" mask="url(#connect-mask)" /> -->
+    <rect x="0" width="50" height="300" id="c1" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="50" width="50" height="300" id="c2" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="100" width="50" height="300" id="c3" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="150" width="50" height="300" id="c4" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="200" width="50" height="300" id="c5" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="250" width="50" height="300" id="c6" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+    <rect x="300" width="50" height="300" id="c7" mask="url(#connect-mask)" style="fill: var(--secondary-color);"/>
+</svg>
+
+</div>
+{% if online == False %}
+<script src="{% static 'connect4/local/connect4.js' %}"></script>
+{% endif %}
+{% if online == True %}
+<script src="{% static 'connect4/online/connect4.js' %}"></script>
+{% endif %}
+<div id="connect-content" class="d-flex justify-content-center m-2 p-3"></div>
+<div class="d-flex justify-content-center m-2 p-3">
+    <button onclick="newGame()" id="start-again" class="mt-3">Start again</button>
+</div>

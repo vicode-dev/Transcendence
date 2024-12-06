@@ -1,0 +1,44 @@
+{%load static %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'components/game_picker.css' %}">
+{% endblock %}
+
+<div class="container mb-4">
+	<!-- <form action="{% url 'localgame' %}" method="get"> -->
+	<form action="{% url 'localgame' %}">
+		<div>
+			<label for="gameType">Quick game:</label>
+			<select name="gameType" id="gameType">
+				<option value="0">Pong</option>
+				<option value="1">Connect 4</option>
+			</select>
+		</div>
+		<div>
+			if Pong {
+		</div>
+		<div>
+			<label for="maxPlayers">Max Players:</label>
+			<select name="maxPlayers" id="maxPlayers">
+				<option value="2">2</option>
+				<option value="4">4</option>
+			</select>
+			<!-- <input type="number" name="maxPlayers" id="maxPlayers" value="2" min="1" max="4"> -->
+		</div>
+		<div>
+			<label for="render">Render type:</label>
+			<select name="render" id="render">
+				<option value="0">2D</option>
+				<option value="1">3D</option>
+			</select>
+		</div>
+		<div>
+		}
+		</div>
+		<button type="submit">Start Game</button>
+	</form>
+</div>
+
+{% block javascripts %}
+    <script src="{% static 'components/theme_picker/theme_picker.js' %}"></script>
+{% endblock %}

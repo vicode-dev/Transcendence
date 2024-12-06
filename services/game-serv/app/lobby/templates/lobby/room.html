@@ -1,0 +1,39 @@
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'lobby/room.css' %}">
+{% endblock %}
+    <h1>Lobby</h1>
+    <p id="userCount">{{ playercount }}/{{ maxplayer }}</p>
+    <h3>Users list:</h3>
+    <ul id="playersList" style="list-style-type: none;">
+    </ul>
+    {% block javascripts %}
+        <script src="{% static 'lobby/room.js' %}"></script>
+    {% endblock %}
+    <p>2D/3D:</p>
+    <label class="switch">
+        <input id="render" type="checkbox" onclick="handleRender()">
+        <span class="slider round"></span>
+      </label>
+
+    {% if admin == False %}
+    <div id="main" style="display:none">
+    {% else %}
+    <div id="main">
+    {% endif %}
+        <button id="launchButton" onclick="launchGame()" disabled>Launch</button>
+        
+        <div>
+            <input type="radio" name="playercount" id="2player" onchange="handlePlayerCount()" {% if maxplayer == 2 %}checked{% endif %}>
+            <label for="2player" class="slider-label">2P</label>      
+            <input type="radio" name="playercount" id="4player" onchange="handlePlayerCount()" {% if maxplayer == 4 %}checked{% endif %}>
+            <label for="4player" class="slider-label">4P</label>
+        </div>
+        <div>
+            <input type="radio" name="visibility" id="private" onchange="handleVisibility()" checked>
+            <label for="private" class="slider-label">Private</label>      
+            <input type="radio" name="visibility" id="public" onchange="handleVisibility()" >
+            <label for="public" class="slider-label">Public</label>
+        </div>
+    </div>
+    {% include "chat/room.html" %}

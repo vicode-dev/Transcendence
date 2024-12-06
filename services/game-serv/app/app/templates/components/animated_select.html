@@ -1,0 +1,30 @@
+{%load static %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'components/animated_select.css' %}">
+{% endblock %}
+
+<!-- <div class="content"> -->
+    <!-- <div class="animated-select">
+        <div class="item">
+            Pong
+        </div>
+        <div class="item">
+            Connect4
+        </div>
+    </div> -->
+
+<div class="content">
+    <div class="animated-select">
+        <label class="item">
+            <input type="radio" name="expand" />
+            <div class="item-title">Item 1</div>
+        </label>
+        <label class="item">
+            <input type="radio" name="expand" />
+            <div class="item-title">Item 2</div>
+        </label>
+    </div>
+</div>
+    
+<!-- </div> -->

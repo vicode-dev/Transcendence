@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pong{% endblock %}
+
+{% block body %}
+<div id="content" style="margin-top: 10vh;">
+    {% include "partials/pong/3D.html" %}
+</div>
+
+{% endblock %}

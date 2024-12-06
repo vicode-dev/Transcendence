@@ -1,0 +1,7 @@
+{% load static %} 
+<div id="chatArea"></div><br>
+<input id="chat-message-input" type="text" size="100" style="max-width: 20rem;"><br>
+<input id="chat-message-submit" type="button" value="Send">
+{% block javascripts %}
+    <script src="{% static 'chat/room.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    <!-- <link rel="stylesheet" href="{% static 'pong/local/pong2D.css' %}"> -->
+
+{% block title %}Pong{% endblock %}
+
+{% block body %}
+
+<div id="content">
+    {% include "partials/pong/2D.html" %}
+</div>
+
+{% endblock %}

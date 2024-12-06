@@ -1,0 +1,163 @@
+{% csrf_token %}
+{%load static %}
+
+<script>
+    urls = {
+        home: "{% url 'home' %}",
+        localgame: "{% url 'localgame' %}",
+        lobby: "{% url 'lobby_index' %}",
+        matchmaking: "{% url 'matchmaking' %}",
+};
+</script>
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'app/game_select.css' %}">
+{% endblock %}
+
+<!-- <div id="game_select-content" class="d-flex flex-column flex-wrap align-items-center justify-content-center"> -->
+<div id="game_select-content">
+
+<h3 id="game_select-title" class="mx-3 mt-4 d-flex justify-content-center">[ game settings ]</h3>
+
+<div id="main-div" class="d-flex justify-content-center" >
+
+    <form class="my-1 pt-1 p-3 justify-content-center align-items-center" id="game-form" onsubmit="loadLocalGame(event, urls.localgame)">
+    <!-- <form class="p-3 justify-content-center align-items-center" id="game-form" action="{% url 'localgame' %}"> -->
+        <div class="my-3 content" style="max-width: 1023px;">
+            <div class="left">
+                <h2>
+                    Online or<br/>
+                    local?<br/>
+                </h2>
+            </div>
+
+            <div class="right ml-2">
+                <input value="5" onclick="showRender()" required type="radio" name="matchmaking" id="local" class="one"/>
+                <label class="input-label" for="local">
+                    <div class="input-content">
+                        <div class="item-title">
+                            Local
+                        </div>
+                    </div>
+                </label>
+
+                <input value="5" onclick="hideRender()" required type="radio" name="matchmaking" id="online" class="two" />
+                <label class="input-label" for="online">
+                    <div class="input-content">
+                        <div class="item-title">
+                            Online
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="my-3 content" style="max-width: 1023px;">
+            <div class="left">
+                <h2>
+                    Choose a game<br/>
+                    to play<br/>
+                </h2>
+            </div>
+
+            <div class="right ml-2">
+                <input value="1" onclick="hidePong()" required type="radio" name="gameType" id="connect4" class="one" />
+                <label class="input-label" for="connect4">
+                    <div class="input-content">
+                        <div class="item-title">
+                            Connect4
+                        </div>
+                    </div>
+                </label>
+
+                <input value="0" onclick="showPong()" required type="radio" name="gameType" id="pong" class="two" />
+                <label class="input-label" for="pong">
+                    <div class="input-content">
+                        <div class="item-title">
+                            Pong
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div id="pong-content">
+            <div class="my-3 content" style="max-width: 1023px;">
+                <div class="left">
+                    <h2>
+                        Choose the number<br/>
+                        of players<br/>
+                    </h2>
+                </div>
+
+                <div class="right">
+                    <input value="2" class="pong-required" type="radio" name="maxPlayers" id="2players" />
+                    <label class="input-label" for="2players">
+                        <div class="input-content">
+                            <div class="item-title">
+                                2 Players
+                            </div>
+                        </div>
+                    </label>
+
+                    <input value="4" class="pong-required" type="radio" name="maxPlayers" id="4players" />
+                    <label class="input-label" for="4players">
+                        <div class="input-content">
+                            <div class="item-title">
+                                4 Players
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div id="online-content">
+                <div class="my-3 content"  style="max-width: 1023px;">
+                    <div class="left">
+                        <h2>
+                            Choose 3D<br/>
+                            or 2D<br/>
+                        </h2>
+                    </div>
+
+                    <div class="right">
+                        <input value="1" class="online-required" type="radio" name="render" id="3D" />
+                        <label class="input-label" for="3D">
+                            <div class="input-content">
+                                <div class="item-title">
+                                    3D
+                                </div> 
+                            </div>
+                        </label>
+
+                        <input value="0" class="online-required" type="radio" name="render" id="2D" />
+                        <label class="input-label" for="2D">
+                            <div class="input-content">
+                                <div class="item-title">
+                                    2D
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="d-flex justify-content-center align-items-center">
+            <button id="submit-form" type="submit">Start Game</button>
+        </div> -->
+
+    </form>
+</div>
+
+<div class="d-flex justify-content-center align-items-center">
+    <button style="margin: 0" form="game-form" id="submit-form" type="submit">Start Game</button>
+</div>
+</div>
+
+<!-- </div> -->
+
+{% block javascripts %}    
+    <script src="{% static 'app/game_select.js' %}"></script>
+{% endblock %}
+

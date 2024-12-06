@@ -1,0 +1,170 @@
+#game_select-content {
+    max-height: 100vh;
+}
+
+#main-div {
+    height: fit-content;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    width: 100%;
+    grid-template-rows: auto;
+}
+
+.pong-content {
+    display: none;
+}
+
+.right {
+    grid-column: 5/13;
+    height: 100%;
+    line-height: 1;
+    gap: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.left {
+    grid-column: 1/4;
+    height: 50%;
+}
+
+#game-form {
+    max-width: 1023px;
+    margin: 2rem;
+}
+
+.item-title {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 2rem;
+    transform: rotate(-90deg);
+    transform-origin: bottom left;
+    color: whitesmoke;
+    white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+    #main-div {
+        margin: 0;
+    }
+    #game-form {
+        width: 100%;
+        margin: 0;
+    }
+    .content {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+    .right {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        height: 100px;
+        margin-left: 0;
+    }
+    .left h2 {
+        font-size: 1.3rem;
+        /* display: none; */
+    }
+    .item-title {
+        bottom: 0.6rem;
+        left: 1.5rem;
+        font-size: .9rem;
+    }
+    br {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .left h2 {
+        display: none;
+    }
+}
+
+@media (max-width: 286px) {
+    #game_select-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 269px) {
+    #game_select-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 252px) {
+    #game_select-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 236px) {
+    #game_select-title {
+        font-size: 1rem;
+    }
+}
+
+.right input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.right .input-label {
+    cursor: pointer;
+    /* width: 48.5%; */
+    width: 50%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    transition: width 300ms ease;
+}
+
+.right .input-label:hover {
+    width: 100%;
+}
+
+.right input[type="radio"]:checked ~ .input-label:after {
+    width: 100%;
+}
+
+.right .input-label .input-content {
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: var(--secondary-color);
+    border-radius: .5rem;
+    overflow: hidden;
+}
+
+.right .input-label .input-content:hover {
+    background-color: var(--accent-color);
+}
+
+.right .input-label .input-content:hover .item-title {
+    color: var(--secondary-color);
+}
+
+.right input[type="radio"]:checked + .input-label {
+    width: 100%;
+}
+
+.right input[type="radio"]:checked + .input-label .input-content {
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+}
+
+.right input[type="radio"]:checked + .input-label .input-content:after {
+    width: 50%;
+}
+
+.right input[type="radio"]:checked + .input-label .input-content .item-title {
+    color: var(--secondary-color);
+}

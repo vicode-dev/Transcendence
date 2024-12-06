@@ -1,0 +1,83 @@
+<!-- <div data-partial="matchmaking">
+    <form method="POST" action="{% url 'matchmaking' %}">
+        {% csrf_token %}
+        <label for="maxPlayers">Max Players:</label>
+        <input type="number" name="maxPlayers" value="2" required>
+    
+        <label for="gameType">Game Type:</label>
+        <input type="number" name="gameType" value="0" required>
+    
+        <button type="submit">Start Matchmaking</button>
+    </form> -->
+    
+
+
+    <!-- <button id="matchmakingButton">Start Matchmaking</button>
+
+    <script>
+    document.getElementById('matchmakingButton').addEventListener('click', function() {
+        // Get the values for maxPlayers and gameType (you can get them from input fields if needed)
+        const maxPlayers = 2;  // For example, you can dynamically fetch this
+        const gameType = 0;    // Likewise, fetch this dynamically if needed
+    
+        fetch("{% url 'matchmaking' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value  // CSRF token
+            },
+            body: JSON.stringify({
+                maxPlayers: maxPlayers,
+                gameType: gameType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Success:", data);
+            // Handle the response from the view
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    });
+    </script> -->
+    
+<!-- </div> -->
+
+<form id="matchmaking-form">
+    <label for="maxPlayers">Max Players:</label>
+    <input type="number" id="maxPlayers" name="maxPlayers" value="2" required>
+    
+    <label for="gameType">Game Type:</label>
+    <input type="number" id="gameType" name="gameType" value="0" required>
+    
+    <button type="button" onclick="createGame()">Create Game</button>
+  </form>
+  
+  <script>
+    async function createGame() {
+        const maxPlayers = document.getElementById('maxPlayers').value;
+        const gameType = document.getElementById('gameType').value;
+
+        const response = await fetch("/game/api/join/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // "Authorization": "Bearer YOUR_JWT_TOKEN", // Include JWT here
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ maxPlayers, gameType })
+        });
+
+        const text = await response.text();
+        console.log("Raw response:", text);
+
+        try {
+            const result = JSON.parse(text);
+            alert(result.message);
+        } catch (error) {
+            console.error("Error parsing JSON:", error, "Response text:", text);
+        }
+    }
+  </script>
+  

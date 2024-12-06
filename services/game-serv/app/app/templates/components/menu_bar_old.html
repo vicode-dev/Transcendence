@@ -1,0 +1,106 @@
+{%load static %}
+
+	<script>
+		let urls = {
+			home: "{% url 'home' %}",
+			localgame: "{% url 'localgame' %}",
+			lobby: "{% url 'lobby_index' %}",
+			matchmaking: "{% url 'matchmaking' %}",
+			game_select: "{% url 'game_select' %}",
+			settings: "{% url 'settings' %}",
+		};
+	</script>
+
+    <!-- <script src="{% static 'components/menu_bar.js' %}"></script> -->
+
+<!-- <input class="py-1 m-3 rounded-4 navbar-toggler background-color fixed-bottom" type="text" value="MENU"> -->
+<!-- <button type="test" class="py-1 m-3 rounded-4 navbar-toggler background-color fixed-bottom" >
+	<i class="accent-color fas fa-plus" ></i>
+</button> -->
+
+
+<!-- <div id="navbar-content"> -->
+<nav class="m-3 navbar-expand-sm navbar justify-content-center fixed-bottom navbar-custom rounded-4">
+
+<!-- <div id="test-content">
+	Test
+</div> -->
+
+<!-- <nav class="secondary-color navbar-expand-sm navbar justify-content-center fixed-bottom m-3"> -->
+<!-- <nav class="secondary-color navbar justify-content-center fixed-bottom m-3"> -->
+	<!-- <div class="justify-content-center container-fluid"> -->
+		<!-- <button id="navbar-toggler" onclick="expandMenu()" type="button" class="py-1 navbar-toggler background-color" data-bs-toggle="collapse" data-bs-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+			<!-- <span class="navbar-toggler-icon"></span> -->
+			<!-- <i class="accent-color fas fa-plus" ></i> -->
+				<!-- style="color:rgb(0, 0, 0); font-size:28px;"></i> -->
+		<!-- </button> -->
+
+		<!-- <div id="navbar-content" class="justify-content-center collapse navbar-collapse justify-between mx-3 rounded-4"> -->
+		<!-- <div class="justify-content-center justify-between mx-3 rounded-4"> -->
+			<!-- <a class="navbar-brand background-color" href="{% url 'home' %}" onclick="loadPageEvent(event, '{{ home_url }}')"> -->
+			<div class="container-fluid	justify-content-center">
+				<a class="navbar-brand background-color" href="{% url 'home' %}" onclick="loadPageEvent(event, urls.home)">
+				<div class="icon-text-container">
+					<i class="fas fa-home"></i>
+					<div class="nav-item-text">Home</div>					
+				</div>
+			</a>
+			<a class="navbar-brand background-color" href="{% url 'home' %}">
+				<div class="icon-text-container">
+					<i class="fas fa-solid fa-trophy"></i>
+					<div class="nav-item-text">Tournament</div>					
+				</div>
+			</a>
+			<!-- <a class="navbar-brand accent-color" href="{% url 'localgame' %}" onclick="loadPageEvent(event, {{ localgame_url|json_script:'localgame_url' }})" > -->
+			<!-- <a class="navbar-brand accent-color" href="{% url 'localgame' %}" onclick="loadPageEvent(event, urls.matchmaking)" >
+				<div class="icon-text-container">
+					<i class="fas fa-solid fa-plus"></i>
+					<div class="nav-item-text">Matchmaking</div>					
+				</div>
+			</a> -->
+			<a class="navbar-brand accent-color" href="{% url 'game_select' %}" onclick="loadPageEvent(event, urls.game_select)" >
+			<!-- <a class="navbar-brand accent-color" href="{% url 'localgame' %}" onclick="loadPageEvent(event, urls.localgame)" > -->
+				<!-- <a class="navbar-brand accent-color" href="{% url 'localgame' %}"> -->
+				<div class="icon-text-container">
+					<i class="fas fa-solid fa-play"></i>
+					<div class="nav-item-text">Local Game</div>					
+				</div>
+			</a>
+			<a class="navbar-brand background-color" href="{% url 'lobby_index' %}" onclick="loadPageEvent(event, urls.lobby)" >
+				<!-- <i class="fas fa-solid fa-microphone"></i> -->
+				<!-- or -->
+				<div class="icon-text-container">
+					<i class="fas fa-solid fa-comments"></i>
+					<div class="nav-item-text">Lobby</div>					
+				</div>
+			</a>
+			<a class="navbar-brand background-color" href="{% url 'settings' %}" onclick="loadPageEvent(event, urls.settings)">
+				<div class="icon-text-container">
+					<i class="fas fa-solid fa-user"></i>
+					<div class="nav-item-text">Profile</div>					
+				</div>
+			</a>
+			<!-- <a class="navbar-brand background-color" href="game/local/?gameType=1&maxPlayers=2" onclick="loadPageEvent(event, 'game/local/?gameType=1&maxPlayers=2')"> -->
+			<!-- <a class="navbar-brand background-color" href="game/local/?gameType=1&maxPlayers=2">
+				Connect4 (test)
+			</a>
+			<a href="#contact">Contact</a> -->
+		<!-- </div> -->
+	</div>
+	<!-- </div> -->
+
+</nav>
+
+<script>
+	function expandMenu() {
+		const menuToggler = document.getElementById('navbar-content')
+		if (menuToggler.style.display === "none") {
+			menuToggler.style.display = "block";
+		} else {
+			menuToggler.style.display = "none";
+		}
+		console.log('test');
+	}
+</script>
+
+

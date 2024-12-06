@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+<div id="content">
+    {% include "partials/choose_game.html" %}
+</div>
+
+{# <!-- <img src="{% include "connect4/connect4.html" %}"/> --> #}
+
+{% block javascripts %}
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Room{% endblock %}
+
+{% block body %}
+{% include "components/menu_bar.html" %}
+<div id="content" class="justify-content-center">
+    {% include "lobby/partials/room.html" %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Test Page{% endblock %}
+{% block stylesheets %}
+    <!-- <link rel="stylesheet" href="{% static 'components/base.css' %}"> --> -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'components/base.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Paths</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head> -->
+
+<body>
+    <div class="container my-5">
+
+    <!-- <h1>Available URLs</h1>
+    <ul>
+        {% for url in available_paths %}
+            <li>{{ url }}</li>
+        {% endfor %}
+    </ul> -->
+
+    <div class="container mb-4">
+        <h1>[ Available URLs ]</h1>
+        <ul id="url-list">
+            {% for url in available_paths %}
+                <li>{{ url }}</li>
+            {% endfor %}
+        </ul>
+        <button id="load-more">Load more</button>
+        <!-- <script src="/static/js/hydrate.js"></script> -->
+    </div>
+
+    <div class="container mb-4">
+        <form action="{% url 'localgame' %}" method="get">
+            <label for="gameType">Choose a Game:</label>
+            <select name="gameType" id="gameType">
+                <option value="1">Connect 4</option>
+                <option value="0">Pong</option>
+            </select>
+        
+            <label for="maxPlayers">Max Players (for Pong):</label>
+            <input type="number" name="maxPlayers" id="maxPlayers" value="2" min="1" max="4">
+ 
+            <button type="submit">Start Game</button>
+        </form>
+    </div>
+
+    <div class="container mb-4">
+        <h1>[ Connect4 1]</h1>
+        <iframe src="{% url 'localgame' %}?gameType=1&maxPlayers=2" width="100%" height="500px" frameborder="0">
+            Your browser does not support iframes.
+        </iframe>
+    </div>
+
+    <div class="container mb-4">
+        <h1>[ Connect4 2]</h1>
+        <div id="game-container">
+            {{ game|safe }}
+        </div>
+    </div>
+
+
+    <div class="container mb-4">
+        <h1>[ Connect4 3]</h1>
+        <a href="{% url 'localgame' %}?gameType=1">Play Connect 4</a>
+        {% include "connect4/connect4.html" %}
+    </div>
+
+    <div class="container mb-4">
+        <h1>[ Pong ]</h1>
+        <div>
+            <a href="{% url 'localgame' %}?gameType=0&maxPlayers=2">Play Pong with 2 Players</a>
+        </div>
+        <div>
+            {% include "pong/2D.html" %}
+        </div>
+    </div>
+
+    <div class="container mb-4">
+        <h1>[ Local Game ]</h1>
+        {% url 'localgame' %}
+    </div>
+
+    <div class="container mb-4">
+        <h1>[ Lobby ]</h1>
+        {% include "lobby/index.html" %}
+    </div>
+
+    
+    <!-- <div>
+        <h1>Available URLs</h1>
+        <ul id="url-list"></ul>
+    </div> -->
+    </div>
+    
+    <div class="container">
+        <h1>Theme Switcher</h1>
+        <p>Choose three colors for your theme</p>
+        
+        <div class="color-picker">
+            <label for="color1">Background Color:</label>
+            <input type="color" id="color1" value="#444444">
+            
+            <label for="color2">Secondary Color:</label>
+            <input type="color" id="color2" value="#7F7F7F">
+            
+            <label for="color3">Accent Color:</label>
+            <input type="color" id="color3" value="#e74c3c">
+            
+            <button onclick="applyTheme()">Apply Theme</button>
+        </div>
+    </div>
+
+
+    <script>
+        fetch("{% url 'url_list' %}")
+            .then(response => response.json())
+            .then(data => {
+                const urlList = document.getElementById('url-list');
+
+                data.available_paths.forEach(url => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = url;
+                    urlList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching URL list:', error));
+        
+    </script>
+</body>
+{% include "components/menu_bar.html" %}
+{% endblock %}

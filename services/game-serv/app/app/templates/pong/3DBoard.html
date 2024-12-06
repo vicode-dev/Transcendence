@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="rounded-3" style="overflow: hidden; width: 100%; max-width: 50vh; margin: auto;">
+    <div id="center-div" style="width: 100%; display: block; height: auto; aspect-ratio: 1 / 1;"
+        data-max-players="{{ game.maxPlayers }}">
+        {% if online == False %}
+        <script src="{% static 'pong/local/rendu3d.js' %}"></script>
+        {% else %}
+        <script src="{% static 'pong/online/rendu3d.js' %}"></script>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function resizeCenterDiv() {
+        const centerDiv = document.getElementById('center-div');
+        const parentWidth = centerDiv.offsetWidth;
+        centerDiv.style.height = `${parentWidth}px`;
+    }
+    resizeCenterDiv();
+    window.addEventListener('resize', resizeCenterDiv);
+</script>

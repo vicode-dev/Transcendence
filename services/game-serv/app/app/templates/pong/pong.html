@@ -1,0 +1,129 @@
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'pong/local/pong2D.css' %}">
+{% endblock %}
+
+<div class="wrapper d-flex flex-column align-items-center">
+
+    <div class="start-btn">
+        <div class="d-flex justify-content-center align-items-center scores mt-2 mb-3">
+            <div class="mx-4">
+                Player 1 <div id="player1"></div>
+                <p class="score">
+                    Score:
+                <div id="score1">{{game.score.0}}</div>
+                </p>
+            </div>
+            <div class="mx-4">
+                Player 2 <div id="player2"></div>
+                <p class="score">
+                    Score:
+                <div id="score2">{{game.score.1}}</div>
+                </p>
+            </div>
+            {% if game.maxPlayers == 4 %}
+            <div class="mx-4">
+                Player 3 <div id="player3"></div>
+                <p id="score1" class="score">
+                    Score:
+                <div id="score3">{{game.score.2}}</div>
+                </p>
+            </div>
+            <div class="mx-4">
+                Player 4 <div id="player4"></div>
+                <p id="score2" class="score">
+                    Score:
+                <div id="score4">{{game.score.3}}</div>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+  
+    {% if online == False %}
+    <button class="start-btn d-flex justify-content-center align-items-center" onclick="gameLoop()">
+        <div class="btn-text">
+            start
+        </div>
+    </button>
+    {% endif %}
+
+
+    <div class="pong-main-content d-flex justify-content-center align-items-center m-2">
+
+ 
+     
+        <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center"
+            style="transform: rotate(-90deg);">
+            <button id="left-arrow-up" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+            <button id="left-arrow-down" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+  
+        {% if render == False %}
+            {% include "pong/2DBoard.html" %}
+        {% else %}
+            {% include "pong/3DBoard.html" %}
+        {% endif %}
+        {% if online == False %}
+        <div id="right-arrows" class="flex-shrink-1 arrows arrows-right d-flex align-items-center"
+            style="transform: rotate(-90deg);">
+            <button id="right-arrow-up" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+            <button id="right-arrow-down" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    <!-- 
+    <div class="d-flex justify-content-center align-items-center scores mt-2 mb-5">
+        <div class="mx-4">
+            Player 1
+            <p id="score1" class="score">
+                Score: {{ game.score.0 }}
+            </p>
+        </div>
+        <div class="mx-4">
+            Player 2
+            <p id="score2" class="score">
+                Score: {{ game.score.1 }}
+            </p>
+        </div>
+        {% if game.maxPlayers == 4 %}
+        <div class="mx-4">
+            Player 3
+            <p id="score3" class="score">
+                Score: {{ game.score.2 }}
+            </p>
+        </div>
+        <div class="mx-4">
+            Player 4
+            <p id="score4" class="score">
+                Score: {{ game.score.3 }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    -->
+    {% if game.maxPlayers == 4 %}
+    <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center mt-4 mb-3">
+        <button id="left-arrow-up" class="m-2 arrows-btn rounded-2 mx-4">
+            <i class="fas fa-solid fa-arrow-left"></i>
+        </button>
+        <button id="left-arrow-down" class="m-2 arrows-btn rounded-2 mx-4">
+            <i class="fas fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+    {% endif %}
+ 
+
+    {% if online == True %}
+    {% include "disconectPopup.html" %}
+    {% endif %}
+</div>
