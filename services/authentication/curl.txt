@@ -1,0 +1,13 @@
+curl -F grant_type=authorization_code \
+-F client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f \
+-F client_secret=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 \
+-F code=4d9097e4999d5bf0c2cdd7ebde8116401dac2b6775e1e5518f12ca629641d17d \
+-F redirect_uri=http://localhost::8000/register \
+-X POST https://api.intra.42.fr/oauth/token
+
+curl -X POST --data "grant_type=client_credentials&client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&client_secret=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" https://api.intra.42.fr/oauth/token
+
+
+curl -H "Authorization: Bearer 6ec39e053d85f0f4cf05415e09eb7ac3c2aa80054bb9ba11c25aceb96f7b05a0" https://api.intra.42.fr/v2/me
+
+https://cdn.intra.42.fr/users/be42245c79dd3e8eb3407c5df494d718/rbarbiot.jpg
