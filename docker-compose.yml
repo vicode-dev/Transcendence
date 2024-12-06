@@ -13,7 +13,7 @@ services:
     image: redis:alpine
     container_name: redis
     restart: unless-stopped
-# Django app
+# Authentication
   authentication:
     build:
       context: ./services/authentication
@@ -22,8 +22,11 @@ services:
     image: authentication
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      JWT_SECRET_KEY : ${JWT_SECRET_KEY}
+      SALT : ${SALT}
     volumes:
-     - ./services/authentication/auth:/app
+     - ./services/authentication/app:/app
     ports:
     - 8000:8000
     depends_on:
@@ -37,30 +40,50 @@ services:
     image: user-management
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET_KEY : ${JWT_SECRET_KEY}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    develop:
+      watch:
+        - path: ./services/user-management/app/
+          target: /app/
+          action: sync
     volumes:
-     - ./services/user-management/app:/app
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
-    ports:
-    - 8001:8000
     depends_on:
     - postgres
     - hardhat
 # Game 1
-  game1-serv:
+  game-serv:
     build:
-      context: ./services/game1-serv
-    container_name: game1-serv
+      context: ./services/game-serv
+    container_name: game-serv
     restart: unless-stopped
-    image: game1-serv
+    image: game-serv
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-     - ./services/game1-serv/app:/app
-    ports:
-    - 8002:8000
+      JWT_SECRET_KEY : ${JWT_SECRET_KEY}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    develop:
+      watch:
+        - path: ./services/game-serv/app/
+          target: /app/
+          action: sync
     depends_on:
     - postgres
+# AI
+  # ai-bot:
+  #   build:
+  #     context: ./services/ai-bot
+  #     restart: unless-stopped
+  #     image: ai-bot
+  #     volumes:
+  #      - ./services/ai-bot/app:/app
+  #     ports:
+  #     - 8003:8000
+  #     depends-on:
+  #     - game-serv
+  #     - authentication
 #Ethereum Blockchain emulator
   hardhat:
     build:
@@ -145,7 +168,7 @@ services:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     mem_limit: 4g
     volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
+      - ./services/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
     networks:
@@ -155,26 +178,36 @@ services:
     container_name: logstash
     restart: unless-stopped
     volumes:
-      - ./services/logstash/:/etc/logstash/conf.d/
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - ./services/logstash:/usr/share/logstash/pipeline:ro
     networks:
       - elk
-      - default
   kibana:
     image: kibana:8.15.0
     container_name: kibana
     restart: unless-stopped
     # volumes:
     #   - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-    ports:
-      - 5601:5601
     environment:
-      # SERVER_NAME: kibana.example.org
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
       xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+      #elasticsearch.password: ${ELASTIC_PASSWORD}
+    ports:
+      - "5601:5601"
     networks:
       - elk
+  filebeat:
+    image: elastic/filebeat:8.15.0
+    container_name: filebeat
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - elk
+    depends_on:
+      - logstash
 #Nginx (Proxy server) for all external acces
   nginx:
     container_name: nginx
@@ -188,6 +221,9 @@ services:
         - ./services/nginx/certificates/:/etc/certificates/
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
+    networks:
+      - elk
+      - default
 volumes:
   postgres_data:
   prometheus_data:
