@@ -1,8 +1,8 @@
 curl -F grant_type=authorization_code \
 -F client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f \
--F client_secret=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 \
--F code=4d9097e4999d5bf0c2cdd7ebde8116401dac2b6775e1e5518f12ca629641d17d \
--F redirect_uri=http://localhost::8000/register \
+-F client_secret=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 \
+-F code=52fb17a4b83c4b41689ae3a99240403da210ec6884babeacb8f2dacf9e788641 \
+-F redirect_uri=https://transcendence.vicode.dev/42-oauth2/ \
 -X POST https://api.intra.42.fr/oauth/token
 
 curl -X POST --data "grant_type=client_credentials&client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&client_secret=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" https://api.intra.42.fr/oauth/token
