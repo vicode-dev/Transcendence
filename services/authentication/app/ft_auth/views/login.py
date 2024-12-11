@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 ### Utils ###
 
 from ft_auth.utils.token import \
-    delete_jwt, get_jwt_data, generate_jwt
+    get_jwt_data, generate_jwt
 from ft_auth.utils.user import user_login
 from ft_auth.utils.single_page import single_page_redirection
 
@@ -72,10 +72,4 @@ def post_login(request):
            )
 	response = HttpResponseRedirect("/profil")
 	generate_jwt(response, user.to_dict())
-	return response
-
-@require_http_methods(["GET"])
-def logout(request):
-	response = HttpResponseRedirect("/login")
-	delete_jwt(response)
 	return response
