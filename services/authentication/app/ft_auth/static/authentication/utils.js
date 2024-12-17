@@ -36,6 +36,7 @@ function getQuery(params)
 
 function checkSession()
 {
+	// event.preventDefault();
 	loadPage("/loading/", false)
 	const session = getCookie("session");
 	if (session)
@@ -52,7 +53,16 @@ function checkSession()
 		setTimeout(checkSession, 3000)
 }
 
-document.getElementById("login").addEventListener("submit", async function (event) {
+/*
+
+Pas de panique ! Les lignes ci-dessous sont temporaires et vont être
+remplacées par une class 
+
+*/
+const login = document.getElementById("login")
+
+if (login)
+	login.addEventListener("submit", async function (event) {
 	event.preventDefault();
 	const form = event.target;
 	const formData = new FormData(form);
@@ -80,4 +90,36 @@ document.getElementById("login").addEventListener("submit", async function (even
 	//   paper.innerHTML = "Une erreur est survenue.";
 	}
   });
+
+  const register = document.getElementById("register")
+
+  if (register)
+	  login.addEventListener("submit", async function (event) {
+	  event.preventDefault();
+	  const form = event.target;
+	  const formData = new FormData(form);
+  
+	  loadPage("/loading/", false);
+  
+	  try {
+		const response = await fetch("/register/", {
+		  method: "POST",
+		  headers: {
+			  'X-CSRFToken': csrftoken,
+		  },
+		  mode: 'same-origin',
+		  body: formData
+		});
+		console.log(formData)
+		if (!response.ok) {
+		  throw new Error(`Erreur : ${response.statusText}`);
+		}
+	
+	  //   const result = await response.json();
+	  //   paper.textContent = `Réponse du serveur : ${result.message}`;
+	  } catch (error) {
+		console.error(error);
+	  //   paper.innerHTML = "Une erreur est survenue.";
+	  }
+	});
   

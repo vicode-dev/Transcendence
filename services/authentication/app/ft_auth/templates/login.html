@@ -1,26 +1,29 @@
 {% load static %}
+{% load i18n %}
+
+
 <div class="container" id="paper">
 	<div class="d-flex justify-content-center">
 		<div class="col-md-6 col-md-offset-3">
-			<h2>Login</h2>
+			<h2>{% translate "Login" %}</h2>
 			<form action="/login/" method="post" class="form-horizontal" id="login">
 				<div class="form-group">
-					<label for="login" class="col-sm-3 control-label">Login Name</label>
+					<label for="login" class="col-sm-3 control-label">{% translate "Login Name" %}</label>
 					<div class="col-sm-9">
 						<input
 							type="text" class="form-control"
 							{% if login != None %}
 								value="{{ login }}"
 							{% endif %}
-							placeholder="Enter login name" name="login" required autocomplete>
+							placeholder="{% translate 'Enter login name' %}" name="login" required autocomplete>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="password" class="col-sm-3 control-label">Password</label>
+					<label for="password" class="col-sm-3 control-label">{% translate "Password" %}</label>
 					<div class="col-sm-9">
 						<input
 							type="password" class="form-control"
-							placeholder="Enter Password" name="password" required>
+							placeholder="{% translate 'Enter Password' %}" name="password" required>
 					</div>
 				</div>
 				{% if error != None %}
@@ -33,21 +36,21 @@
 							class="btn btn-primary btn-block"
 							onclick="checkSession();"
 						>
-								Login
+								{% translate "Login" %}
 						</button>
 					</div>
 				</div>
 
 				<div class="text-center" style="background-color:#f1f1f1; padding: 15px; margin-top: 20px;">
-					<p>No account yet ? <a href="/register" onclick"loadPageEvent(event, '{% url 'register' %}')">Create one</a></p>
+					<p>{% translate "No account yet ?" %} <a href="{% url 'register' %}" onclick="loadPageEvent(event, '{% url 'register' %}')">{% translate "Create one" %}</a></p>
 					<p>
-						Or
+						{% translate "Or" %}
 						<a
 							target="_blank"
 							onclick="checkSession();"
 							href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&redirect_uri=https%3A%2F%2Ftranscendence.vicode.dev%2F42-oauth2%2F&response_type=code"
 						>
-							login with 42
+							{% translate "login with 42" %}
 						</a>
 					</p>
 				</div>

@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-16 14:07+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: app/ft_auth/settings.py:98
+msgid "English"
+msgstr "Anglais"
+
+#: app/ft_auth/settings.py:99
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: app/ft_auth/settings.py:100
+msgid "French"
+msgstr "Français"
+
+#: app/ft_auth/settings.py:101
+msgid "Dutch"
+msgstr "Néerlandais"
+
+#: app/ft_auth/templates/login.html:8 app/ft_auth/templates/login.html:39
+#: app/ft_auth/templates/register.html:70
+msgid "Login"
+msgstr "Connexion"
+
+#: app/ft_auth/templates/login.html:11 app/ft_auth/templates/register.html:9
+msgid "Login Name"
+msgstr "Nom d'utilisateur"
+
+#: app/ft_auth/templates/login.html:18 app/ft_auth/templates/register.html:16
+msgid "Enter login name"
+msgstr "Entrez le nom d'utilisateur"
+
+#: app/ft_auth/templates/login.html:22 app/ft_auth/templates/register.html:47
+msgid "Password"
+msgstr "Mot de passe"
+
+#: app/ft_auth/templates/login.html:26 app/ft_auth/templates/register.html:49
+msgid "Enter Password"
+msgstr "Entrez le mot de passe"
+
+#: app/ft_auth/templates/login.html:45
+msgid "No account yet ?"
+msgstr "Pas encore de compte ?"
+
+#: app/ft_auth/templates/login.html:45
+msgid "Create one"
+msgstr "Créez-en un"
+
+#: app/ft_auth/templates/login.html:47
+msgid "Or"
+msgstr "Ou"
+
+#: app/ft_auth/templates/login.html:53 app/ft_auth/templates/register.html:78
+msgid "login with 42"
+msgstr "se connecter avec 42"
+
+#: app/ft_auth/templates/logout.html:4
+msgid "Disconnection"
+msgstr "Déconnexion"
+
+#: app/ft_auth/templates/register.html:6 app/ft_auth/templates/register.html:63
+msgid "Register"
+msgstr "Inscription"
+
+#: app/ft_auth/templates/register.html:22
+msgid "First Name"
+msgstr "Prénom"
+
+#: app/ft_auth/templates/register.html:29
+msgid "Enter your first name"
+msgstr "Entrez votre prénom"
+
+#: app/ft_auth/templates/register.html:35
+msgid "Last Name"
+msgstr "Nom de famille"
+
+#: app/ft_auth/templates/register.html:42
+msgid "Enter your last name"
+msgstr "Entrez votre nom de famille"
+
+#: app/ft_auth/templates/register.html:70
+msgid "You already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: app/ft_auth/templates/register.html:72
+msgid "Or maybe"
+msgstr "Ou peut-être"
+
+#: app/ft_auth/utils/user.py:105
+msgid "One or more required fields are empty"
+msgstr "Un ou plusieurs champs obligatoires sont vides"
+
+#: app/ft_auth/utils/user.py:109
+msgid "Your login name isn't an option!"
+msgstr "Votre nom d'utilisateur n'est pas valide !"
+
+#: app/ft_auth/utils/user.py:111
+msgid "Login size must be between 8 and 19 characters."
+msgstr "La taille du nom d'utilisateur doit être comprise entre 8 et 19 caractères."
+
+#: app/ft_auth/utils/user.py:115
+msgid "Your password isn't an option!"
+msgstr "Votre mot de passe n'est pas valide !"
+
+#: app/ft_auth/utils/user.py:117
+msgid "Password size must be between 8 and 32 characters."
+msgstr "La taille du mot de passe doit être comprise entre 8 et 32 caractères."
+
+#: app/ft_auth/utils/user.py:121 app/ft_auth/utils/user.py:124
+msgid "Your first name isn't an option!"
+msgstr "Votre prénom n'est pas valide !"
+
+#: app/ft_auth/utils/user.py:126
+msgid "Combination of first name and last name must be between 8 and 32 characters."
+msgstr "La combinaison du prénom et du nom de famille doit être comprise entre 8 et 32 caractères."
+
+#: app/ft_auth/utils/user.py:129
+msgid "Login must contain only alphabetic characters."
+msgstr "Le nom d'utilisateur doit contenir uniquement des caractères alphabétiques."
+
+#: app/ft_auth/utils/user.py:132
+msgid "First and last names must contain only alphabetic characters and spaces."
+msgstr "Les prénoms et noms de famille doivent contenir uniquement des caractères alphabétiques et des espaces."
+
+#: app/ft_auth/utils/user.py:135
+msgid "Login already exists."
+msgstr "Le nom d'utilisateur existe déjà."
