@@ -1,51 +1,52 @@
 {% load static %}
+{% load i18n %}
 <div class="container">
 	<div class="d-flex justify-content-center">
 		<div class="col-md-6 col-md-offset-3">
-			<h2>Register</h2>
-			<form action="" method="post" class="form-horizontal">
+			<h2>{% translate "Register" %}</h2>
+			<form action="" method="post" class="form-horizontal" id="register">
 				<div class="form-group">
-					<label for="login" class="col-sm-3 control-label">Login Name</label>
+					<label for="login" class="col-sm-3 control-label">{% translate "Login Name" %}</label>
 					<div class="col-sm-9">
 						<input 
 							type="text" class="form-control" id="login" name="login"
 							{% if login != None %}
 								value="{{ login }}"
 							{% endif %}
-							placeholder="Enter login name" required
+							placeholder="{% translate 'Enter login name' %}" required
 						>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
-					<label for="first_name" class="col-sm-3 control-label">First Name</label>
+					<label for="first_name" class="col-sm-3 control-label">{% translate "First Name" %}</label>
 					<div class="col-sm-9">
 						<input
 							type="text" class="form-control" id="first_name" name="first_name"
 							{% if first_name != None %}
 								value="{{ first_name }}"
 							{% endif %}
-							placeholder="Enter your first name" required
+							placeholder="{% translate 'Enter your first name' %}" required
 						>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
-					<label for="last_name" class="col-sm-3 control-label">Last Name</label>
+					<label for="last_name" class="col-sm-3 control-label">{% translate "Last Name" %}</label>
 					<div class="col-sm-9">
 						<input
 							type="text" class="form-control" id="last_name" name="last_name"
 							{% if last_name != None %}
 								value="{{ last_name }}"
 							{% endif %}
-							placeholder="Enter your last name" required>
+							placeholder="{% translate 'Enter your last name' %}" required>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
-					<label for="password" class="col-sm-3 control-label">Password</label>
+					<label for="password" class="col-sm-3 control-label">{% translate "Password" %}</label>
 					<div class="col-sm-9">
-						<input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" >
+						<input type="password" class="form-control" id="password" name="password" placeholder="{% translate 'Enter Password' %}" >
 					</div>
 				</div>
 				{% if error != None %}
@@ -54,21 +55,27 @@
 				<div class="form-group">
 					<br>
 					<div class="col-sm-offset-3 col-sm-9">
-						<button type="submit" class="btn btn-primary btn-block">Register</button>
+						<button
+							type="submit"
+							class="btn btn-primary btn-block"
+							onclick="checkSession();"
+						>
+								{% translate "Register" %}
+						</button>
 					</div>
 				</div>
 			</form>
 
 			<div class="text-center" style="background-color:#f1f1f1; padding: 15px; margin-top: 20px;">
-				<p>You already have an account? <a href="/login">Login</a></p>
+				<p>{% translate "You already have an account?" %} <a href="{% url 'login' %}" onclick="loadPageEvent(event, '{% url 'login' %}')">{% translate "Login" %}</a></p>
 				<p>
-					Or maybe
+					{% translate "Or maybe" %}
 					<a
 						target="_blank"
 						onclick="checkSession();"
 						href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f&redirect_uri=https%3A%2F%2Ftranscendence.vicode.dev%2F42-oauth2%2F&response_type=code"
 					>
-						login with 42
+						{% translate "login with 42" %}
 					</a>
 				</p>
 			</div>

@@ -4,10 +4,11 @@
 
 ### Django ###
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import gettext as _
 
 ### Utils ###
 
@@ -40,7 +41,7 @@ def post_login(request):
 	login = request.POST.get('login')
 	if login is None or len(login) == 0:
 		context = {
-			"error": "You forgot to specify your login name."
+			"error": _("You forgot to specify your login name.")
 		}
 		return render(
       			request,
@@ -50,7 +51,7 @@ def post_login(request):
 	password = request.POST.get('password')
 	if password is None or len(password) == 0:
 		context = {
-			"error": "You forgot to specify your password.",
+			"error": _("You forgot to specify your password."),
 			"login": login
 		}
 		return render(
@@ -62,7 +63,7 @@ def post_login(request):
 	user = user_login(login, password)
 	if user is None:
 		context = {
-			"error": "Login and password do not match.",
+			"error": _("Login and password do not match."),
 			"login": login
 		}
 		return render(

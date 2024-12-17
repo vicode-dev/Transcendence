@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-16 14:07+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: app/ft_auth/settings.py:98
+msgid "English"
+msgstr "Engels"
+
+#: app/ft_auth/settings.py:99
+msgid "Spanish"
+msgstr "Spaans"
+
+#: app/ft_auth/settings.py:100
+msgid "French"
+msgstr "Frans"
+
+#: app/ft_auth/settings.py:101
+msgid "Dutch"
+msgstr "Nederlands"
+
+#: app/ft_auth/templates/login.html:8 app/ft_auth/templates/login.html:39
+#: app/ft_auth/templates/register.html:70
+msgid "Login"
+msgstr "Inloggen"
+
+#: app/ft_auth/templates/login.html:11 app/ft_auth/templates/register.html:9
+msgid "Login Name"
+msgstr "Gebruikersnaam"
+
+#: app/ft_auth/templates/login.html:18 app/ft_auth/templates/register.html:16
+msgid "Enter login name"
+msgstr "gebruikersnaam"
+
+#: app/ft_auth/templates/login.html:22 app/ft_auth/templates/register.html:47
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: app/ft_auth/templates/login.html:26 app/ft_auth/templates/register.html:49
+msgid "Enter Password"
+msgstr "wachtwoord"
+
+#: app/ft_auth/templates/login.html:45
+msgid "No account yet ?"
+msgstr "Nog geen account?"
+
+#: app/ft_auth/templates/login.html:45
+msgid "Create one"
+msgstr "Maak er een"
+
+#: app/ft_auth/templates/login.html:47
+msgid "Or"
+msgstr "Of"
+
+#: app/ft_auth/templates/login.html:53 app/ft_auth/templates/register.html:78
+msgid "login with 42"
+msgstr "log in met 42"
+
+#: app/ft_auth/templates/logout.html:4
+msgid "Disconnection"
+msgstr "Verbinding verbroken"
+
+#: app/ft_auth/templates/register.html:6 app/ft_auth/templates/register.html:63
+msgid "Register"
+msgstr "Registreren"
+
+#: app/ft_auth/templates/register.html:22
+msgid "First Name"
+msgstr "Voornaam"
+
+#: app/ft_auth/templates/register.html:29
+msgid "Enter your first name"
+msgstr "Voornaam"
+
+#: app/ft_auth/templates/register.html:35
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: app/ft_auth/templates/register.html:42
+msgid "Enter your last name"
+msgstr "Achternaam"
+
+#: app/ft_auth/templates/register.html:70
+msgid "You already have an account?"
+msgstr "Heeft u al een account?"
+
+#: app/ft_auth/templates/register.html:72
+msgid "Or maybe"
+msgstr "Of misschien"
+
+#: app/ft_auth/utils/user.py:105
+msgid "One or more required fields are empty"
+msgstr "Een of meer verplichte velden zijn leeg"
+
+#: app/ft_auth/utils/user.py:109
+msgid "Your login name isn't an option!"
+msgstr "Uw inlognaam is een verplicht veld!"
+
+#: app/ft_auth/utils/user.py:111
+msgid "Login size must be between 8 and 19 characters."
+msgstr "Inlognaam moet tussen 8 en 19 tekens lang zijn."
+
+#: app/ft_auth/utils/user.py:115
+msgid "Your password isn't an option!"
+msgstr "Uw wachtwoord is een verplicht veld!"
+
+#: app/ft_auth/utils/user.py:117
+msgid "Password size must be between 8 and 32 characters."
+msgstr "Wachtwoord moet tussen 8 en 32 tekens lang zijn."
+
+#: app/ft_auth/utils/user.py:121 app/ft_auth/utils/user.py:124
+msgid "Your first name isn't an option!"
+msgstr "Uw voornaam is een verplicht veld!"
+
+#: app/ft_auth/utils/user.py:126
+msgid "Combination of first name and last name must be between 8 and 32 characters."
+msgstr "De combinatie van voornaam en achternaam moet tussen 8 en 32 tekens lang zijn."
+
+#: app/ft_auth/utils/user.py:129
+msgid "Login must contains only alphabetic characters."
+msgstr "Login mag alleen alfabetische tekens bevatten."
+
+#: app/ft_auth/utils/user.py:132
+msgid "First and last names must contain only alphabetic characters and spaces."
+msgstr "Voor- en achternamen mogen alleen alfabetische tekens en spaties bevatten."
+
+#: app/ft_auth/utils/user.py:135
+msgid "Login already exists."
+msgstr "Login bestaat al."

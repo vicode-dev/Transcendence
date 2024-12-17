@@ -2,7 +2,7 @@ from hashlib import md5
 from os import environ
 from ft_auth.models import User
 from ft_auth.utils.api_users import create_user
-
+from django.utils.translation import gettext as _
 ########################################################
 ###                    Hash                          ###
 ########################################################
@@ -102,37 +102,37 @@ def check_user(login, first_name, last_name, password):
 		or first_name is None \
 		or last_name is None \
 		or password is None:
-		return "One or more required fields are empty"
+		return _("One or more required fields are empty")
 
 	length = len(login)
 	if length == 0:
-		return "Your login name isn't an option!"
+		return _("Your login name isn't an option!")
 	if length < 4 or length > 19:
-		return "Login size must be between 8 and 19 characters."
+		return _("Login size must be between 8 and 19 characters.")
 
 	length = len(password)
 	if length == 0:
-		return "Your password isn't an option!"
+		return _("Your password isn't an option!")
 	if length < 8 or length > 32:
-		return "Password size must be between 8 and 32 characters."
+		return _("Password size must be between 8 and 32 characters.")
 
 	length = len(first_name)
 	if length == 0:
-		return "Your first name isn't an option!"
+		return _("Your first name isn't an option!")
 	length = len(first_name) + 1 + len(last_name) 
 	if length == 0:
-		return "Your first name isn't an option!"
+		return _("Your first name isn't an option!")
 	if length < 8 or length > 32:
-		return "Combination of fisrt name and last name must be between 8 and 32 characters."
+		return _("Combination of fisrt name and last name must be between 8 and 32 characters.")
 
 	if not isAlphabet(login):
-		return "Login must contains only alphabetic characters."
+		return _("Login must contains only alphabetic characters.")
 	if not isAlphabet(first_name, accept_spaces=True) \
     	or not isAlphabet(last_name, accept_spaces=True):
-		return "First and last names must contain only alphabetic characters and spaces."
+		return _("First and last names must contain only alphabetic characters and spaces.")
 
 	if User.objects.filter(login=login).exists():
-		return "Login already exists."
+		return _("Login already exists.")
 	return None
 
 ########################################################
