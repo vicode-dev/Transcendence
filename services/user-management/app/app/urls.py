@@ -18,12 +18,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("api/games/setup/", views.setupContract),
+    # path("api/games/setup/", views.setupContract),
     path("api/games/", views.getGamesNumber),
     path("api/games/add", views.add),
     path("api/", views.addPlayer),
 	path('api/games/<int:id>/', views.getGameById),
     path('api/tournament/<int:id>/', views.getTournamentById),
+    path('api/tournament/add', views.addTournament),
     path('api/player/<int:playerId>/', views.getPlayerById),
     path('api/player/<int:playerId>/html/', views.playerHTML),
     path('api/player/<int:playerId>/games/', views.getPlayerGame),
@@ -32,9 +33,11 @@ urlpatterns = [
     path('api/player/<int:playerId>/friends/', views.getPlayerFriends),
     path('api/player/<int:playerId>/role/', views.playerRole),
     path('api/player/<int:playerId>/elo/', views.playerElo),
+    path('api/players/elo/', views.playersElo),
     path('api/player', views.addPlayer),
     path('api/friends/add', views.addFriend),
     path('api/friends/remove', views.removeFriend),
+    path('tournament/summary/<int:tournamentId>/', views.tournament),
     path('profil/<int:playerId>/', views.profil),
     path('profil/', views.authProfil),
     path('settings/', views.settings, name="settings")

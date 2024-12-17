@@ -7,11 +7,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import F, Func, Value
 from . import blockchain
+from django.conf import settings as GlobalSettings
 from app.models import User
 from app.utils.token import get_jwt_data
 from app.eloUpdater import elo
 import requests, json, os
+import logging
+from django.utils.translation import gettext as _
 
+logger = logging.getLogger('app')
 def render_redirect(request):
     jwtData = get_jwt_data(request)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and "error" not in jwtData:
@@ -39,8 +43,18 @@ def setupContract(request):
 def add(request):
     game = json.loads(request.body.decode('utf-8'))
     elo(game)
-    blockchain.addGame(game["players"], game["score"], game["gameType"], int(game["endTime"] - game["startTime"]), game["startTime"], game["endTime"])
-    return HttpResponse(status=204)
+    tx_receipt = blockchain.addGame(game["players"], game["score"], game["gameType"], game["startTime"], game["endTime"])
+    return JsonResponse({"gameId": tx_receipt})
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def addTournament(request):
+    tournament = json.loads(request.body.decode('utf-8'))
+    for i in range(len(tournament["playersId"])):
+        if tournament["playersId"][i] == None:
+            tournament["playersId"][i] = -1
+    tx_receipt = blockchain.addTournament(tournament["gamesId"], tournament["playersId"])
+    return JsonResponse({"tournamentId": tx_receipt})
 
 @require_http_methods(["GET"])
 def getGamesNumber(request):
@@ -55,7 +69,7 @@ def addPlayer(request):
     if playerId == 0:
         return HttpResponseBadRequest()
     username = request.GET.get('username', "Arthur Dent")
-    newUser = User(playerId=playerId, username=username)
+    newUser = User(playerId=playerId, username=username, role=('D' if playerId != 1 else 'A'))
     newUser.save()
     return HttpResponse(status=204)
 
@@ -71,7 +85,7 @@ def getTournamentById(request, id):
     jwtData = get_jwt_data(request)
     if "error" in jwtData:
         return HttpResponse(jwtData["error"], status=401)
-    return JsonResponse(blockchain.getTournamentById(id).to_dict())
+    return JsonResponse(blockchain.getTournamentById(id))
 
 @require_http_methods(["GET"])
 def getPlayerById(request, playerId):
@@ -111,6 +125,19 @@ def playerRole(request, playerId):
 
 @require_http_methods(["GET"])
 def playerElo(request, playerId):
+    eloPong, eloConnect = User.objects.filter(pk=playerId).values_list("eloPong", "eloConnect").first()
+    if eloPong:
+        return JsonResponse({"eloPong": eloPong, "eloConnect": eloConnect})
+    else:
+        raise Http404("User not found")
+
+@require_http_methods(["POST"])
+def playersElo(request):
+    playerIds = json.loads(request.body.decode('utf-8'))["playerIds"]
+    for i in range(len(playerIds)):
+        playerIds[i] = int(playerIds[i])
+    elos = User.objects.filter(pk__in=playerIds).values("eloPong", "eloConnect")
+    return JsonResponse(list(elos))
     eloPong, eloConnect = User.objects.filter(pk=playerId).values_list("eloPong", "eloConnect").first()
     if eloPong:
         return JsonResponse({"eloPong": eloPong, "eloConnect": eloConnect})
@@ -237,4 +264,12 @@ def settings(request):
     if redirect:
         return redirect
     jwtData = get_jwt_data(request)
-    return render(request, "settings/index.html", {"playerId": jwtData["id"]})
+    logger.debug(dict(GlobalSettings.LANGUAGES).keys())
+    return render(request, "settings/index.html", {"playerId": jwtData["id"], "available_languages": dict(GlobalSettings.LANGUAGES).keys()})
+
+@require_http_methods(["GET"])
+def tournament(request, tournamentId):
+    redirect = render_redirect(request)
+    if redirect:
+        return redirect
+    return render(request, "tournament.html", {"tournament": blockchain.getTournamentById(tournamentId)})

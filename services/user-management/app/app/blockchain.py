@@ -5,16 +5,15 @@ Contract = None
 w3 = None
 
 class Game:
-    def __init__(self, _gameId, _playerIds, _score, _gameType, _duration, _startTime, _endTime):
+    def __init__(self, _gameId, _playerIds, _score, _gameType, _startTime, _endTime):
         self.gameId = _gameId
         self.playerIds = _playerIds
         self.gameType = _gameType
         self.score = _score
-        self.duration = _duration
         self.startTime = _startTime
         self.endTime = _endTime
     def to_dict(self):
-        return ({"gameId": self.gameId, "playerIds": self.playerIds, "gameType": self.gameType, "score": self.score, "duration": self.duration, "startTime": self.startTime, "endTime": self.endTime })
+        return ({"gameId": self.gameId, "playerIds": self.playerIds, "gameType": self.gameType, "score": self.score, "startTime": self.startTime, "endTime": self.endTime })
 
 def setup():
     global Contract
@@ -45,7 +44,7 @@ def _getContract():
 
 #Game function
 ##Setter
-def addGame(_playerIds, _score, _gameType, _duration, _startTime, _endTime):
+def addGame(_playerIds, _score, _gameType, _startTime, _endTime):
     global Contract
     global w3
     if Contract is None:
@@ -54,22 +53,25 @@ def addGame(_playerIds, _score, _gameType, _duration, _startTime, _endTime):
         exists = User.objects.filter(pk=id).exists()
         if not exists:
             raise Exception(f"User {id} doesn't exist")
-    tx_hash = Contract.functions.addGame(_playerIds, _score, _gameType, _duration, _startTime, _endTime).transact()
+    tx_hash = Contract.functions.addGame(_playerIds, _score, _gameType, _startTime, _endTime).transact()
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    logs = Contract.events.GameAdded().process_receipt(tx_receipt)
+    gameId = logs[0]['args']['gameId']
+    return gameId
 ##Getter
 def getGameById(index):
     global Contract
     if Contract is None:
         _getContract()
     gameObject = Contract.functions.getGameById(index).call()
-    return Game(gameObject[0], gameObject[1], gameObject[2], gameObject[3], gameObject[4], gameObject[5], gameObject[6])
+    return Game(gameObject[0], gameObject[1], gameObject[2], gameObject[3], gameObject[4], gameObject[5])
 
 def getGamesByPlayer(playerId):
     global Contract
     if Contract is None:
         _getContract()
     gameObject = Contract.functions.getGamesByPlayer(playerId).call()
-    game = [Game(t[0], t[1], t[2], t[3], t[4], t[5], t[6]) for t in gameObject]
+    game = [Game(t[0], t[1], t[2], t[3], t[4], t[5]) for t in gameObject]
     return game
 
 def getGamesNumber():
@@ -86,9 +88,13 @@ def addTournament(_gameIds, _playerIds):
         _getContract()
     tx_hash = Contract.functions.addTournament(_gameIds, _playerIds).transact()
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    logs = Contract.events.TournamentAdded().process_receipt(tx_receipt)
+    tournamentId = logs[0]['args']['tournamentId']
+    return tournamentId
 ##Getter
-def getTournamentById(id):
+def getTournamentById(id):  
     global Contract
     if Contract is None:
         _getContract()
-    return Contract.functions.getTournamentById(id).call()
+    tournament = Contract.functions.getTournamentById(id).call()
+    return {"tournamentId": tournament[0], "gamesId": tournament[1], "playersId": tournament[2]}

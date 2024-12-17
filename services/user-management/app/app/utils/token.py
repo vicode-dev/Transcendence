@@ -8,19 +8,19 @@ from app.utils.api_users import get_user
 ###                    Encode                        ###
 ########################################################
 
-def encode_jwt(data):
+def encode_jwt(user_info):
 	header = {
 		"alg": "HS256",
   		"typ": "JWT"
 	}
 	payload = {
-		"id": data["id"],
+		"id": user_info["id"],
 		"iat":
 			datetime.now(timezone.utc),
 		"exp":
 			(datetime.now(timezone.utc)
-			+ timedelta(hours=1)),
-		"role": get_user(data["id"], target="role")["role"]
+			+ timedelta(days=1)),
+		"role": get_user(user_info["id"], target="role")["role"]
 	}
 
 	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
@@ -53,7 +53,7 @@ def get_jwt_data(request):
 	token = get_jwt(request)
 	return decode_jwt(token)
 
-def generate_jwt(response, data):
-	token = encode_jwt(data)
+def generate_jwt(response, user_info):
+	token = encode_jwt(user_info)
 	save_jwt(response, token)
 	return (token)

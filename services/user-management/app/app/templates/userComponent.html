@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'user-management/userComponent.css' %}">
 
-<div id="userComponent">
+<div id="userComponent" class="rounded-2">
     <a href="/profil/{{ user.playerId }}/" onclick="loadPageEvent(event,'/profil/{{ user.playerId }}/')" style="color: var(--secondary-color); text-decoration: none;">
         <div class="d-flex align-items-center" style="margin-bottom: 0;">
                 <img class="usr-img mx-1 mr-3" src="/api/player/{{ user.playerId }}/avatar" style="height: 1.7rem; width: 1.7rem; border-radius: 50%;" />

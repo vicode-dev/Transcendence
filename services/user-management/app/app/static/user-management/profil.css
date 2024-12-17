@@ -12,7 +12,8 @@
 }
 
 .one-game {
-	/* border: solid var(--secondary-color) 1px; */
+	width: fit-content;
+	border-bottom: solid var(--fourth-color) 2px;
 	/* background-color: #E1E0DD; */
 	/* opacity: 50%; */
 	/* box-shadow: 0 0 9999px 9999px rgba(0, 0, 0, 0.5); */
@@ -22,13 +23,15 @@
 }
 
 @media (max-width: 356px) {
-	.section-title {
-		font-size: 1.2rem;
+	/* #friends h3 {
+		font-size: .1rem;
 	}
+	.section-title {
+		font-size: 1.1rem;
+	} */
 	.one-game h3 {
 		font-size: 1.1rem;
 	}
-
 	.one-game {
 		font-size: .9rem;
 	}
@@ -36,6 +39,8 @@
 
 .section {
 	margin-top: 2rem;
+	background-color: var(--fourth-color);
+	padding: 1rem;
 	/* background-color: #E1E0DD; */
 }
 
@@ -44,22 +49,26 @@
 	/* background-color: color(var(--background-color) lightness(-10%)); */
 	width: fit-content;
 	border: solid var(--accent-color) 1.5px;
+	font-size: 1.1rem;
 }
 
 .ennemy-profile {
 	margin-bottom: 0rem;
-	/* background-color: #E1E0DD; */
-	/* border: solid #E1E0DD 2px; */
+	/* background-color: #ECEBE8; */
+	/* border: solid #ECEBE8 2px; */
+	border: solid var(--fourthColor) 2px;
 	padding: .1rem;
 	padding-left: .5rem;
 	padding-right: .5rem;
 	margin-top: .2rem;
+	margin-right: 3px;
 }
 
 .ennemy-profile:hover {
 	/* opacity: 60%; */
 	/* cursor: pointer; */
-	background-color: #E1E0DD;
+	/* background-color: #E1E0DD; */
+	background-color: var(--fourthColor);
 }
 
 .against {
@@ -139,6 +148,10 @@
 
 .game-status-draw {
 	background-color: var(--background-color);
-	color: var(--accent-color);
-	border: var(--accent-color) solid 1.5px;
+	color: var(--secondary-color);
+	border: var(--secondary-color) solid 1.5px;
+}
+
+.bar {
+	background-color: var(--accent-color);
 }

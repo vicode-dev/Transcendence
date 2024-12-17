@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-16 13:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: app/app/settings.py:116
+msgid "English"
+msgstr "Engels"
+
+#: app/app/settings.py:118
+msgid "French"
+msgstr "Frans"
+
+#: app/app/templates/friendButton.html:8
+msgid "add as friend"
+msgstr "toevoegen als vriend"
+
+#: app/app/templates/friendButton.html:11
+msgid "remove as friend"
+msgstr "verwijderen van vrienden"
+
+#: app/app/templates/profil.html:28
+msgid "settings"
+msgstr "instellingen"
+
+#: app/app/templates/profil.html:43
+msgid "Logout"
+msgstr "Uitloggen"
+
+#: app/app/templates/profil.html:47
+msgid "Friends Title"
+msgstr "Vrienden"
+
+#: app/app/templates/profil.html:63
+msgid "Game History"
+msgstr "Spelgeschiedenis"
+
+#: app/app/templates/profil.html:66
+msgid "no game played yet!"
+msgstr "nog geen spel gespeeld!"
+
+#: app/app/templates/profil.html:74
+msgid "Connect4"
+msgstr "Vier op een rij"
+
+#: app/app/templates/profil.html:77
+msgid "Pong"
+msgstr "Pong"
+
+#: app/app/templates/profil.html:83
+msgid "draw"
+msgstr "gelijkspel"
+
+#: app/app/templates/profil.html:86
+msgid "won"
+msgstr "gewonnen"
+
+#: app/app/templates/profil.html:88
+msgid "lost"
+msgstr "verloren"
+
+#: app/app/templates/settings/theme_picker.html:9
+msgid "Theme Picker"
+msgstr "Themakiezer"
+
+#: app/app/templates/settings/theme_picker.html:11
+msgid "Select a default theme"
+msgstr "Selecteer een standaardthema"
+
+#: app/app/templates/settings/theme_picker.html:81
+msgid "Or choose three colors for your theme"
+msgstr "Of kies drie kleuren voor je thema"
+
+#: app/app/templates/settings/theme_picker.html:99
+msgid "Test the theme"
+msgstr "Test het thema"

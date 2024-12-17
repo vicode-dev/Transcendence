@@ -1,4 +1,3 @@
-
 async function postData(url) {
     const response = await fetch(url, {
         method: 'POST',
@@ -29,11 +28,8 @@ function addFriend(friendId) {
     postData("/api/friends/add?playerId=" + friendId)
     .catch(error => {
         console.error('Error:', error);
-        // document.getElementById("friendButton").attributes
     });
-
     updateBtn("removeFriend", "remove as friend", friendId, " removeFriendBtn");
-    // updateBtn("removeFriend", "remove as friend", friendId, "");
 }
 
 function removeFriend(friendId) {
@@ -41,7 +37,5 @@ function removeFriend(friendId) {
     .catch(error => {
         console.error('Error:', error);
     });
-
     updateBtn("addFriend", "add as friend", friendId, " addFriendBtn");
-    // updateBtn("addFriend", "add as friend", friendId, "");
 }

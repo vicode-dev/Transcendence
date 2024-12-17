@@ -1,7 +1,8 @@
+{% load i18n %}
 <div>
     <div class="preview">
-        <p>Current Profile Picture:</p>
-        <img src="/api/player/{{ playerId }}/avatar/" alt="Current Profile Picture"
+        <p>{% translate "Current Profile Picture:" %}</p>
+        <img src="/api/player/{{ playerId }}/avatar/" alt="{% translate 'Current Profile Picture:' %}"
             style="height: 3rem; width: 3rem; border-radius: 50%;">
     </div>
 
@@ -11,11 +12,11 @@
             {% csrf_token %}
 
             <!-- Profile Picture Field -->
-            <label for="id_profile_picture">Select new picture:</label>
+            <label for="id_profile_picture">{% translate "Select new picture:" %}</label>
             <input type="file" name="profile_picture" id="id_profile_picture" accept="image/jpeg,  image/png" required>
 
             <!-- Submit Button -->
-            <button type="submit">Upload Picture</button>
+            <button type="submit">{% translate "Upload Picture" %}</button>
         </form>
     </div>
 </div>

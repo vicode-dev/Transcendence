@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-16 13:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+#: app/app/settings.py:116
+msgid "English"
+msgstr "Inglés"
+
+#: app/app/settings.py:118
+msgid "French"
+msgstr "Francés"
+
+#: app/app/templates/friendButton.html:8
+msgid "add as friend"
+msgstr "agregar como amigo"
+
+#: app/app/templates/friendButton.html:11
+msgid "remove as friend"
+msgstr "eliminar amigo"
+
+#: app/app/templates/profil.html:28
+msgid "settings"
+msgstr "configuraciones"
+
+#: app/app/templates/profil.html:43
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: app/app/templates/profil.html:47
+msgid "Friends Title"
+msgstr "Amigos"
+
+#: app/app/templates/profil.html:63
+msgid "Game History"
+msgstr "Historial de juegos"
+
+#: app/app/templates/profil.html:66
+msgid "no game played yet!"
+msgstr "¡aún no se ha jugado ningún juego!"
+
+#: app/app/templates/profil.html:74
+msgid "Connect4"
+msgstr "Conecta4"
+
+#: app/app/templates/profil.html:77
+msgid "Pong"
+msgstr "Pong"
+
+#: app/app/templates/profil.html:83
+msgid "draw"
+msgstr "empate"
+
+#: app/app/templates/profil.html:86
+msgid "won"
+msgstr "gano"
+
+#: app/app/templates/profil.html:88
+msgid "lost"
+msgstr "perdido"
+
+#: app/app/templates/settings/theme_picker.html:9
+msgid "Theme Picker"
+msgstr "Selector de tema"
+
+#: app/app/templates/settings/theme_picker.html:11
+msgid "Select a default theme"
+msgstr "Selecciona un tema predeterminado"
+
+#: app/app/templates/settings/theme_picker.html:81
+msgid "Or choose three colors for your theme"
+msgstr "O elige tres colores para tu tema"
+
+#: app/app/templates/settings/theme_picker.html:99
+msgid "Test the theme"
+msgstr "Prueba el tema"

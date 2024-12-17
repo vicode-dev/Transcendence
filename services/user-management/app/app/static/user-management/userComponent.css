@@ -7,11 +7,18 @@ img {
 	border-radius: 50%;
 } */
 
+
+#userComponent {
+	width: fit-content;
+	height: fit-content;
+	padding: .2rem;
+	/* background-color: #E1E0DD; */
+	/* margin-left: 3px; */
+	/* border: solid black 2px; */
+}
+
 #userComponent:hover {
-	background-color: #E1E0DD;
+	background-color: var(--fourth-color);
 	opacity: 60%;
 }
 
-#userComponent {
-	/* background-color: #E1E0DD; */
-}

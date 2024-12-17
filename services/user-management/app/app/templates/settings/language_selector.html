@@ -1,0 +1,12 @@
+{% load static %}
+{% load i18n %}
+{% get_language_info_list for available_languages as langs %}
+<label for="language">{% translate "Select your language:" %}</label>
+<select id="language" name="language" oninput="handle_language(this.value)">
+{% for lang in langs %}
+  <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>{{ lang.name_local }} ({{ lang.name }})</option>
+{% endfor %}
+</select>
+{% block javascripts %}
+    <script src="{% static 'user-management/settings/language_selector.js' %}"></script>
+{% endblock %}
