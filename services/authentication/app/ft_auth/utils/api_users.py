@@ -9,8 +9,10 @@ def get_user(user_id, target=None):
 		response = requests.get(url)
 		response.raise_for_status()
 		return response.json()
-	except ConnectionError:
-	 	return {"error":"connection failed"}
+	except:
+		if target is not None:
+			return "None"
+		return {"error":"Connection failed, come back later."}
 
 def create_user(user_id, first_name, last_name):
 	url = f"http://user-management:8000/api/player?playerId={user_id}&username={first_name}%20{last_name}"
@@ -21,5 +23,5 @@ def create_user(user_id, first_name, last_name):
 		response = requests.get(url)
 		response.raise_for_status()
 		return ""
-	except ConnectionError:
-	 	return {"error":"connection failed"}
+	except:
+	 	return {"error":"Connection failed, come back later."}

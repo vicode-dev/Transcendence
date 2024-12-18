@@ -1,3 +1,13 @@
+########################################################
+###                Dependencies                      ###
+########################################################
+
+### Django ###
+
+from django.utils.translation import gettext as _
+
+### Utils ###
+
 from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
 from datetime import datetime, timezone, timedelta
 from os import environ
@@ -32,9 +42,9 @@ def decode_jwt(token):
 		
 		return payload
 	except ExpiredSignatureError:
-		return {"error": "Token expiré"}
+		return {"error": _("Token expired")}
 	except InvalidTokenError:
-		return {"error": "Token invalide"}
+		return {"error": _("Invalid token")}
 
 ########################################################
 ###                    Storage                       ###

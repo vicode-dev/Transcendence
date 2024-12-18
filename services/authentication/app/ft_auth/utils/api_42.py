@@ -1,14 +1,15 @@
 import requests
+from os import environ
 
 def get_42_user_access(code):
 	url = "https://api.intra.42.fr/oauth/token"
 
 	data = {
 		"grant_type": "authorization_code",
-		"client_id": "u-s4t2ud-d994d34fee9548150795820d0569584f13de3c53f31275bffaf05b5860c6cf9f",
-		"client_secret": "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",
+		"client_id": environ.get("CLIENT_42_ID"),
+		"client_secret": environ.get("CLIENT_42_SECRET"),
 		"code": code,
-		"redirect_uri": "https://transcendence.vicode.dev/42-oauth2/"
+		"redirect_uri": f"https://{environ.get("DOMAIN_NAME")}/42-oauth2/"
 	}
 
 	headers = {
@@ -29,3 +30,14 @@ def get_42_user(access_token):
 
 	response = requests.get(url, headers=headers)
 	return response.json()
+
+def get_42_url():
+    return f"https://api.intra.42.fr/oauth/authorize?client_id={environ.get("CLIENT_42_ID")}&redirect_uri=https%3A%2F%2F{environ.get("DOMAIN_NAME")}%2F42-oauth2%2F&response_type=code"
+
+def get_context(context = None):
+    if context is None:
+        return {
+			"domain_name": get_42_url()
+		}
+    context["domain_name"] = get_42_url()
+    return context

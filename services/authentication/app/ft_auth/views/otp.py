@@ -1,15 +1,28 @@
+########################################################
+###                Dependencies                      ###
+########################################################
+
+### Django ###
+
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+
+### Utils ###
+
 from pyotp import TOTP
 from ft_auth.utils.otp_2fa import OTPForm, generate_qr_code
 from ft_auth.utils.token import get_jwt_data
 from django.views.decorators.http import \
     require_http_methods
 from ft_auth.utils.user import get_user_by_id
+from ft_auth.utils.single_page import single_page_redirection
 
 @require_http_methods(["GET", "POST"])
 def verify_otp(request):
+	redirection = single_page_redirection(request)
+	if redirection != None:
+		return redirection # 404 here
 	data = get_jwt_data(request)
 	if data == None or "error" in data:
 		return HttpResponseRedirect("/login")

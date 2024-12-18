@@ -4,7 +4,7 @@
 
 ### Django ###
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -12,10 +12,14 @@ from django.utils.translation import gettext as _
 
 ### Utils ###
 
+from os import environ
 from ft_auth.utils.token import \
     get_jwt_data, generate_jwt
-from ft_auth.utils.user import user_login
+from ft_auth.utils.user import check_user_login
 from ft_auth.utils.single_page import single_page_redirection
+from ft_auth.utils.api_42 import get_context
+
+
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
@@ -34,43 +38,21 @@ def get_login(request):
 		return redirection
 	return render(
 		request,
-		"/app/ft_auth/templates/login.html"
+		"/app/ft_auth/templates/login.html",
+		get_context()
 	)
 
 def post_login(request):
 	login = request.POST.get('login')
-	if login is None or len(login) == 0:
-		context = {
-			"error": _("You forgot to specify your login name.")
-		}
-		return render(
-      			request,
-         		"/app/ft_auth/templates/login.html",
-				context
-           )
 	password = request.POST.get('password')
-	if password is None or len(password) == 0:
-		context = {
-			"error": _("You forgot to specify your password."),
-			"login": login
-		}
+	result = check_user_login(login, password)
+	if "error" in result:
 		return render(
-      			request,
-         		"/app/ft_auth/templates/login.html",
-				context
-           )
-
-	user = user_login(login, password)
-	if user is None:
-		context = {
-			"error": _("Login and password do not match."),
-			"login": login
-		}
-		return render(
-      			request,
-         		"/app/ft_auth/templates/login.html",
-				context
-           )
+			request,
+			"/app/ft_auth/templates/login.html",	
+			get_context(result),
+			status=403
+		)
 	response = HttpResponseRedirect("/profil")
-	generate_jwt(response, user.to_dict())
+	generate_jwt(response, result["user"].to_dict())
 	return response

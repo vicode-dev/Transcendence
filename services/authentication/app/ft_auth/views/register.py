@@ -14,7 +14,7 @@ from django.views.decorators.http import \
 ### Utils ###
 
 from ft_auth.utils.user import \
-    create_classic_user, check_user, \
+    create_classic_user, check_user_register, \
     getLogin, getFirstName, getLastName
 from ft_auth.utils.token import generate_jwt, get_jwt_data
 from ft_auth.utils.single_page import single_page_redirection
@@ -47,7 +47,7 @@ def post_register(request):
 	last_name = getLastName(request)
 	password = request.POST.get('password')
 
-	error = check_user(
+	error = check_user_register(
 		login, first_name, last_name, password
     )
 	if error is not None:
@@ -61,7 +61,8 @@ def post_register(request):
 		return render(
      		request,
             "/app/ft_auth/templates/register.html",
-            context
+            context,
+            status=403
         )
 	user = create_classic_user(
 		login, first_name, last_name, password

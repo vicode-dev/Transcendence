@@ -34,10 +34,12 @@ function getQuery(params)
 	return (query);
 }
 
-function checkSession()
+function checkSession(first = true)
 {
-	// event.preventDefault();
-	loadPage("/loading/", false)
+	
+	if (first)
+		loadPage("/loading/", false)
+
 	const session = getCookie("session");
 	if (session)
 	{
@@ -50,76 +52,43 @@ function checkSession()
 			loadPage(`/home/${getQuery(params)}`).then();
 	}
 	else
-		setTimeout(checkSession, 3000)
+		setTimeout(checkSession, 5000, false)
 }
 
-/*
 
-Pas de panique ! Les lignes ci-dessous sont temporaires et vont être
-remplacées par une class 
-
-*/
-const login = document.getElementById("login")
-
-if (login)
-	login.addEventListener("submit", async function (event) {
+async function fetchForm(event, form_id)
+{
+	// console.log("fetch", form_id)
 	event.preventDefault();
-	const form = event.target;
+
+	const form = document.getElementById(form_id)
 	const formData = new FormData(form);
 
-	loadPage("/loading/", false);
-
 	try {
-	  const response = await fetch("/login/", {
-		method: "POST",
-		headers: {
-            'X-CSRFToken': csrftoken,
-        },
-        mode: 'same-origin',
-		body: formData
-	  });
-	  console.log(formData)
-	  if (!response.ok) {
-		throw new Error(`Erreur : ${response.statusText}`);
-	  }
-  
-	//   const result = await response.json();
-	//   paper.textContent = `Réponse du serveur : ${result.message}`;
+		const response = await fetch(`/${form_id}/`, {
+			method: "POST",
+			headers: {
+				'X-CSRFToken': csrftoken,
+			},
+			mode: 'same-origin',
+			body: formData
+			});
+		// console.log(response)
+	if (response.status == 403)
+		document.getElementById('content').innerHTML = await response.text();	
 	} catch (error) {
-	  console.error(error);
-	//   paper.innerHTML = "Une erreur est survenue.";
-	}
-  });
-
-  const register = document.getElementById("register")
-
-  if (register)
-	  login.addEventListener("submit", async function (event) {
-	  event.preventDefault();
-	  const form = event.target;
-	  const formData = new FormData(form);
-  
-	  loadPage("/loading/", false);
-  
-	  try {
-		const response = await fetch("/register/", {
-		  method: "POST",
-		  headers: {
-			  'X-CSRFToken': csrftoken,
-		  },
-		  mode: 'same-origin',
-		  body: formData
-		});
-		console.log(formData)
-		if (!response.ok) {
-		  throw new Error(`Erreur : ${response.statusText}`);
-		}
-	
-	  //   const result = await response.json();
-	  //   paper.textContent = `Réponse du serveur : ${result.message}`;
-	  } catch (error) {
 		console.error(error);
-	  //   paper.innerHTML = "Une erreur est survenue.";
-	  }
-	});
-  
+		document.getElementById('content').innerHTML = "Internal error.";
+	}
+}
+
+// function listen(element_id)
+// {
+//     const element = document.getElementById(element_id)
+
+//     if (!element)
+//         return ;
+// 	element.addEventListener("submit", fetchForm);
+// }
+
+// addMain(fec);

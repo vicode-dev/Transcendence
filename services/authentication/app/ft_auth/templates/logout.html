@@ -1,6 +1,14 @@
+{% load static %}
 {% load i18n %}
 
-<div onload="loadPageEvent(event, '{% url 'login' %}');">
-	<h1>{% translate "Disconnection"%}</h1>
+<div>
+	<center>
+		<h1>{% translate "Disconnection"%}</h1>
+	</center>
 </div>
 {% include "loading.html" %}
+
+
+{% block javascripts %}
+	<script src="{% static 'authentication/logout.js' %}"></script>
+{% endblock %}
