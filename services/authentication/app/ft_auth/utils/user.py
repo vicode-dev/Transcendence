@@ -198,8 +198,7 @@ def getLastName(request):
 def create_42_user(user_42):
 	user = User(
 		ft_id = user_42["id"],
-		login=user_42["login"],
-		ft_picture = user_42["image"]["link"]
+		login=user_42["login"]
 	)
 	user.save()
 	user = get_user_by_42_id(user_42["id"])

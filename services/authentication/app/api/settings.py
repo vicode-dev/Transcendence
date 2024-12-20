@@ -9,12 +9,15 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from django.utils.translation import gettext_lazy as _
+
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-from os import environ
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -28,23 +31,30 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'authentication', 
     'localhost', 
-    environ.get('DOMAIN_NAME'),
+    env('DOMAIN_NAME'),
     ]
-CSRF_TRUSTED_ORIGINS = [f"https://{environ.get('DOMAIN_NAME')}"]
+CSRF_TRUSTED_ORIGINS = [f"https://{env('DOMAIN_NAME')}"]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
 	'ft_auth',
-    'api'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ft_auth.middleware.LanguageCookieMiddleware',
 ]
 
 ROOT_URLCONF = 'ft_auth.urls'
@@ -58,6 +68,8 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -75,10 +87,28 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': environ.get('POSTGRES_PASSWORD'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
     }
 }
 
+
+# Password validation
+# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 CACHES = {
     "default": {
@@ -90,18 +120,7 @@ CACHES = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en'
-
-LANGUAGES = [
-    ('en', _('English')),
-    ('es', _('Spanish')),
-    ('fr', _('French')),
-    ('nl', _('Dutch')),
-    # Add other languages as needed
-]
-
-
-LANGUAGE_COOKIE_NAME = 'language'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 

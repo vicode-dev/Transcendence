@@ -35,7 +35,8 @@ def login_with_42(request):
 		response = HttpResponse(
 			"<body onload=\"close();\"></body>"
 		)
-		generate_jwt(response, user.to_dict())
+		if generate_jwt(response, user.to_dict()) is None:
+			return JsonResponse({"error": _("User login failed, try later.")}, status=500)
 		return response
 
 	except requests.exceptions.RequestException as e:

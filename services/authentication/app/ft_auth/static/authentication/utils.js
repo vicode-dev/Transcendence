@@ -58,6 +58,7 @@ function checkSession(first = true)
 
 async function fetchForm(event, form_id)
 {
+	checkSession()
 	// console.log("fetch", form_id)
 	event.preventDefault();
 
@@ -73,7 +74,7 @@ async function fetchForm(event, form_id)
 			mode: 'same-origin',
 			body: formData
 			});
-		// console.log(response)
+		console.log(response)
 	if (response.status == 403)
 		document.getElementById('content').innerHTML = await response.text();	
 	} catch (error) {
