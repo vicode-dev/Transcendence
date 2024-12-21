@@ -4,55 +4,98 @@
 
 ### Django ###
 
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import gettext as _
 
 ### Utils ###
 
-from os import environ
-from ft_auth.utils.token import \
-    get_jwt_data, generate_jwt
-from ft_auth.utils.user import check_user_login
-from ft_auth.utils.single_page import single_page_redirection
-from ft_auth.utils.api_42 import get_context
-
-
+from datetime import datetime, timezone
+from api.models import CLI, User
+from ft_auth.utils.token import get_jwt_data, decode_jwt, encode_jwt
+from api.utils.token import generate_cli_jwt
 
 @csrf_exempt
-@require_http_methods(["GET", "POST"])
-def login(request):
+@require_http_methods(["GET"])
+def generate_token(request):
+	type = request.GET.get("type")
+	if type is None:
+		return JsonResponse({
+			"error":
+					"Invalid request. The \"type\" query parameter is missing. It should be equal to \"persistent\" or \"ephemeral\"."
+		})
+	if type == "persistent":
+		return generate_persistent_token(request)
+	elif type == "ephemeral":
+		return generate_ephemeral_token(request)
+	return JsonResponse({
+		"error":
+				"Invalid request. The \"type\" query parameter should be equal to \"persistent\" or \"ephemeral\"."
+	})
+
+def generate_persistent_token(request):
 	data = get_jwt_data(request)
-	if not "error" in data:
-		return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
-	if request.method == "GET":
-		return get_login(request)
-	if request.method == "POST":
-		return post_login(request)
+	if "error" in data:
+		return JsonResponse({
+			"error":
+				data["error"]
+		})
+	cli = CLI.objects.filter(owner_id=data["id"]).first();
+	if not cli:
+		cli = CLI(owner_id=data["id"]);
+		cli.save()
+	token = generate_cli_jwt(cli.to_dict(), "persistent")
+	return JsonResponse({
+			"token":
+				token
+		})
 
-def get_login(request):
-	redirection = single_page_redirection(request)
-	if redirection != None:
-		return redirection
-	return render(
-		request,
-		"/app/ft_auth/templates/login.html",
-		get_context()
-	)
+def get_cli(data):
+	try:
+		cli = CLI.objects.filter(
+	  			id=data["id"]).first()
+		iat_datetime = datetime.fromtimestamp(data["iat"], tz=timezone.utc)
+		if iat_datetime < cli.token_date:
+			return None
+		return cli
+	except CLI.DoesNotExist:
+		return None
 
-def post_login(request):
-	login = request.POST.get('login')
-	password = request.POST.get('password')
-	result = check_user_login(login, password)
-	if "error" in result:
-		return render(
-			request,
-			"/app/ft_auth/templates/login.html",	
-			get_context(result),
-			status=403
-		)
-	response = HttpResponseRedirect("/profil")
-	generate_jwt(response, result["user"].to_dict())
-	return response
+def get_user(cli):
+	try:
+		user = User.objects.filter(
+	  			id=cli.owner_id).first()
+		return user
+	except User.DoesNotExist:
+		return None
+
+def generate_ephemeral_token(request):
+	authorization = request.META.get('HTTP_AUTHORIZATION')
+	if authorization is None:
+		return JsonResponse({
+			"error":
+				"Access forbidden. Authorization header is required."
+		})
+	data = decode_jwt(authorization)
+	if "error" in data:
+		return JsonResponse({
+			"error":
+				data["error"]
+		})
+	cli = get_cli(data)
+	if cli is None:
+		return JsonResponse({
+			"error":
+				"Invalid or expired authorization token."
+		})
+	user = get_user(cli)
+	if user is None:
+		return JsonResponse({
+			"error":
+				"This token isn't linked to any user."
+		})
+	token = encode_jwt(user.to_dict())
+	return JsonResponse({
+			"token":
+				token
+		})

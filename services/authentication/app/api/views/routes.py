@@ -1,0 +1,1 @@
+from api.views.cli import generate_token

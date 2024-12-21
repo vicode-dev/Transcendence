@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path, include
 
 from ft_auth.views.routes import \
     profil, login, logout, register, \
@@ -23,6 +23,7 @@ from ft_auth.views.routes import \
             loading
 
 urlpatterns = [
+    path('', include('api.urls')),
 	path('login/', login, name="login"),
 	path('logout/', logout),
 	path('register/', register, name="register"),

@@ -17,13 +17,9 @@ Including another URLconf
 
 from django.urls import path
 
-from api.views.routes import
+from api.views.routes import generate_token
 
 urlpatterns = [
-	path('api/auth/cli/connect', login),
-	path('logout/', logout),
-	path('register/', register, name="register"),
-	path('profil/', profil),
-	path('42-oauth2/', login_with_42),
-	path('qr-code/', verify_otp),
+	path('api/cli/token/', generate_token),
+	path('api/cli/connect/', generate_token)
 ]

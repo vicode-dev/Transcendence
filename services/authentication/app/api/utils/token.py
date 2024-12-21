@@ -18,46 +18,27 @@ from ft_auth.utils.api_users import get_user
 ###                    Encode                        ###
 ########################################################
 
-def encode_jwt(user_info):
+def encode_jwt(data, type):
 	header = {
 		"alg": "HS256",
   		"typ": "JWT"
 	}
 	payload = {
-		"id": user_info["id"],
+		"id": data["id"],
 		"iat":
 			datetime.now(timezone.utc),
 		"exp":
 			(datetime.now(timezone.utc)
-			+ timedelta(days=1)),
-		"role": get_user(user_info["id"], target="role")["role"]
+			+ timedelta(days=15)),
+		"type": type
 	}
-
 	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
 	return jwt_token
-
-def decode_jwt(token):
-	try:
-		payload = decode(token, environ['JWT_SECRET_KEY'], algorithms=["HS256"])
-		
-		return payload
-	except ExpiredSignatureError:
-		return {"error": _("Token expired")}
-	except InvalidTokenError:
-		return {"error": _("Invalid token")}
 
 ########################################################
 ###                    Storage                       ###
 ########################################################
 
-
-def get_jwt(request):
-	return request.COOKIES.get("session")
-
-def get_jwt_data(request):
-	token = get_jwt(request)
-	return decode_jwt(token)
-
-def generate_jwt(user_info):
-	token = encode_jwt(user_info)
+def generate_cli_jwt(data, type):
+	token = encode_jwt(data, type)
 	return (token)
