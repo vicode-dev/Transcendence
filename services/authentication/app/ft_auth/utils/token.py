@@ -36,7 +36,7 @@ def encode_jwt(user_info, otp_required):
 		"role": user["role"]
 	}
 	if otp_required:
-		payload["error"] = "OTP required."
+		payload["error"] = "OTP required"
 	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
 	return jwt_token
 
@@ -75,5 +75,5 @@ def generate_jwt(response, user_info, otp_required=False):
 	token = encode_jwt(user_info, otp_required)
 	if token is None:
 		return None
-	save_jwt(response, token)
+	save_jwt(response, token, otp_required)
 	return (token)

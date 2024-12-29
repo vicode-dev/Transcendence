@@ -12,7 +12,7 @@ function getCookie(name)
 	})
 
 	if (value.length)
-		return (value[0].substring(nameString.length, value[0].length));
+		return (value[0].substring(nameString.length + 1, value[0].length));
 	return (undefined);
 }
 
@@ -34,17 +34,18 @@ function getQuery(params)
 	return (query);
 }
 
-function checkSession(first = true)
+function checkSession(first = true, wait_for_otp = false)
 {
-	
 	if (first)
 		loadPage("/loading/", false)
 
 	const session = getCookie("session");
-	if (session)
-	{
-		const otp = getCookie("otp");
+	const otp = getCookie("otp");
 
+	if (wait_for_otp && otp == "required")
+		setTimeout(checkSession, 5000, false, wait_for_otp)
+	else if (session)
+	{
 		if (otp == "required")
 		{
 			loadPage(`/otp/`, false).then();
@@ -59,14 +60,13 @@ function checkSession(first = true)
 			loadPage(`/home/${getQuery(params)}`).then();
 	}
 	else
-		setTimeout(checkSession, 5000, false)
+		setTimeout(checkSession, 5000, false, wait_for_otp)
 }
 
 
 async function fetchForm(event, form_id)
 {
-	checkSession()
-	// console.log("fetch", form_id)
+	checkSession(true)
 	event.preventDefault();
 
 	const form = document.getElementById(form_id)

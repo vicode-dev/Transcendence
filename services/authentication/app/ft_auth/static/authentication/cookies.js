@@ -12,6 +12,6 @@ function getCookie(name)
 	})
 
 	if (value.length)
-		return (value[0].substring(nameString.length, value[0].length));
+		return (value[0].substring(nameString.length + 1, value[0].length));
 	return (undefined);
 }

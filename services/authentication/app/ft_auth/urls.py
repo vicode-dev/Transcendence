@@ -20,15 +20,15 @@ from django.urls import path, include
 from ft_auth.views.routes import \
     profil, login, logout, register, \
         login_with_42, \
-            loading
+            loading, otp_page
 
 urlpatterns = [
     path('', include('api.urls')),
 	path('login/', login, name="login"),
-	path('logout/', logout),
+	path('logout/', logout, name="logout"),
 	path('register/', register, name="register"),
 	path('profil/', profil),
 	path('42-oauth2/', login_with_42),
 	path('loading/', loading),
-	path('otp/', loading)
+	path('otp/', otp_page)
 ]
