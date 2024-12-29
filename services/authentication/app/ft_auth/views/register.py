@@ -62,7 +62,7 @@ def post_register(request):
      		request,
             "/app/ft_auth/templates/register.html",
             context,
-            status=403
+            status=401
         )
 	user = create_classic_user(
 		login, first_name, last_name, password

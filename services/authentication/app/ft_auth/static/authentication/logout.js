@@ -1,3 +1,3 @@
 setTimeout(
-    loadPage, 3000, '/login/'
+    loadPage, 1000, '/login/'
 )

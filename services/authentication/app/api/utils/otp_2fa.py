@@ -4,15 +4,19 @@ from io import BytesIO
 from django.http import HttpResponse
 from django import forms
 
+from api.models import OTP
+
 class OTPForm(forms.Form):
     otp_code = forms.CharField(max_length=6, label="Code de vérification")
 
 def generate_qr_code(user):
-
-    otp_secret = user.otp_secret
+    otp = OTP.objects.filter(owner_id=user.id).first();
+    if otp is None or otp.validated is False:
+        otp = OTP(owner_id=user.id);
+        otp.save()
 
     # Générer une URI conforme au protocole TOTP
-    totp_uri = totp.TOTP(otp_secret).provisioning_uri(
+    totp_uri = totp.TOTP(otp.secret).provisioning_uri(
         name=user.login,
         issuer_name="Transcendence"
     )

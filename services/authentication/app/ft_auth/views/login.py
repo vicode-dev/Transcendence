@@ -12,14 +12,12 @@ from django.utils.translation import gettext as _
 
 ### Utils ###
 
-from os import environ
 from ft_auth.utils.token import \
     get_jwt_data, generate_jwt
 from ft_auth.utils.user import check_user_login
 from ft_auth.utils.single_page import single_page_redirection
 from ft_auth.utils.api_42 import get_context
-
-
+from ft_auth.models import OTP
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
@@ -51,8 +49,13 @@ def post_login(request):
 			request,
 			"/app/ft_auth/templates/login.html",	
 			get_context(result),
-			status=403
+			status=401
 		)
-	response = HttpResponseRedirect("/profil")
-	generate_jwt(response, result["user"].to_dict())
+	response = HttpResponse("")
+	otp = OTP.objects.filter(owner_id=result["user"].id).first();
+	if otp is None or otp.validated is False:
+		otp_required = False
+	else:
+		otp_required = True
+	generate_jwt(response, result["user"].to_dict(), otp_required)
 	return response

@@ -17,9 +17,14 @@ Including another URLconf
 
 from django.urls import path
 
-from api.views.routes import generate_token
+from api.views.routes import generate_token, \
+	request_qr_code, validate_otp_code, check_otp_state, \
+    disable_otp
 
 urlpatterns = [
 	path('api/cli/token/', generate_token),
-	path('api/cli/connect/', generate_token)
+	path('api/otp/qr-code/', request_qr_code),
+	path('api/otp/validate/', validate_otp_code),
+	path('api/otp/enabled/', check_otp_state),
+	path('api/otp/disable/', disable_otp)
 ]

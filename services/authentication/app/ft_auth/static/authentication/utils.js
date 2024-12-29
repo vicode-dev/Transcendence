@@ -43,6 +43,13 @@ function checkSession(first = true)
 	const session = getCookie("session");
 	if (session)
 	{
+		const otp = getCookie("otp");
+
+		if (otp == "required")
+		{
+			loadPage(`/otp/`, false).then();
+			return ;
+		}
 		const	params = new URLSearchParams(window.location.search);
 		const	redirect_url = params.get("redirect_url");
 
@@ -75,7 +82,7 @@ async function fetchForm(event, form_id)
 			body: formData
 			});
 		console.log(response)
-	if (response.status == 403)
+	if (response.status == 401)
 		document.getElementById('content').innerHTML = await response.text();	
 	} catch (error) {
 		console.error(error);

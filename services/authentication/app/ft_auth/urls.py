@@ -19,7 +19,7 @@ from django.urls import path, include
 
 from ft_auth.views.routes import \
     profil, login, logout, register, \
-        verify_otp, login_with_42, \
+        login_with_42, \
             loading
 
 urlpatterns = [
@@ -29,6 +29,6 @@ urlpatterns = [
 	path('register/', register, name="register"),
 	path('profil/', profil),
 	path('42-oauth2/', login_with_42),
-	path('qr-code/', verify_otp),
-	path('loading/', loading)
+	path('loading/', loading),
+	path('otp/', loading)
 ]
