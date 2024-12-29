@@ -41,9 +41,9 @@ function checkSession(first = true, wait_for_otp = false)
 
 	const session = getCookie("session");
 	const otp = getCookie("otp");
-
+	console.log(wait_for_otp)
 	if (wait_for_otp && otp == "required")
-		setTimeout(checkSession, 5000, false, wait_for_otp)
+		setTimeout(checkSession, 3000, false, wait_for_otp)
 	else if (session)
 	{
 		if (otp == "required")
@@ -60,13 +60,13 @@ function checkSession(first = true, wait_for_otp = false)
 			loadPage(`/home/${getQuery(params)}`).then();
 	}
 	else
-		setTimeout(checkSession, 5000, false, wait_for_otp)
+		setTimeout(checkSession, 3000, false, wait_for_otp)
 }
 
 
 async function fetchForm(event, form_id)
 {
-	checkSession(true)
+	checkSession(true, form_id == 'otp')
 	event.preventDefault();
 
 	const form = document.getElementById(form_id)

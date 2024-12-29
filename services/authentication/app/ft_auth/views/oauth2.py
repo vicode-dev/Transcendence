@@ -12,6 +12,7 @@ from django.utils.translation import gettext as _
 ### Utils ###
 
 import requests
+from ft_auth.models import OTP
 from ft_auth.utils.token import generate_jwt
 from ft_auth.utils.api_42 import \
 	get_42_user_access, get_42_user
@@ -35,7 +36,12 @@ def login_with_42(request):
 		response = HttpResponse(
 			"<body onload=\"close();\"></body>"
 		)
-		if generate_jwt(response, user.to_dict()) is None:
+		otp = OTP.objects.filter(owner_id=user.id).first();
+		if otp is None or otp.validated is False:
+			otp_required = False
+		else:
+			otp_required = True
+		if generate_jwt(response, user.to_dict(), otp_required) is None:
 			return JsonResponse({"error": _("User login failed, try later.")}, status=500)
 		return response
 

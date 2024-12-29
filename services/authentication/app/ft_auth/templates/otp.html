@@ -1,0 +1,57 @@
+{% load static %}
+{% load i18n %}
+
+<div class="container" id="paper">
+	<div class="d-flex justify-content-center">
+		<div class="col-md-6 col-md-offset-3">
+			<h2>{% translate "Doublefactor Authentication" %}</h2>
+			<form action="/otp/" method="post" class="form-horizontal" id="otp">
+				<div class="form-group">
+					<label for="otp" class="control-label">{% translate "Enter PIN from your app" %}</label>
+                    <div class="form-group">
+                        <label for="otp" class="control-label">2Af Code</label>
+                        <div id="enter-code">
+                        <input
+                            type="text" class="col-sm-5 form-control"
+                            placeholder="000 000" name="otp-code" id="otp-code" required>
+                    </div>
+					{% comment %} <input
+						type="text" class="col-sm-9 form-control"
+						{% if login != None %}
+							value="{{ login }}"
+						{% endif %}
+						placeholder="{% translate 'Enter login name' %}" name="login" required autocomplete> {% endcomment %}
+						{% comment %} <input type="number" class="input" id="int0" name="int0" min="0" max="9" maxlength="1" oninput="parse_code(this, 1)" required autofocus>
+						<input type="number" class="input" id="int1" name="int1" min="0" max="9" maxlength="1" oninput="parse_code(this, 2)" required>
+						<input type="number" class="input" id="int2" name="int2" min="0" max="9" maxlength="1" oninput="parse_code(this, 3)" required>
+						<input type="number" class="input" id="int3" name="int3" min="0" max="9" maxlength="1" oninput="parse_code(this, 4)" required>
+						<input type="number" class="input" id="int4" name="int4" min="0" max="9" maxlength="1" oninput="parse_code(this, 5)" required>
+						<input type="number" class="input" id="int5" name="int5" min="0" max="9" maxlength="1" oninput="parse_code(this, 6)" required>
+						<input type="number" class="input" id="int6" name="int6" min="0" max="9" maxlength="1" oninput="parse_code(this, 7)" required>
+						<input type="number" class="input" id="int7" name="int7" min="0" max="9" maxlength="1" oninput="parse_code(this, 8)" required> {% endcomment %}
+				</div>
+				{% if error != None %}
+					<code>{% translate error %}</code>
+				{% endif %}
+				<div class="form-group"> 
+					<button
+						type="submit"
+						class="col-sm-offset-3 col-sm-5 btn btn-primary btn-block"
+						onclick="fetchForm(event, 'otp');"
+					>
+							{% translate "Validate" %}
+					</button>
+				</div>
+
+				<div class="text-center" style="background-color:#f1f1f1; padding: 15px; margin-top: 20px;">
+					<p>{% translate "It's an error?" %} <a href="{% url 'register' %}" onclick="loadPageEvent(event, '{% url 'logout' %}')">{% translate "Cancel" %}</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% block javascripts %}
+	<script src="{% static 'authentication/utils.js' %}"></script>
+	<script src="{% static 'authentication/pin.js' %}"></script>
+{% endblock %}
