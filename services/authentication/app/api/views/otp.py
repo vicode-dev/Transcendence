@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from pyotp import TOTP
 from api.models import OTP
-from api.utils.otp_2fa import generate_qr_code
+from api.utils.otp_2fa import generate_qr_code, otp_is_required
 from ft_auth.utils.token import get_jwt_data
 from django.views.decorators.http import \
     require_http_methods
@@ -26,13 +26,12 @@ def request_qr_code(request):
 
 @require_http_methods(["GET"])
 def check_otp_state(request):
+    # if request.headers.get('Authorization') == environ.get("JWT_SECRET_KEY"):
+	# 	return HttpResponse("Permission denied.", status=403)
 	data = get_jwt_data(request)
 	if data == None or "error" in data:
 		return HttpResponse(False)
-	otp = OTP.objects.filter(owner_id=data["id"]).first();
-	if otp is None or otp.validated is False:
-		return HttpResponse(False)
-	return HttpResponse(True)
+	return HttpResponse(otp_is_required(data["id"]))
 
 @require_http_methods(["POST"])
 def validate_otp_code(request):

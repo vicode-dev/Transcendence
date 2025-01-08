@@ -1,5 +1,8 @@
-setTimeout(() =>
+function logout(event)
 {
-    console.log("Hello from logout timeout")
-    loadPage('/login/')
-}, 2000)
+    loadPageEvent(event,'/logout/');
+    setTimeout(() =>
+    {
+        loadPage('/login/')
+    }, 2000)
+}

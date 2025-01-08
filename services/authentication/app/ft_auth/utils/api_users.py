@@ -10,7 +10,6 @@ def get_user(user_id, target=None):
 		response.raise_for_status()
 		return response.json()
 	except:
-		print("ERROR")
 		if target is not None:
 			return None
 		return {"error":"Connection failed, come back later."}

@@ -28,3 +28,9 @@ def generate_qr_code(user):
     buffer.seek(0)
 
     return HttpResponse(buffer, content_type="image/png")
+
+def otp_is_required(user_id):
+	otp = OTP.objects.filter(owner_id=user_id).first();
+	if otp is None or otp.validated is False:
+		return False
+	return True

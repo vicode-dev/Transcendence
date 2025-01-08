@@ -94,7 +94,7 @@ def generate_ephemeral_token(request):
 			"error":
 				"This token isn't linked to any user."
 		})
-	token = encode_jwt(user.to_dict())
+	token = encode_jwt(user.to_dict(), False)
 	return JsonResponse({
 			"token":
 				token

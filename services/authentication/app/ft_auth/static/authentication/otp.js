@@ -48,7 +48,6 @@ async function check_otp_code(event)
 			mode: 'same-origin',
 			body: formData
 			});
-		console.log(response)
 	if (response.status == 401 || response.status == 400)
 	{
 		document.getElementById('enter-code').innerHTML = 
@@ -58,36 +57,14 @@ async function check_otp_code(event)
 		return
 	}
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
 		document.getElementById('content').innerHTML = "Internal error.";
 	}
-	document.getElementById('otp-container').innerHTML = 
-	`<button type="button" id="disable_otp" onclick="disable_otp()" class="btn btn-danger">
-	Disable Double Authentication</button>`
-}
-
-async function check_otp_state()
-{
-	const result = await fetch("/api/authentication/otp/enabled/");
-	const response = await result.text();
-	const otp_container = document.getElementById('otp-container');
-
-	if (!otp_container)
-		return ;
-	if (response == "True")
-		otp_container.innerHTML = 
-			`<button type="button" id="disable_otp" onclick="disable_otp()" class="btn btn-danger">
-Disable Double Authentication</button>`
-	else
-		otp_container.innerHTML =
-`<button type="button" id="generate_otp" onclick="generate_qr_code()" class="btn btn-danger">
-Add Double Authentication</button>`
+	await loadPage('/settings/', false)
 }
 
 async function disable_otp()
 {
 	await fetch("/api/authentication/otp/disable/");
-	check_otp_state();
+	await loadPage('/settings/', false)
 }
-
-check_otp_state();

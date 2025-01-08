@@ -5,7 +5,7 @@ from ft_auth.utils.api_users import create_user
 from django.utils.translation import gettext as _
 
 ########################################################
-###                    Hash                          ###
+###                    Password                      ###
 ########################################################
 
 def hash_password(password):
@@ -13,14 +13,22 @@ def hash_password(password):
 	hashed = md5(altered_password.encode())
 	return hashed.hexdigest()
 
+def update_password(user, password):
+	user.password = hash_password(password)
+	user.save()
+
 ########################################################
 ###                    Login                         ###
 ########################################################
 
-def user_login(login, password):
+def user_login(login, password, by_id=False):
 	try:
-		user = User.objects.filter(
-	  		login=login, password=hash_password(password)).first()
+		if by_id:
+			user = User.objects.filter(
+	  			id=login, password=hash_password(password)).first()
+		else:
+			user = User.objects.filter(
+	  			login=login, password=hash_password(password)).first()
 	  		# login=login, password=password).first()
 		return user
 	except User.DoesNotExist:
@@ -154,6 +162,39 @@ def check_user_login(login, password):
 			"error": _("Login and password do not match."),
 			"login": login
 		}
+	return {
+		"user": user
+	}
+
+def check_user_password(id, oldpassword, newpassword):
+	if id is None == 0:
+		return {
+			"error": _("You forgot to specify your login name.")
+		}
+	user = get_user_by_id(id)
+	if user is None:
+		return {
+			"error":
+				_("Unknow user")
+		}
+	if user.password is not None:
+		if oldpassword is None or len(oldpassword) == 0:
+			return {
+				"error": _("You forgot to specify your old password."),
+			}
+
+		user = user_login(id, oldpassword, True)
+		if user is None:
+			return {
+				"error": _("Old password does not match."),
+			}
+	if newpassword is None or len(newpassword) == 0:
+		return {
+			"error": _("You forgot to specify your new password."),
+		}
+	length = len(newpassword)
+	if length < 8 or length > 32:
+		return _("Password size must be between 8 and 32 characters.")
 	return {
 		"user": user
 	}

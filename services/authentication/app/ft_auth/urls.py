@@ -18,8 +18,8 @@ Including another URLconf
 from django.urls import path, include
 
 from ft_auth.views.routes import \
-    profil, login, logout, register, \
-        login_with_42, \
+    login, logout, register, \
+        login_with_42, password, \
             loading, otp_page
 
 urlpatterns = [
@@ -27,7 +27,7 @@ urlpatterns = [
 	path('login/', login, name="login"),
 	path('logout/', logout, name="logout"),
 	path('register/', register, name="register"),
-	path('profil/', profil),
+	path('password/', password, name="password"),
 	path('42-oauth2/', login_with_42),
 	path('loading/', loading),
 	path('otp/', otp_page)

@@ -13,12 +13,13 @@ from datetime import datetime, timezone, timedelta
 from os import environ
 
 from ft_auth.utils.api_users import get_user
+from ft_auth.utils.user import get_user_by_id
 
 ########################################################
 ###                    Encode                        ###
 ########################################################
 
-def encode_jwt(user_info, otp_required):
+def encode_jwt(user_info, otp_required = False):
 	user = get_user(user_info["id"], target="role")
 	if user is None:
 		return None
@@ -44,6 +45,11 @@ def decode_jwt(token):
 	try:
 		payload = decode(token, environ['JWT_SECRET_KEY'], algorithms=["HS256"])
 		
+		user = get_user_by_id(payload["id"])
+		if user is None:
+			return {"error": _("Unknow user")}
+		if user.token_date.replace(tzinfo=None) > datetime.fromtimestamp(payload["iat"]).replace(tzinfo=None):
+			return {"error": _("Token expired")}
 		return payload
 	except ExpiredSignatureError:
 		return {"error": _("Token expired")}
@@ -55,9 +61,9 @@ def decode_jwt(token):
 ########################################################
 
 def save_jwt(response, token, otp_required=False):
-	response.set_cookie("session", token)
+	response.set_cookie("session", token, samesite='Strict', max_age=86400)
 	if otp_required:
-		response.set_cookie("otp", "required")
+		response.set_cookie("otp", "required", samesite='Strict')
 	else:	
 		response.delete_cookie("otp")
 

@@ -18,6 +18,7 @@ from ft_auth.utils.api_42 import \
 	get_42_user_access, get_42_user
 from ft_auth.utils.user import \
 	get_user_by_42_id, create_42_user
+from api.utils.otp_2fa import otp_is_required
 
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -36,11 +37,7 @@ def login_with_42(request):
 		response = HttpResponse(
 			"<body onload=\"close();\"></body>"
 		)
-		otp = OTP.objects.filter(owner_id=user.id).first();
-		if otp is None or otp.validated is False:
-			otp_required = False
-		else:
-			otp_required = True
+		otp_required = otp_is_required(user.id)
 		if generate_jwt(response, user.to_dict(), otp_required) is None:
 			return JsonResponse({"error": _("User login failed, try later.")}, status=500)
 		return response

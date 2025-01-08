@@ -1,3 +1,7 @@
+const session = {
+	check: false
+}
+
 /**
  * 
  * @param {string} name 
@@ -25,7 +29,6 @@ function getQuery(params)
 {
 	let query = "?";
 	params.forEach(param => {
-		console.log(param)
 		if (param != "redirect_url")
 		{
 			query = `${query}&${encodeURIComponent(param)}`;
@@ -41,14 +44,14 @@ function checkSession(first = true, wait_for_otp = false)
 
 	const session = getCookie("session");
 	const otp = getCookie("otp");
-	console.log(wait_for_otp)
 	if (wait_for_otp && otp == "required")
 		setTimeout(checkSession, 3000, false, wait_for_otp)
 	else if (session)
 	{
 		if (otp == "required")
 		{
-			loadPage(`/otp/`, false).then();
+			// if (first)
+				loadPage(`/otp/`, false).then();
 			return ;
 		}
 		const	params = new URLSearchParams(window.location.search);
@@ -59,19 +62,17 @@ function checkSession(first = true, wait_for_otp = false)
 		else
 			loadPage(`/home/${getQuery(params)}`).then();
 	}
-	else
+	else // if (session.check)
 		setTimeout(checkSession, 3000, false, wait_for_otp)
 }
 
 
-async function fetchForm(event, form_id)
+async function fetchForm(event, form_id, update_password = false)
 {
-	checkSession(true, form_id == 'otp')
 	event.preventDefault();
 
 	const form = document.getElementById(form_id)
 	const formData = new FormData(form);
-
 	try {
 		const response = await fetch(`/${form_id}/`, {
 			method: "POST",
@@ -81,22 +82,33 @@ async function fetchForm(event, form_id)
 			mode: 'same-origin',
 			body: formData
 			});
-		console.log(response)
-	if (response.status == 401)
-		document.getElementById('content').innerHTML = await response.text();	
+		if (response.status == 401 || update_password)
+		{
+			document.getElementById('content').innerHTML = await response.text();
+			return 
+		}
 	} catch (error) {
 		console.error(error);
 		document.getElementById('content').innerHTML = "Internal error.";
 	}
+	if (!update_password)
+	{
+		const session = getCookie("session");
+		const otp = getCookie("otp");
+		 if (session)
+		{
+			if (otp == "required")
+			{
+				loadPage(`/otp/`, false).then();
+				return ;
+			}
+			const	params = new URLSearchParams(window.location.search);
+			const	redirect_url = params.get("redirect_url");
+
+			if (redirect_url)
+				loadPage(`/${redirect_url}/${getQuery(params)}`).then();
+			else
+				loadPage(`/home/${getQuery(params)}`).then();
+		}
+	}
 }
-
-// function listen(element_id)
-// {
-//     const element = document.getElementById(element_id)
-
-//     if (!element)
-//         return ;
-// 	element.addEventListener("submit", fetchForm);
-// }
-
-// addMain(fec);
