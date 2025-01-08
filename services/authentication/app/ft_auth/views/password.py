@@ -28,6 +28,7 @@ def password(request):
 	url = request.path
 	query_params = request.GET.copy()
 	query_params["redirect_url"] = url[1:]
+	# return HttpResponse(data["error"])
 	if "error" in data:
 		return HttpResponseRedirect(f"/login/?{query_params.urlencode()}")
 	if request.method == "GET":

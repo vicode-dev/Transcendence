@@ -48,8 +48,8 @@ def decode_jwt(token):
 		user = get_user_by_id(payload["id"])
 		if user is None:
 			return {"error": _("Unknow user")}
-		if user.token_date.replace(tzinfo=None) > datetime.fromtimestamp(payload["iat"]).replace(tzinfo=None):
-			return {"error": _("Token expired")}
+		# if user.token_date.replace(tzinfo=timezone.utc) > datetime.fromtimestamp(payload["iat"]).replace(tzinfo=timezone.utc):
+		# 	return {"error": _("Token expired")}
 		return payload
 	except ExpiredSignatureError:
 		return {"error": _("Token expired")}
@@ -73,6 +73,9 @@ def save_jwt(response, token, otp_required=False, login_with_42=False):
 
 def delete_jwt(response):
 	response.delete_cookie("session")
+	response.delete_cookie("otp")
+	response.delete_cookie("update")
+ 
 
 def get_jwt(request):
 	return request.COOKIES.get("session")

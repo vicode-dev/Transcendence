@@ -23,18 +23,7 @@ function getCookie(name)
  */
 function deleteCookie(name)
 {
-	const	nameString	= name + "="
-	let		cookies		= "";
-
-	console.log("i", document.cookie)
-	document.cookie.split(";").filter(item => {
-		if (!item.includes(nameString))
-			cookies=`${item};${cookies}`
-	})
-
-	document.cookie = cookies;
-	console.log("o", document.cookie)
-
+	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 }
 
 /**
@@ -65,7 +54,7 @@ function checkSession(first = true, wait_for_otp = false)
 		setTimeout(checkSession, 3000, false, wait_for_otp)
 	else if (update == "session")
 	{
-		deleteCookie("update");
+		// deleteCookie("update");
 		if (otp == "required")
 		{
 			// if (first)

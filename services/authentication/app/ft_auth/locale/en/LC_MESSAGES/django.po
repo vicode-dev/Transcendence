@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 15:11+0000\n"
+"POT-Creation-Date: 2025-01-08 16:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -255,6 +255,6 @@ msgstr ""
 msgid "Invalid code"
 msgstr ""
 
-#: services/authentication/app/ft_auth/views/password.py:78
+#: services/authentication/app/ft_auth/views/password.py:79
 msgid "Invalid A2F code"
 msgstr ""

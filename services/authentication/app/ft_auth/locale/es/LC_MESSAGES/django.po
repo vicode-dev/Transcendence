@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:38+0000\n"
+"POT-Creation-Date: 2025-01-08 16:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,7 +276,7 @@ msgstr "El inicio de sesión del usuario falló, inténtelo más tarde."
 msgid "Invalid code"
 msgstr "Código inválido"
 
-#: services/authentication/app/ft_auth/views/password.py:78
+#: services/authentication/app/ft_auth/views/password.py:79
 #, fuzzy
 #| msgid "Invalid token"
 msgid "Invalid A2F code"

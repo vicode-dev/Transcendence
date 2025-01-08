@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 15:26+0000\n"
+"POT-Creation-Date: 2025-01-08 17:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,7 +175,6 @@ msgstr "Ou peut-être"
 msgid "Unknow user"
 msgstr "Utilisateur inconnu"
 
-#: services/authentication/app/ft_auth/utils/token.py:52
 #: services/authentication/app/ft_auth/utils/token.py:55
 msgid "Token expired"
 msgstr "Le jeton a expiré"
@@ -194,7 +193,8 @@ msgstr "Votre nom d'utilisateur n'est pas valide !"
 
 #: services/authentication/app/ft_auth/utils/user.py:120
 msgid "Login size must be between 8 and 19 characters."
-msgstr "La taille du nom d'utilisateur doit être comprise entre 8 et 19 caractères."
+msgstr ""
+"La taille du nom d'utilisateur doit être comprise entre 8 et 19 caractères."
 
 #: services/authentication/app/ft_auth/utils/user.py:124
 msgid "Your password isn't an option!"
@@ -215,18 +215,25 @@ msgstr "Votre prénom n'est pas valide !"
 #| msgid ""
 #| "Combination of first name and last name must be between 8 and 32 "
 #| "characters."
-msgid "Combination of fisrt name and last name must be between 4 and 32 characters."
-msgstr "La combinaison du prénom et du nom de famille doit être comprise entre 4 et 32 caractères."
+msgid ""
+"Combination of fisrt name and last name must be between 4 and 32 characters."
+msgstr ""
+"La combinaison du prénom et du nom de famille doit être comprise entre 4 et "
+"32 caractères."
 
 #: services/authentication/app/ft_auth/utils/user.py:138
 #, fuzzy
 #| msgid "Login must contain only alphabetic characters."
 msgid "Login must contains only alphabetic characters."
-msgstr "Le nom d'utilisateur doit contenir uniquement des caractères alphabétiques."
+msgstr ""
+"Le nom d'utilisateur doit contenir uniquement des caractères alphabétiques."
 
 #: services/authentication/app/ft_auth/utils/user.py:141
-msgid "First and last names must contain only alphabetic characters and spaces."
-msgstr "Les prénoms et noms de famille doivent contenir uniquement des caractères alphabétiques et des espaces."
+msgid ""
+"First and last names must contain only alphabetic characters and spaces."
+msgstr ""
+"Les prénoms et noms de famille doivent contenir uniquement des caractères "
+"alphabétiques et des espaces."
 
 #: services/authentication/app/ft_auth/utils/user.py:144
 msgid "Login already exists."
@@ -277,7 +284,7 @@ msgstr "La connexion de l'utilisateur a échoué, réessayez plus tard."
 msgid "Invalid code"
 msgstr "Code invalide"
 
-#: services/authentication/app/ft_auth/views/password.py:78
+#: services/authentication/app/ft_auth/views/password.py:79
 #, fuzzy
 #| msgid "Invalid token"
 msgid "Invalid A2F code"
