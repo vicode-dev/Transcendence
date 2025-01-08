@@ -60,8 +60,12 @@ def decode_jwt(token):
 ###                    Storage                       ###
 ########################################################
 
-def save_jwt(response, token, otp_required=False):
-	response.set_cookie("session", token, samesite='Strict', max_age=86400)
+def save_jwt(response, token, otp_required=False, login_with_42=False):
+	response.set_cookie("session", token, samesite='Strict', max_age=86400, httponly=True, secure=True)
+	if login_with_42:
+		response.set_cookie("update", "session", samesite='Strict', httponly=False, secure=True)
+	else:
+		response.delete_cookie("update")
 	if otp_required:
 		response.set_cookie("otp", "required", samesite='Strict')
 	else:	
@@ -77,9 +81,9 @@ def get_jwt_data(request):
 	token = get_jwt(request)
 	return decode_jwt(token)
 
-def generate_jwt(response, user_info, otp_required=False):
+def generate_jwt(response, user_info, otp_required=False, login_with_42=False):
 	token = encode_jwt(user_info, otp_required)
 	if token is None:
 		return None
-	save_jwt(response, token, otp_required)
+	save_jwt(response, token, otp_required, login_with_42)
 	return (token)

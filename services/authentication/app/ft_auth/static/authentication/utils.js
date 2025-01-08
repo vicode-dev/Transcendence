@@ -1,7 +1,3 @@
-const session = {
-	check: false
-}
-
 /**
  * 
  * @param {string} name 
@@ -18,6 +14,27 @@ function getCookie(name)
 	if (value.length)
 		return (value[0].substring(nameString.length + 1, value[0].length));
 	return (undefined);
+}
+
+/**
+ * 
+ * @param {string} name 
+ * @returns {string | undefined}
+ */
+function deleteCookie(name)
+{
+	const	nameString	= name + "="
+	let		cookies		= "";
+
+	console.log("i", document.cookie)
+	document.cookie.split(";").filter(item => {
+		if (!item.includes(nameString))
+			cookies=`${item};${cookies}`
+	})
+
+	document.cookie = cookies;
+	console.log("o", document.cookie)
+
 }
 
 /**
@@ -42,12 +59,13 @@ function checkSession(first = true, wait_for_otp = false)
 	if (first)
 		loadPage("/loading/", false)
 
-	const session = getCookie("session");
+	const update = getCookie("update");
 	const otp = getCookie("otp");
 	if (wait_for_otp && otp == "required")
 		setTimeout(checkSession, 3000, false, wait_for_otp)
-	else if (session)
+	else if (update == "session")
 	{
+		deleteCookie("update");
 		if (otp == "required")
 		{
 			// if (first)
@@ -93,9 +111,9 @@ async function fetchForm(event, form_id, update_password = false)
 	}
 	if (!update_password)
 	{
-		const session = getCookie("session");
+		// const session = getCookie("session");
 		const otp = getCookie("otp");
-		 if (session)
+		// if (session)
 		{
 			if (otp == "required")
 			{

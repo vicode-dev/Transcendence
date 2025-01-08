@@ -8,11 +8,9 @@ from django.utils.translation import gettext as _
 
 ### Utils ###
 
-from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
+from jwt import encode
 from datetime import datetime, timezone, timedelta
 from os import environ
-
-from ft_auth.utils.api_users import get_user
 
 ########################################################
 ###                    Encode                        ###

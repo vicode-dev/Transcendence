@@ -17,7 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
 #: services/authentication/app/ft_auth/settings.py:96
 msgid "English"
 msgstr "Engels"
@@ -111,35 +110,35 @@ msgstr "Annuleren"
 #, fuzzy
 #| msgid "Password"
 msgid "Old Password"
-msgstr "Wachtwoord"
+msgstr "Oud wachtwoord"
 
 #: services/authentication/app/ft_auth/templates/password.html:15
 #, fuzzy
 #| msgid "Enter Password"
 msgid "Enter old password"
-msgstr "Voer wachtwoord in"
+msgstr "Voer oud wachtwoord in"
 
 #: services/authentication/app/ft_auth/templates/password.html:19
 #, fuzzy
 #| msgid "Password"
 msgid "New password"
-msgstr "Wachtwoord"
+msgstr "Nieuw wachtwoord"
 
 #: services/authentication/app/ft_auth/templates/password.html:22
 #, fuzzy
 #| msgid "Enter Password"
 msgid "Enter new password"
-msgstr "Voer wachtwoord in"
+msgstr "Voer nieuw wachtwoord in"
 
 #: services/authentication/app/ft_auth/templates/password.html:42
 msgid "Update"
-msgstr ""
+msgstr "Bijwerken"
 
 #: services/authentication/app/ft_auth/templates/password_updated.html:8
 #, fuzzy
 #| msgid "Password"
 msgid "Password updated!"
-msgstr "Wachtwoord"
+msgstr "Wachtwoord bijgewerkt!"
 
 #: services/authentication/app/ft_auth/templates/register.html:6
 #: services/authentication/app/ft_auth/templates/register.html:54
@@ -173,7 +172,7 @@ msgstr "Of misschien"
 #: services/authentication/app/ft_auth/utils/token.py:50
 #: services/authentication/app/ft_auth/utils/user.py:178
 msgid "Unknow user"
-msgstr ""
+msgstr "Onbekende gebruiker"
 
 #: services/authentication/app/ft_auth/utils/token.py:52
 #: services/authentication/app/ft_auth/utils/token.py:55
@@ -215,21 +214,16 @@ msgstr "Uw voornaam is geen optie!"
 #| msgid ""
 #| "Combination of first name and last name must be between 8 and 32 "
 #| "characters."
-msgid ""
-"Combination of fisrt name and last name must be between 4 and 32 characters."
-msgstr ""
-"De combinatie van voornaam en achternaam moet tussen 4 en 32 tekens lang "
-"zijn."
+msgid "Combination of fisrt name and last name must be between 4 and 32 characters."
+msgstr "De combinatie van voornaam en achternaam moet tussen 4 en 32 tekens lang zijn."
 
 #: services/authentication/app/ft_auth/utils/user.py:138
 msgid "Login must contains only alphabetic characters."
 msgstr "Inlognaam mag alleen alfabetische tekens bevatten."
 
 #: services/authentication/app/ft_auth/utils/user.py:141
-msgid ""
-"First and last names must contain only alphabetic characters and spaces."
-msgstr ""
-"Voor- en achternamen mogen alleen alfabetische tekens en spaties bevatten."
+msgid "First and last names must contain only alphabetic characters and spaces."
+msgstr "Voor- en achternamen mogen alleen alfabetische tekens en spaties bevatten."
 
 #: services/authentication/app/ft_auth/utils/user.py:144
 msgid "Login already exists."
@@ -252,19 +246,19 @@ msgstr "Inlognaam en wachtwoord komen niet overeen."
 #, fuzzy
 #| msgid "You forgot to specify your password."
 msgid "You forgot to specify your old password."
-msgstr "U bent vergeten uw wachtwoord op te geven."
+msgstr "U bent vergeten uw oude wachtwoord op te geven."
 
 #: services/authentication/app/ft_auth/utils/user.py:189
 #, fuzzy
 #| msgid "Login and password do not match."
 msgid "Old password does not match."
-msgstr "Inlognaam en wachtwoord komen niet overeen."
+msgstr "Oud wachtwoord komt niet overeen."
 
 #: services/authentication/app/ft_auth/utils/user.py:193
 #, fuzzy
 #| msgid "You forgot to specify your password."
 msgid "You forgot to specify your new password."
-msgstr "U bent vergeten uw wachtwoord op te geven."
+msgstr "U bent vergeten uw nieuwe wachtwoord op te geven."
 
 #: services/authentication/app/ft_auth/views/oauth2.py:36
 msgid "User creation failed, try later."
@@ -278,10 +272,10 @@ msgstr "Gebruikerslogin mislukt, probeer later opnieuw."
 #, fuzzy
 #| msgid "Invalid token"
 msgid "Invalid code"
-msgstr "Ongeldige token"
+msgstr "Ongeldige code"
 
 #: services/authentication/app/ft_auth/views/password.py:78
 #, fuzzy
 #| msgid "Invalid token"
 msgid "Invalid A2F code"
-msgstr "Ongeldige token"
+msgstr "Ongeldige A2F code"

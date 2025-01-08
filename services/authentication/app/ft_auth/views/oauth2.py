@@ -38,7 +38,7 @@ def login_with_42(request):
 			"<body onload=\"close();\"></body>"
 		)
 		otp_required = otp_is_required(user.id)
-		if generate_jwt(response, user.to_dict(), otp_required) is None:
+		if generate_jwt(response, user.to_dict(), otp_required, login_with_42=True) is None:
 			return JsonResponse({"error": _("User login failed, try later.")}, status=500)
 		return response
 

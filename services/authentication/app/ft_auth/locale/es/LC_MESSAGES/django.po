@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 15:11+0000\n"
+"POT-Creation-Date: 2025-01-08 16:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: services/authentication/app/ft_auth/settings.py:96
 msgid "English"
 msgstr "Inglés"
@@ -210,16 +211,21 @@ msgid "Your first name isn't an option!"
 msgstr "¡Tu nombre no es una opción!"
 
 #: services/authentication/app/ft_auth/utils/user.py:135
-msgid "Combination of fisrt name and last name must be between 4 and 32 characters."
-msgstr "La combinación de nombre y apellido debe estar entre 4 y 32 caracteres."
+msgid ""
+"Combination of fisrt name and last name must be between 4 and 32 characters."
+msgstr ""
+"La combinación de nombre y apellido debe estar entre 4 y 32 caracteres."
 
 #: services/authentication/app/ft_auth/utils/user.py:138
 msgid "Login must contains only alphabetic characters."
 msgstr "El nombre de usuario debe contener solo caracteres alfabéticos."
 
 #: services/authentication/app/ft_auth/utils/user.py:141
-msgid "First and last names must contain only alphabetic characters and spaces."
-msgstr "Los nombres y apellidos deben contener solo caracteres alfabéticos y espacios."
+msgid ""
+"First and last names must contain only alphabetic characters and spaces."
+msgstr ""
+"Los nombres y apellidos deben contener solo caracteres alfabéticos y "
+"espacios."
 
 #: services/authentication/app/ft_auth/utils/user.py:144
 msgid "Login already exists."
