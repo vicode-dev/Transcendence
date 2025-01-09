@@ -31,12 +31,13 @@ class LobbyConsumer(WebsocketConsumer):
                 players=Func(F('players'), Value(self.scope["token_check"]["id"]), function='array_remove')
             )
         data = Game.objects.get(pk=self.room_name)
-        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {'type': 'lobby_game', 'players':data.players, 'maxPlayers':data.maxPlayers})
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {'type': 'lobby_game', 'players':data.players, 'maxPlayers':data.maxPlayers})
 
     def receive(self, text_data):
+        # text_data
         pass
 
     def lobby_game(self, event):

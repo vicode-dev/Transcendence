@@ -1,7 +1,17 @@
 {% load static %} 
-<div id="chatArea"></div><br>
-<input id="chat-message-input" type="text" size="100" style="max-width: 20rem;"><br>
-<input id="chat-message-submit" type="button" value="Send">
+{% load i18n %}
+<div id="chat" class="section rounded-4">
+<input type="hidden" name="chatId" value="{{ chatId }}">
+<h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Chat :" %}</h3>
+<div id="messageArea"></div><br>
+<div class="d-flex justify-content-between">
+<input id="chat-message-input" type="text" maxlength="500" onkeyup="sendMessageOnEnter(event)" class="rounded-2" placeholder="{% translate 'Send a message' %}">
+<button id="sendButton" type="button" onclick="sendMessage()" ><i class="fa-solid fa-paper-plane"></i></button>
+</div>
+{% block css %}
+    <link rel="stylesheet" href="{% static 'chat/room.css' %}">
+{% endblock %}
 {% block javascripts %}
     <script src="{% static 'chat/room.js' %}"></script>
 {% endblock %}
+</div>

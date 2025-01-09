@@ -1,40 +1,38 @@
-// const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+// function showPlayersFields() {
+//     document.getElementById('players-fields').style.display = 'block';
+// }
 
-async function postData(url = '', data = {}) {
-const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-        'X-CSRFToken': csrftoken,
-        'Content-Type': 'application/json'
-    },
-    mode: 'same-origin',
-});
+// function hidePlayersFields() {
+//     document.getElementById('players-fields').style.display = 'none';
+// }
 
-if (!response.ok)
-    throw new Error('Network response was not ok');
-return response.json();
-}
-
-function create(event) {
-    let nbPlayer = document.querySelector('input[type=radio][name=players]:checked').value;
+async function create(event) {
+    // let nbPlayer = document.querySelector('input[type=radio][name=players]:checked').value;
     let gameType = document.querySelector('input[type=radio][name=gameType]:checked').value;
-	let searchParams = new URLSearchParams();
-	searchParams.set("maxPlayers", nbPlayer);
-	searchParams.set("gameType", gameType);
-    postData(`/lobby/api/create/?${searchParams.toString()}`)
-    .then(data => {
-        console.log('Success:', data);
-        room_url = `/lobby/${data.id}/`;
-        loadPageEvent(event, room_url);
+    let searchParams = new URLSearchParams();
+    // searchParams.set("maxPlayers", nbPlayer);
+    searchParams.set("gameType", gameType);
+    response = await fetch(`/lobby/api/create/?${searchParams.toString()}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        },
+        mode: 'same-origin',
     })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    if (response.status == 200) {
+        content = await response.json();
+        console.log('Success:', content);
+        room_url = `/lobby/${content.id}/`;
+        loadPageEvent(event, room_url);
+    } else {
+        content = await response.text();
+        console.error('Error:', content);
+    };
 }
 
 function join(event) {
     id = document.getElementById('lobbyId').value
-    // window.location.href = "/lobby/" + id
     room_url = "/lobby/" + id;
     loadPageEvent(event, room_url);
 }

@@ -1,39 +1,74 @@
 {% load static %}
+{% load i18n %}
+{% load chat %}
+<input type="hidden" name="pageKey" value="roomLobby">
+<input type="hidden" name="roomId" value="{{game.gameId}}">
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'lobby/room.css' %}">
+<link rel="stylesheet" href="{% static 'lobby/room.css' %}">
 {% endblock %}
-    <h1>Lobby</h1>
-    <p id="userCount">{{ playercount }}/{{ maxplayer }}</p>
-    <h3>Users list:</h3>
-    <ul id="playersList" style="list-style-type: none;">
-    </ul>
-    {% block javascripts %}
-        <script src="{% static 'lobby/room.js' %}"></script>
-    {% endblock %}
-    <p>2D/3D:</p>
-    <label class="switch">
-        <input id="render" type="checkbox" onclick="handleRender()">
-        <span class="slider round"></span>
-      </label>
-
-    {% if admin == False %}
-    <div id="main" style="display:none">
+<div class="d-flex flex-column justify-content-between">
+    {% if game.gameType == False %}
+        <h1 class="accent-color">{% translate "Create a Pong Lobby" %}</h1>
     {% else %}
-    <div id="main">
+        <h1 class="accent-color">{% translate "Create a Connect 4 Lobby" %}</h1>
     {% endif %}
-        <button id="launchButton" onclick="launchGame()" disabled>Launch</button>
-        
-        <div>
-            <input type="radio" name="playercount" id="2player" onchange="handlePlayerCount()" {% if maxplayer == 2 %}checked{% endif %}>
-            <label for="2player" class="slider-label">2P</label>      
-            <input type="radio" name="playercount" id="4player" onchange="handlePlayerCount()" {% if maxplayer == 4 %}checked{% endif %}>
-            <label for="4player" class="slider-label">4P</label>
-        </div>
-        <div>
-            <input type="radio" name="visibility" id="private" onchange="handleVisibility()" checked>
-            <label for="private" class="slider-label">Private</label>      
-            <input type="radio" name="visibility" id="public" onchange="handleVisibility()" >
-            <label for="public" class="slider-label">Public</label>
-        </div>
+
+<div class="main-content d-flex section">
+<div id="user" class="section rounded-4">
+    <div class="d-flex flex-row justify-content-between">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Users list:" %}
+        </h3>
+        <div id="userCount">0/{{ game.maxPlayers }}</div>
     </div>
-    {% include "chat/room.html" %}
+    <ul id="playersList" style="padding: 0; list-style-type: none" class="mt-3">
+    </ul>
+</div>
+<div id="properties" class="section rounded-4">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Properties :" %}
+    </h3>
+    <ul style="padding: 0; list-style-type: none" class="mt-3">
+    {% if game.gameType == False %}
+        <li class="my-2 rounded-2 m-1">
+            <p>2D/3D:</p>
+            <label class="switch">
+                <input id="render" type="checkbox" onclick="lobby_handleRender()">
+                <span class="slider round"></span>
+            </label>
+        </li>
+    {% endif %}
+        {% if admin %}
+        {% if game.gameType == False %}
+        <li class="my-2 rounded-2 m-1">
+            <p>{% translate "2Players/4Players:" %}</p>
+            <label class="switch">
+                <input type="checkbox" name="playercount" id="playercount" onchange="handlePlayerCount()" {% if game.maxPlayers == 4 %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+        </li>
+        {% endif %}
+        <li class="my-2 rounded-2 m-1">
+            <p>{% translate "Private:" %}</p>
+            <label class="switch">
+                <input type="checkbox" name="private" id="private" onchange="handleVisibility()" {% if game.private %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+</div>
+<div id="buttons" class="d-flex section rounded-4">
+    <button id="copy" onclick="copy_text('copy')"><i class="fa-regular fa-copy"></i></button>
+    {% if admin == True %}
+        <button id="launchButton" onclick="lobby_launchGame()" disabled>{% translate "Launch" %}</button>
+    {% endif %}
+</div>
+{% block javascripts %}
+<script src="{% static 'lobby/room.js' %}"></script>
+{% endblock %}
+
+{% chat game.gameId %}
+</div>
+</div>

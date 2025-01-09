@@ -1,35 +1,35 @@
 {% load static %}
-
+{% load i18n %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'lobby/index.css' %}">
 {% endblock %}
 
 <div class="justify-content-center p-3 mt-2">
-    <h1 class="accent-color mb-3">Create a Lobby</h1>
-    <div>
-        <label style="cursor: pointer;">
-            <input type="radio" name="players" value="2" checked> 2 Players
+    <h2 class="mb-3">{% translate "Create a Lobby" %}</h2>
+    <div id="gametype-fields">
+        <label style="cursor: pointer;" class="custom-radio">
+            <span class="checkmark"></span>
+            <input type="radio" name="gameType" value="0" checked>{% translate "Pong" %}
         </label>
-        <label style="cursor: pointer;">
-            <input type="radio" name="players" value="4"> 4 Players
-        </label>
-        </div>
-    <div>
-        <label style="cursor: pointer;">
-            <input type="radio" name="gameType" value="0" checked> Pong
-        </label>
-        <label style="cursor: pointer;">
-            <input type="radio" name="gameType" value="1"> Connect4
+        <label style="cursor: pointer;" class="custom-radio">
+            <input type="radio" name="gameType" value="1">{% translate "Connect 4" %}
         </label>
     </div>
+    <!-- <div id="players-fields">
+        <label style="cursor: pointer;" class="custom-radio">
+            <input type="radio" name="players" value="2" checked>{% translate "2 Players" %}
+        </label>
+        <label style="cursor: pointer;" class="custom-radio">
+            <input type="radio" name="players" value="4">{% translate "4 Players" %}
+        </label>
+    </div> -->
+    <button onpointerdown="create(event)" style="color: var(--background-color);">{% translate "Create the lobby" %}</button>
 
-    <button onclick="create(event)">Create the lobby</button>
-
-    <hr class="solid">
-    <h3>Or join an existing one:</h3>
+    <!-- <hr class="solid">
+    <h3>{% translate "Or join an existing one:" %}</h3>
     <input id="lobbyId" placeholder="Lobby ID" style="background-color: var(--secondary-color); border: none;"></input>
-<button onclick="join(event)">Join</button>
-</div>
+<button onpointerdown="join(event)">{% translate "Join" %}</button>
+</div> -->
 
 {% block javascripts %}
     <script src="{% static 'lobby/index.js' %}"></script>

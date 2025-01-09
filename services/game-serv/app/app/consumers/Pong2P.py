@@ -40,6 +40,8 @@ class PongConsumer2P(PongConsumer):
             msg = json.loads(text_data)
             if msg["type"] == "move":
                 GGDD[self.room_name].playersMove[self.index] = msg["paddleMove"]
+            if msg["type"] == "refresh":
+                await self.channel_layer.group_send(self.room_group_name, {'type':'init', 'playersList':GGDD[self.room_name].playersOrder})
         except:
             pass
 
@@ -87,7 +89,8 @@ async def ballMovement(score, ball, players, room_name):
             await get_channel_layer().group_send (f"game_{room_name}", {'type': 'score_update', "score": score})
         ball._x = 4.5
         ball._y = 4.5
-        ball._speed = 1
+        ball._speed = INIT_SPEED
+        return
 
     x = ball._x + math.cos(math.radians(ball._angle)) / 8 * ball._speed
     y = ball._y + math.sin(math.radians(ball._angle)) / 8 * ball._speed

@@ -17,6 +17,7 @@ PADDLE_WIDTH = 0.25
 BALL_SIZE = 0.125
 TICK_RATE = 1 / 20
 MAX_SPEED = 10
+INIT_SPEED = 2
 
 class PongConsumer(AsyncWebsocketConsumer):
 
@@ -61,6 +62,12 @@ class PongConsumer(AsyncWebsocketConsumer):
             'scores': event["score"],
         }))
 
+    async def init(self, event):
+        await self.send(text_data=json.dumps({
+            'type':'init',
+            'playersList':event["playersList"]
+        }))
+
     async def get_index(self):
         for i in range(len(GGDD[self.room_name].playersOrder)):
             if GGDD[self.room_name].playersOrder[i] == self.scope["token_check"]["id"]:
@@ -73,7 +80,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 winner = 1
         else:
             for i in range(len(GGDD[self.room_name].score)):
-                if GGDD[self.room_name].score[i] == 0:
+                if GGDD[self.room_name].score[i] == 1:
                     winner = i
                     break
         await self.send(text_data=json.dumps({
@@ -88,7 +95,7 @@ class Ball:
         self._x = x
         self._y = y
         self._angle = 180
-        self._speed = 1
+        self._speed = INIT_SPEED
 
     def toJson(self):
         return {
@@ -136,6 +143,7 @@ async def initGameData(room_name, nb_players):
 
 @database_sync_to_async
 def getPlayersIdsInGame(room_name):
+    logger.debug(Game.objects.filter(pk=room_name).values('players').first())
     return Game.objects.filter(pk=room_name).values('players').first()["players"]
 
 @database_sync_to_async
@@ -159,11 +167,17 @@ def updateModelScore(room_name, score):
 async def sleep(elapsedTime, room_name):
     await asyncio.sleep(max(0, TICK_RATE - elapsedTime))
     timeout = int(time.time())
+    entered = False
     while GGDD[room_name].freeze == True:
         await asyncio.sleep(TICK_RATE)
         if int(time.time()) - timeout == 60:
-            GGDD[room_name].score = [0 for i in GGDD[room_name].score]
+            for i in range(len(GGDD[room_name].playersOrder)):
+                GGDD[room_name].score[i] = 1 if GGDD[room_name].playersOrder[i] in GGDD[room_name].playersId else 0
+            entered = False
             break
+        entered = True
+    if entered == True:
+        await asyncio.sleep(3)
 
 
 def willHitLeftPaddle(ball, px, py, x, y):
@@ -255,9 +269,10 @@ def victory(room_name, nb_players):
             else:
                 win = i
             if (count == 3):
-                score[win] -= score[win] - 1
+                score[win] = 1
                 newPoint(score, win)
-                GGDD[room_name].score = [i * -1 for i in score]
+                GGDD[room_name].score = [(i * -1) + 1 for i in score]
+                logger.debug(score)
                 return True
     return False
 
@@ -270,6 +285,8 @@ async def gameLoop(room_name, nb_players, ballMovement):
     game = await getGameById(room_name)
     game.startTime = now()
     sync_to_async(game.save)()
+    await get_channel_layer().group_send(f'game_{room_name}',{'type': 'init','playersList': GGDD[room_name].playersOrder}
+    )
     while not GGDD[room_name].freeze:
         startTime = time.time()
         if victory(room_name, nb_players) == True:
@@ -287,8 +304,12 @@ async def gameLoop(room_name, nb_players, ballMovement):
     game = await getGameById(room_name)
     game.score = GGDD[room_name].score
     game.endTime = now()
-    requests.post("http://user-management:8000/api/games/add", json=game.toJson())
-    await sync_to_async(game.delete)()
+    GameIdEth = requests.post("http://user-management:8000/api/games/add", json=game.toJson()).json()
+    game.GameIdEth = GameIdEth["gameId"]
+    if game.admin != 0:
+        await sync_to_async(game.delete)()
+    else:
+        await sync_to_async(game.save)()
     await get_channel_layer().group_send(f'game_{room_name}', {"type": "close_connection"})
     await asyncio.sleep(5000)
     del GGDD[room_name]

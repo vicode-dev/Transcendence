@@ -1,12 +1,12 @@
 {%load static %}
-
+{%load i18n %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'components/menu_bar.css' %}">
 {% endblock %}
 
 <script>
 	let urls = {
-		home: "{% url 'home' %}",
+		home: "/home/",
         tournament: "{% url 'tournament_index' %}",
 		localgame: "{% url 'localgame' %}",
 		lobby: "{% url 'lobby_index' %}",
@@ -20,15 +20,15 @@
 
 {% block footer %}
 <!-- <input class="m-3 fixed-bottom" type="checkbox" checked> -->
-<nav class="m-3 navbar navbar-custom rounded-4 fixed-bottom">
+<nav id="nav" class="my-3 navbar navbar-custom rounded-4 fixed-bottom navbar-hide-on-scroll">
 
 	<div class="container-fluid justify-content-center align-items-center">
 
 		<!-- <div class="test"> -->
-			<a class="navbar-brand background-color" href="{% url 'home' %}" onclick="loadPageEvent(event, urls.home)">
+			<a style="margin-left: .7rem;" class="navbar-brand background-color" href="/home/" onclick="loadPageEvent(event,'/home/')">
 				<div class="icon-text-container">
-					<i class="fas fa-home"></i>
-					<div class="nav-item-text">Home</div>
+					<i class="fas fa-user-astronaut"></i>
+					<div class="nav-item-text">{% translate "Profile"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
@@ -37,7 +37,7 @@
 			<a class="expand-content navbar-brand background-color" href="{% url 'tournament_index' %}" onclick="loadPageEvent(event, urls.tournament)">
 				<div class="icon-text-container">
 					<i class="fas fa-solid fa-trophy"></i>
-					<div class="nav-item-text">Tournament</div>
+					<div class="nav-item-text">{% translate "Tournament"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
@@ -50,7 +50,7 @@
 					<i class="fas fa-solid fa-play"></i>
 					<!-- <i class="fas fa-solid fa-users"></i> -->
 					<!-- <i class="fas fa-solid fa-rectangle"></i> -->
-					<div class="nav-item-text">Play</div>
+					<div class="nav-item-text">{% translate "Play"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
@@ -60,7 +60,7 @@
 			<a class="navbar-brand background-color" href="{% url 'lobby_index' %}" onclick="loadPageEvent(event, urls.lobby)" >
 				<div class="icon-text-container">
 					<i class="fas fa-solid fa-plus"></i>
-					<div class="nav-item-text">Lobby</div>
+					<div class="nav-item-text">{% translate "Lobby"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
@@ -75,11 +75,11 @@
 		<!-- </div> -->
 
 		<!-- <div class="test"> -->
-			<a class="expand-content navbar-brand background-color" href="/profil/" onclick="loadPageEvent(event,'/profil/')">
+			<a class="expand-content navbar-brand background-color" href="/settings/" onclick="loadPageEvent(event,'/settings/')">
 				<div class="icon-text-container">
 					<!-- <i class="fas fa-solid fa-user"></i> -->
-					<i class="fas fa-solid fa-user-astronaut"></i>
-					<div class="nav-item-text">Profile</div>
+					<i class="fas fa-solid fa-gears"></i>
+					<div class="nav-item-text">{% translate "Settings"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
@@ -89,11 +89,18 @@
 				<!-- <input class="content-toggler" type="checkbox" id="content-toggler"/> -->
 				<div class="icon-text-container">
 					<i class="fas fa-solid fa-bars"></i>
-					<div class="nav-item-text">More</div>
+					<div class="nav-item-text">{% translate "More"%}</div>
 				</div>
 			</a>
 		<!-- </div> -->
-
 	</div>
+	<!-- <script>
+		function handleClick(event, url) {
+    loadPageEvent(event, url); // Call the existing function
+    setTimeout(() => {
+        location.reload(); // Refresh the page after a short delay
+    }, 27); // Delay ensures the loadPageEvent completes first
+}
+	</script> -->
 </nav>
 {% endblock %}

@@ -4,17 +4,21 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from app.models import Game
 from django.core import serializers
+from django.conf import settings
 from django.http import Http404, HttpResponseBadRequest, HttpResponseNotAllowed
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from lobby.utils.token import get_jwt_data
-import json, datetime, time
-import asyncio
+import datetime, requests
 from django.shortcuts import redirect
 
 def render_redirect(request):
     jwtData = get_jwt_data(request)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and "error" not in jwtData:
+        try:
+            requests.post(f"http://user-management:8000/api/player/{jwtData['id']}/lastConnection/", cookies={"secret": settings.SECRET_KEY})
+        except:
+            pass
         return None
     url = request.path
     query_params = request.GET.copy()
@@ -43,7 +47,7 @@ def getRoom(request, room_name, jwtData):
     admin = False
     if jwtData["id"] == game.admin or jwtData["role"] == "A":
         admin = True
-    return render(request, "lobby/room.html", {"room_name": room_name, "playercount": 0, "maxplayer": game.maxPlayers, "admin": admin})
+    return render(request, "lobby/room.html", {"game": game, "admin": admin})
 
 def postRoom(request, room_name, jwtData):
     if (not Game.objects.filter(pk=room_name, state=False).exists()):
@@ -55,10 +59,10 @@ def postRoom(request, room_name, jwtData):
             newGame.maxPlayers = maxPlayers
             newGame.save()
         private = request.GET.get('private', 3)
-        if private == 0:
+        if private == "0":
             newGame.private = False
             newGame.save()
-        elif private == 1:
+        elif private == "1":
             newGame.private = True
             newGame.save()
         async_to_sync(get_channel_layer().group_send)(f"lobby_{str(room_name)}",
@@ -71,6 +75,7 @@ def postRoom(request, room_name, jwtData):
     return HttpResponseNotAllowed()
 
 @require_http_methods(["POST", "GET"])
+@csrf_exempt
 def room(request, room_name):
     jwtData = get_jwt_data(request)
     if request.method == "GET":
@@ -79,6 +84,7 @@ def room(request, room_name):
         return postRoom(request, room_name, jwtData)
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def create(request):
     jwtData = get_jwt_data(request)
     if "error" in jwtData:
@@ -97,6 +103,7 @@ def create(request):
 def start(request, room_name):
     if "error" in get_jwt_data(request):
         return HttpResponse("Unautorized", status=401)
+    jwtData = get_jwt_data(request)
     channel_layer = get_channel_layer()
     game = Game.objects.get(pk=room_name)
     if len(game.players) != game.maxPlayers:

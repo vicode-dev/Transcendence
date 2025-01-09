@@ -1,1 +1,13 @@
-<h1>DASHBOARD</h1>
+{% load static %}
+{% load i18n %}
+{% load chat %}
+<input type="hidden" name="pageKey" value="dashboard">
+<h1>{% translate "Dashboard" %}</h1>
+
+{% chat room_name %}
+
+{% include "tournament/playersTree.html"%}
+
+{% block javascripts %}
+<script src="{% static 'tournament/dashboard.js' %}"></script>
+{% endblock %}

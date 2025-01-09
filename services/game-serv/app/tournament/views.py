@@ -6,15 +6,23 @@ from app.models import Game, Tournament
 from django.core import serializers
 from django.http import Http404, HttpResponseBadRequest, HttpResponseNotAllowed
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from lobby.utils.token import get_jwt_data
+from django.conf import settings
+from tournament.gameManagement import startGames, death
 import datetime 
-import asyncio
+import asyncio, requests
 from django.shortcuts import redirect
+import random
+import math
 
 def render_redirect(request):
     jwtData = get_jwt_data(request)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and "error" not in jwtData:
+        try:
+            requests.post(f"http://user-management:8000/api/player/{jwtData['id']}/lastConnection/", cookies={"secret": settings.SECRET_KEY})
+        except:
+            pass
         return None
     url = request.path
     query_params = request.GET.copy()
@@ -64,13 +72,12 @@ def postRoom(request, room_name, jwtData):
         async_to_sync(get_channel_layer().group_send)(f"lobby_{str(room_name)}",
             {
                 'type': 'lobby_game',
-                'players': newGame.players, 
+                'players': newGame.players,
                 'maxPlayers': newGame.maxPlayers
             })
         return HttpResponse(status=204)
     return HttpResponseNotAllowed()
 
-@csrf_exempt
 @require_http_methods(["POST", "GET"])
 def room(request, room_name):
     jwtData = get_jwt_data(request)
@@ -79,7 +86,6 @@ def room(request, room_name):
     else:
         return postRoom(request, room_name, jwtData)
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def create(request):
     jwtData = get_jwt_data(request)
@@ -88,6 +94,9 @@ def create(request):
     NewTournament = Tournament(gamesId=[],playersId=[])
     NewTournament.save()
     return JsonResponse({"id": NewTournament.tournamentId})
+
+def closestPowerTwo(length):
+    return 2 ** (math.ceil(math.log(length, 2)))
 
 @require_http_methods(["POST"])
 def start(request, room_name):
@@ -99,18 +108,54 @@ def start(request, room_name):
         return HttpResponseBadRequest()
     tournament.state = True
     tournament.save()
-    async_to_sync(channel_layer.group_send)(
-        f'tournament_{room_name}',
-        {
-            'type': 'redirect',
-            "url": f"{room_name}/dashboard/"
-        }
-    )
+    random.shuffle(tournament.playersId)
+    if (len(tournament.playersId) % 2 != 0):
+        tournament.playersId.insert(0, 0)
+    length = closestPowerTwo(len(tournament.playersId))
+    diff = length - len(tournament.playersId)
+    for i in range(diff):
+        tournament.playersId.append(None)
+    new_length = 2 * length - 1
+    tournament.playersId = [None if i < new_length - length else tournament.playersId[i - (new_length - length)] for i in range(new_length)]
+    tournament.gamesId = [0 for i in range(new_length - length)]
+    tournament.gamesUUID = [None for i in range(new_length - length)]
+    tournament.save()
+    startGames(tournament)
+    # async_to_sync(channel_layer.group_send)(
+    #     f'tournament_{room_name}',
+    #     {
+    #         'type': 'redirect',
+    #         "url": f"{room_name}/dashboard/"
+    #     }
+    # )
+    # async_to_sync(channel_layer.group_send)(
+    #     f'tournament_{room_name}',
+    #     {
+    #         'type': 'stats',
+    #         "players": tournament.playersId
+    #     }
+    # )
     return HttpResponse('')
 
-def dashboard(request, room_name):
+async def dashboard(request, room_name):
     redirectObject = render_redirect(request)
     if redirectObject:
         return redirectObject
+    tournament = None
+    try:
+        tournament = await sync_to_async(Tournament.objects.get)(pk=room_name)
+    except:
+        return HttpResponse(status=404)
+    if tournament.state == False:
+        return redirect(f"/tournament/{room_name}/") 
     return render(request, "tournament/dashboard.html", {"room_name": room_name, "playercount": 0})
 
+def game(request, room_name, gameId):
+    redirectObject = render_redirect(request)
+    if redirectObject:
+        return redirectObject
+    try:
+        result = Game.objects.get(pk=gameId)
+        return render(request, "tournament/game.html", {"game": result, "render": 0, "online": True})
+    except:
+        return redirect(f"tournament/{room_name}/dashboard/")

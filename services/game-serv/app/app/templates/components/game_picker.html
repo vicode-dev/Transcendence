@@ -1,5 +1,5 @@
 {%load static %}
-
+{% load i18n %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'components/game_picker.css' %}">
 {% endblock %}
@@ -8,10 +8,10 @@
 	<!-- <form action="{% url 'localgame' %}" method="get"> -->
 	<form action="{% url 'localgame' %}">
 		<div>
-			<label for="gameType">Quick game:</label>
+			<label for="gameType">{% translate "Quick game:"%}</label>
 			<select name="gameType" id="gameType">
-				<option value="0">Pong</option>
-				<option value="1">Connect 4</option>
+				<option value="0">{% translate "Pong"%}</option>
+				<option value="1">{% translate "Connect 4"%}</option>
 			</select>
 		</div>
 		<div>
@@ -28,8 +28,8 @@
 		<div>
 			<label for="render">Render type:</label>
 			<select name="render" id="render">
-				<option value="0">2D</option>
-				<option value="1">3D</option>
+				<option value="false">2D</option>
+				<option value="true">3D</option>
 			</select>
 		</div>
 		<div>

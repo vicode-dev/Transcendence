@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-08 17:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: services/game-serv/app/app/settings.py:132
+msgid "English"
+msgstr "Anglais"
+
+#: services/game-serv/app/app/settings.py:133
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: services/game-serv/app/app/settings.py:134
+msgid "French"
+msgstr "Français"
+
+#: services/game-serv/app/app/settings.py:135
+msgid "Dutch"
+msgstr "Néerlandais"
+
+#: services/game-serv/app/app/templates/base.html:12
+msgid "Welcome!"
+msgstr "Bienvenue!"
+
+#: services/game-serv/app/app/templates/components/game_picker.html:11
+msgid "Quick game:"
+msgstr "Partie rapide"
+
+#: services/game-serv/app/app/templates/components/game_picker.html:13
+#: services/game-serv/app/app/templates/partials/game_select.html:74
+msgid "Pong"
+msgstr "Pong"
+
+#: services/game-serv/app/app/templates/components/game_picker.html:14
+msgid "Connect 4"
+msgstr "Puissance 4"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:31
+msgid "Profile"
+msgstr "Profil"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:40
+msgid "Tournament"
+msgstr "Tournoi"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:53
+msgid "Play"
+msgstr "Jouer"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:63
+msgid "Lobby"
+msgstr "Salon"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:82
+msgid "Settings"
+msgstr "Paramètres"
+
+#: services/game-serv/app/app/templates/components/menu_bar.html:92
+msgid "More"
+msgstr "Plus"
+
+#: services/game-serv/app/app/templates/connect4/connect4.html:7
+msgid "player 1"
+msgstr "joueur 1"
+
+#: services/game-serv/app/app/templates/connect4/connect4.html:13
+msgid "player 2"
+msgstr "joueur 2"
+
+#: services/game-serv/app/app/templates/connect4/connect4.html:72
+msgid "Start again"
+msgstr "Rejouer"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:19
+msgid "Game Settings"
+msgstr "Paramètres du jeu"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:28
+msgid "Online or <br/>local?<br/>"
+msgstr "En ligne ou <br/>local?<br/>"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:37
+msgid "Local"
+msgstr "Local"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:46
+msgid "Online"
+msgstr "En ligne"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:56
+msgid "Choose a game <br/>to play<br/>"
+msgstr "Sélectionne un jeu <br/>à jouer<br/>"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:65
+msgid "Connect4"
+msgstr "Puissance 4"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:85
+msgid "Choose the number <br/>of players<br/>"
+msgstr "Choisis le nombre <br/>de joueurs<br/>"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:94
+msgid "2 Players"
+msgstr "2 Joueurs"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:103
+msgid "4 Players"
+msgstr "4 Joueurs"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:114
+msgid "Choose 3D <br/>or 2D<br/>"
+msgstr "Choisis 3D <br/>ou 2D<br/>"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:123
+msgid "3D"
+msgstr "3D"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:132
+msgid "2D"
+msgstr "2D"
+
+#: services/game-serv/app/app/templates/partials/game_select.html:149
+msgid "Start Game"
+msgstr "Lancer la partie"
+
+#: services/game-serv/app/app/templates/popup.html:5
+msgid "Victory!"
+msgstr "Victoire!"
+
+#: services/game-serv/app/app/templates/popup.html:6
+msgid "Defeat!"
+msgstr "Défaite!"
+
+#: services/game-serv/app/app/templates/popup.html:7
+msgid "Waiting for:"
+msgstr "En attente de:"
+
+#: services/game-serv/app/app/templates/popup.html:8
+msgid "Game has crashed"
+msgstr "Le jeu a crashé"
+
+#: services/game-serv/app/app/templates/popup.html:10
+msgid "has won!"
+msgstr "a gagné"
+
+#~ msgid "Home"
+#~ msgstr "Accueil"

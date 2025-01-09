@@ -1,23 +1,23 @@
 {%load static %}
-
+{% load i18n %}
 <link rel="stylesheet" href="{% static 'connect4/main.css' %}">
 
-<div data-partial="game" class="d-flex justify-content-center">
-    <div class="m-2">
-      <button id="player-btn-1" class="player-btn">
-        player 1<br>
-        score:<p id="player1-score"></p>
+<div id="players" class="d-flex justify-content-center" style="overflow: hidden;">
+    <button disabled id="player-btn-1" class="player-btn rounded-2" style="color: var(--background-color); background-color: var(--accent-color);">
+        {% translate "player 1" %}<br>
+        <div class="d-flex align-items-center justify-content-center " style="color: var(--background-color);">
+            <div id="player1-score"></div>
+        </div>
     </button>
-    </div>
-    <div class="m-2">
-        <button id="player-btn-2" class="player-btn">
-            player 2<br>
-            score:<p id="player2-score"></p>
-        </button>
-    </div>
+    <button disabled id="player-btn-2" class="player-btn rounded-2" style="color: var(--background-color);">
+        {% translate "player 2" %}<br>
+        <div class="d-flex align-items-center justify-content-center" style="color: var(--background-color);">
+            <div id="player2-score"></div>
+        </div>
+    </button>
 </div>
 
-<div class="d-flex justify-content-center m-2 p-3">
+<div id="connect4-main-content" class="d-flex justify-content-center">
 <svg width="350" height="300" xmlns="http://www.w3.org/2000/svg" id="board" viewBox="0 0 350 300">
     <!-- Define a pattern with circles to create a reusable hole grid -->
     <defs>
@@ -55,13 +55,19 @@
 </svg>
 
 </div>
+<script src="{% static 'connect4/connect4.js' %}"></script>
 {% if online == False %}
+<input type="hidden" name="pageKey" value="connect4Offline">
 <script src="{% static 'connect4/local/connect4.js' %}"></script>
 {% endif %}
 {% if online == True %}
+<input type="hidden" name="gameId" value="{{game.gameId}}">
+<input type="hidden" name="pageKey" value="connect4Online">
 <script src="{% static 'connect4/online/connect4.js' %}"></script>
 {% endif %}
-<div id="connect-content" class="d-flex justify-content-center m-2 p-3"></div>
-<div class="d-flex justify-content-center m-2 p-3">
-    <button onclick="newGame()" id="start-again" class="mt-3">Start again</button>
+<div id="connect-content" class="d-flex justify-content-center mt-1 p-2">
+    <div id="end_msg"></div>
+</div>
+<div class="d-flex justify-content-center m-2 pb-3">
+    <button onclick="ofc_newGame()" id="start-again" class="mt-0 rounded-2 px-2 py-1">{% translate "Start again" %}</button>
 </div>

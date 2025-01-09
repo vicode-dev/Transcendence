@@ -3,13 +3,32 @@
 } */
 
 nav {
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    transition: bottom 0.3s;
+    will-change: bottom; 
+    z-index: 1000;
 }
-
-
+#nav.bounce {
+    animation: bounce 0.5s ease-out;
+}
+@keyframes bounce {
+0% {
+    transform: translateY(0); /* Start at its original position */
+}
+20% {
+    transform: translateY(-30px); /* Move slightly up */
+}
+40% {
+    transform: translateY(10px); /* Move slightly down */
+}
+100% {
+    transform: translateY(0); /* Settle back to its original position */
+}
+}
 .navbar-custom {
     background-color: var(--secondary-color);
+	/* max-width: 55vw; */
 }
 
 #navbar-content {
@@ -24,9 +43,17 @@ nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin: auto;
+    max-width: 800px;
     /* gap: 0.5rem; */
 }
 
+@media (max-width: 850px) {
+    .navbar {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
 .navbar-toggler {
     /* position: relative; */
     height: 37px;

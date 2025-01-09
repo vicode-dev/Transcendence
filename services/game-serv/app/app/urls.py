@@ -16,6 +16,7 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
@@ -24,7 +25,6 @@ urlpatterns = [
     path('chat/', include('chat.urls')),
     path('lobby/', include('lobby.urls'), name='lobby'),
     path('tournament/', include('tournament.urls'), name='tournament'),
-    path('home/', views.home, name='home'),
     # path('profile/', include('profile.urls'), name='profile'),
     path('game/<uuid:gameId>/', views.game),
     path('game/join/', views.matchmaking_page, name='matchmaking_page'),
@@ -32,9 +32,11 @@ urlpatterns = [
     path('game/local/', views.localgame, name='localgame'),
     # path('game/local/pong/', views.pong, name='local_pong'),
     # path('game/local/connect4/', views.connect4, name='local_connect4'),
-
+    #favicon
+    # path('favicon.ico', favicon_view),
+    
     # for testing:
-    path('game/local/select', views.game_select, name='game_select'),
+    path('game/local/select/', views.game_select, name='game_select'),
     # path('url_list/', views.url_list, name='url_list'), #JSON data
     path('theme/', views.theme, name='theme'),
     # path('theme/', views.theme, name='theme'),
@@ -44,3 +46,5 @@ urlpatterns = [
     # path('tournament', createTournament),
 	# path('join/', [function]),
 ]
+
+# urlpatterns += static('/static/', document_root=settings.STATIC_ROOT)

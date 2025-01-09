@@ -1,0 +1,135 @@
+{% load static %}
+<script src="{% static 'pong/pong.js' %}"></script>
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'pong/local/pong2D.css' %}">
+{% endblock %}
+
+<div class="wrapper d-flex flex-column align-items-center">
+
+    <div class="scores d-flex justify-content-center align-items-center mt-5 mb-4">
+        <!-- <div class="d-flex justify-content-center align-items-center scores mt-2 mb-3"> -->
+            <div class="mx-4">
+                Player 1 <div id="player1"></div>
+                <div id="score1" class="score">
+                    Score: {{game.score.0}}
+                </div>
+            </div>
+            <div class="mx-4">
+                Player 2 <div id="player2"></div>
+                <div id="score2" class="score">
+                    Score: {{game.score.1}}
+                </div>
+            </div>
+            {% if game.maxPlayers == 4 %}
+            <div class="mx-4">
+                Player 3 <div id="player3"></div>
+                <div id="score3" class="score">
+                    Score: {{game.score.2}}
+                </div>
+            </div>
+            <div class="mx-4">
+                Player 4 <div id="player4"></div>
+                <div id="score4" class="score">
+                    Score: {{game.score.3}}
+                </div>
+            </div>
+            {% endif %}
+        <!-- </div> -->
+    </div>
+  
+
+
+
+    <div class="pong-main-content d-flex justify-content-center align-items-center m-2">
+
+        {% if online == False %}
+        <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center"
+            style="transform: rotate(-90deg);">
+            <button onclick="moveLeftPaddle('ArrowDown')" id="right-arrow-up" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+            <button onclick="moveLeftPaddle('ArrowUp')" id="right-arrow-up" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        {% endif %}
+
+        {% if render == False %}
+            {% include "pong/2DBoard.html" %}
+        {% else %}
+            {% include "pong/3DBoard.html" %}
+        {% endif %}
+        {% if game.maxPlayers == 4 %}
+        <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center mt-4 mb-3">
+            <button id="left-arrow-up" class="m-2 arrows-btn rounded-2 mx-4">
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+            <button id="left-arrow-down" class="m-2 arrows-btn rounded-2 mx-4">
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        {% endif %}
+
+        {% if online == False %}
+        <div id="right-arrows" class="flex-shrink-1 arrows arrows-right d-flex align-items-center"
+            style="transform: rotate(-90deg);">
+            <button onclick="moveRightPaddle('ArrowRight')" id="right-arrow-up" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+            <button onclick="moveRightPaddle('ArrowLeft')" id="right-arrow-down" class="m-2 arrows-btn rounded-2">
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        {% endif %}
+
+    </div>
+    <!-- 
+    <div class="d-flex justify-content-center align-items-center scores mt-2 mb-5">
+        <div class="mx-4">
+            Player 1
+            <p id="score1" class="score">
+                Score: {{ game.score.0 }}
+            </p>
+        </div>
+        <div class="mx-4">
+            Player 2
+            <p id="score2" class="score">
+                Score: {{ game.score.1 }}
+            </p>
+        </div>
+        {% if game.maxPlayers == 4 %}
+        <div class="mx-4">
+            Player 3
+            <p id="score3" class="score">
+                Score: {{ game.score.2 }}
+            </p>
+        </div>
+        <div class="mx-4">
+            Player 4
+            <p id="score4" class="score">
+                Score: {{ game.score.3 }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    -->
+    {% if online == False %}
+    <button id="start-btn" class="btn btn-lg" onclick="gameLoop()">
+        start
+    </button>
+    {% else %}
+    <div id="online-arrows" class="flex-shrink-1 d-flex align-items-center mt-4 mb-3">
+        <button onclick="movePaddle(-1)" id="online-left-arrow" class="m-2 arrows-btn rounded-2 mx-3">
+            <i class="fas fa-solid fa-arrow-left"></i>
+        </button>
+        <button onclick="movePaddle(1)" id="online-right-arrow" class="m-2 arrows-btn rounded-2 mx-3">
+            <i class="fas fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+    {% endif %}
+
+    {% if online == True %}
+    {% include "disconectPopup.html" %}
+    {% endif %}
+</div>

@@ -1,147 +1,25 @@
-const COLUMNS = 7
-const ROWS = 6
-const RED = 1
-const YELLOW = 2
+let freezeState;
+let connectWebSocket;
 
-// let backgroundColor = window.getComputedStyle(document.documentElement).getPropertyValue('--background-color');
-// let secondaryColor = window.getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
-// let accentColor = window.getComputedStyle(document.documentElement).getPropertyValue('--accent-color');
 
-const COLOR = ["black", "green"] // accentColor crash
-let board = new Array(ROWS);
-for (let i = 0; i < ROWS; i++) {
-    board[i] = new Array(COLUMNS).fill(0);
-}
-let boardState = new Array(COLUMNS).fill(ROWS - 1);
-const roomName = getRoomName();
-let turn = 0;
-let freezeState = false;
-
-startConnect4();
-
-function getRoomName() {
-    let url = window.location.href;
-    let pathSegments = url.split('/').filter(Boolean);
-    return pathSegments[pathSegments.length - 1];
-}
 // document.addEventListener('DOMContentLoaded', function () {
-function startConnect4() {
-    let gameWebSocket = new WebSocket(
-        'wss://'
-        + window.location.host
-        + '/ws/game/'
-        + roomName
-        + '/connect4'
-    );
-    let c1 = document.getElementById("c1");
-    let c2 = document.getElementById("c2");
-    let c3 = document.getElementById("c3");
-    let c4 = document.getElementById("c4");
-    let c5 = document.getElementById("c5");
-    let c6 = document.getElementById("c6");
-    let c7 = document.getElementById("c7");
 
-    gameWebSocket.addEventListener("message", (event) => {
-        msg = JSON.parse(event.data)
-        switch (msg.type) {
-            case "data":
-                UpdateGameData(msg);
-                drawPiece(msg["col"]);
-                break;
-            case "error":
-                console.log(msg);
-                break;
-            case "end_game":
-                endGame(msg);
-                break;
-            case "freeze":
-                freeze(msg, gameWebSocket);
-                break;
-            case "board":
-                board = msg["board"];
-                boardState = msg["board_state"];
-                redraw();
-                break;
-        }
-    });
-    gameWebSocket.onopen = function() {
-        gameWebSocket.send(JSON.stringify({"type": "reconnect"}));
-    }
-    // gameWebSocket.onmessage = function(e) {
-    //     console.log("Hello world")
-    //     redraw();
-    // }
-    c1.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 0);
-    })
-    c2.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 1);
-    })
-    c3.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 2);
-    })
-    c4.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 3);
-    })
-    c5.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 4);
-    })
-    c6.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 5);
-    })
-    c7.addEventListener('click', function () {
-        dropPiece(gameWebSocket, 6);
-    })
-}
 
-function UpdateGameData(msg) {
+function onc_UpdateGameData(msg) {
     boardState = msg["board_state"];
     turn = msg["turn"];
 }
 
-function freeze(msg, gameWebSocket) {
+function onc_freeze(msg, connectWebSocket) {
     freezeState = msg["state"];
 }
 
-function checkWin(x, y) {
-    let piece = board[x][y];
-
-    for (let c = 0; c < COLUMNS - 3; c++) {
-        for (let r = 0; r < ROWS; r++) {
-            if (board[r][c] == piece && board[r][c + 1] == piece && board[r][c + 2] == piece && board[r][c + 3] == piece)
-                return true;
-        }
-    }
-
-    for (let c = 0; c < COLUMNS; c++) {
-        for (let r = 0; r < ROWS - 3; r++) {
-            if (board[r][c] == piece && board[r + 1][c] == piece && board[r + 2][c] == piece && board[r + 3][c] == piece)
-                return true;
-        }
-    }
-
-    for (let c = 0; c < COLUMNS - 3; c++) {
-        for (let r = 0; r < ROWS - 3; r++) {
-            if (board[r][c] == piece && board[r + 1][c + 1] == piece && board[r + 2][c + 2] == piece && board[r + 3][c + 3] == piece)
-                return true;
-        }
-    }
-
-    for (let c = 0; c < COLUMNS - 3; c++) {
-        for (let r = 3; r < ROWS; r++) {
-            if (board[r][c] == piece && board[r - 1][c + 1] == piece && board[r - 2][c + 2] == piece && board[r - 3][c + 3] == piece)
-                return true;
-        }
-    }
-    return false;
-}
-
-function dropPiece(gameWebSocket, col) {
+function onc_dropPiece(connectWebSocket, col) {
     if (freezeState == false)
-        gameWebSocket.send(JSON.stringify({"type": "move", "dropPiece": col}));
+        connectWebSocket.send(JSON.stringify({"type": "move", "dropPiece": col}));
 }
 
-function drawPiece(col) {
+function onc_drawPiece(col) {
     if (boardState[col] + 1 >= 0) {
         board[boardState[col] + 1][col] = turn;
         let svg = document.getElementById("pieces");
@@ -151,11 +29,15 @@ function drawPiece(col) {
         piece.setAttribute("cx", 25 + 50 * col);
         piece.setAttribute("cy", 25 + (boardState[col] + 1) * 50);
         piece.setAttribute("class", "Piece");
+        if (turn % 2 === 0) {
+            piece.setAttribute("stroke", accentColor);
+            piece.setAttribute("stroke-width", "5");
+        }
         svg.appendChild(piece);
     }
 }
 
-function redraw() {
+function onc_redraw() {
     for (let i = 0; i < COLUMNS; i++) {
         for (let j = boardState[i] + 1; j < ROWS; j++) {
             let svg = document.getElementById("pieces");
@@ -165,14 +47,17 @@ function redraw() {
             piece.setAttribute("cx", 25 + 50 * i);
             piece.setAttribute("cy", 25 + (j) * 50);
             piece.setAttribute("class", "Piece");
+            // if (turn % 2 === 0) {
+                piece.setAttribute("stroke", accentColor);
+                piece.setAttribute("stroke-width", "2");
+            // }
             svg.appendChild(piece);
         }
     }
 }
 
-function endGame(msg) {
+function onc_endGame(msg) {
     let score = msg["score"];
-    console.log(msg, score);
     freezeState = true;
     if (score[0] == 0 && score[1] == 0) {
         let content = document.getElementById("connect-content");
@@ -191,10 +76,132 @@ function endGame(msg) {
     }
 }
 
-function boardFull() {
-    for (let i = 0; i < COLUMNS; i++) {
-        if (boardState[i] >= 0)
-            return false;
+function onc_messageEvent(event) {
+    let msg = JSON.parse(event.data)
+    switch (msg.type) {
+        case "data":
+            onc_UpdateGameData(msg);
+            onc_drawPiece(msg["col"]);
+            break;
+        case "error":
+            console.log(msg);
+            break;
+        case "end_game":
+            onc_endGame(msg);
+            break;
+        case "freeze":
+            onc_freeze(msg, connectWebSocket);
+            break;
+        case "board":
+            board = msg["board"];
+            boardState = msg["board_state"];
+            onc_redraw();
+            break;
     }
-    return true;
 }
+
+function onc_openEvent() {
+    connectWebSocket.send(JSON.stringify({"type": "reconnect"}));
+}
+
+function onc_c1Drop() {
+    onc_dropPiece(connectWebSocket, 0);
+}
+
+function onc_c2Drop() {
+    onc_dropPiece(connectWebSocket, 1);
+}
+
+function onc_c3Drop() {
+    onc_dropPiece(connectWebSocket, 2);
+}
+
+function onc_c4Drop() {
+    onc_dropPiece(connectWebSocket, 3);
+}
+
+function onc_c5Drop() {
+    onc_dropPiece(connectWebSocket, 4);
+}
+
+function onc_c6Drop() {
+    onc_dropPiece(connectWebSocket, 5);
+}
+
+function onc_c7Drop() {
+    onc_dropPiece(connectWebSocket, 6);
+}
+
+function mainConnectOnline() {
+    connectWebSocket = new WebSocket(
+        'wss://'
+        + window.location.host
+        + '/ws/game/'
+        + document.querySelector('[name=gameId]').value
+        + '/connect4'
+    );
+    board = new Array(ROWS);
+    freezeState = false
+    for (let i = 0; i < ROWS; i++) {
+        board[i] = new Array(COLUMNS).fill(0);
+    }
+    boardState = new Array(COLUMNS).fill(ROWS - 1);
+    turn = 0;
+    gameOver = 0;
+    let c1 = document.getElementById("c1");
+    let c2 = document.getElementById("c2");
+    let c3 = document.getElementById("c3");
+    let c4 = document.getElementById("c4");
+    let c5 = document.getElementById("c5");
+    let c6 = document.getElementById("c6");
+    let c7 = document.getElementById("c7");
+    document.getElementById("start-again").style.visibility = "hidden";
+    destructors.push(onc_destructor);
+    connectWebSocket.addEventListener("message", onc_messageEvent);
+    connectWebSocket.addEventListener("open", onc_openEvent);
+    c1.addEventListener('click', onc_c1Drop);
+    c2.addEventListener('click', onc_c2Drop);
+    c3.addEventListener('click', onc_c3Drop);
+    c4.addEventListener('click', onc_c4Drop);
+    c5.addEventListener('click', onc_c5Drop);
+    c6.addEventListener('click', onc_c6Drop);
+    c7.addEventListener('click', onc_c7Drop);
+    // c1.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 0);
+    // })
+    // c2.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 1);
+    // })
+    // c3.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 2);
+    // })
+    // c4.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 3);
+    // })
+    // c5.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 4);
+    // })
+    // c6.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 5);
+    // })
+    // c7.addEventListener('click', function () {
+    //     dropPiece(connectWebSocket, 6);
+    // })
+}
+
+function onc_destructor() {
+    boardState = 0;
+    board = 0;
+    connectWebSocket.removeEventListener("message", onc_messageEvent);
+    connectWebSocket.removeEventListener("open", onc_openEvent);
+    c1.removeEventListener('click', onc_c1Drop);
+    c2.removeEventListener('click', onc_c2Drop);
+    c3.removeEventListener('click', onc_c3Drop);
+    c4.removeEventListener('click', onc_c4Drop);
+    c5.removeEventListener('click', onc_c5Drop);
+    c6.removeEventListener('click', onc_c6Drop);
+    c7.removeEventListener('click', onc_c7Drop);
+    connectWebSocket.close();
+}
+
+addMain(mainConnectOnline);

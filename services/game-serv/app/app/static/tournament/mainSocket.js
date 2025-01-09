@@ -22,7 +22,6 @@ function checkTournament() {
                 openSocket(url[2]);
                 break;    
         }
-        console.log("LETTTSS GOOOOOO");
     } else if (actualTournament) {
         actualTournament = null;
         closeSocket();
@@ -51,16 +50,24 @@ function closeSocket() {
 }
 
 function redirectTournament(data) {
-    console.log("hello ")
-    newUrl = data.url + window.location.search; 
-    console.log(newUrl + "TEST")
-    loadPage(newUrl)
+    let newUrl = data.url + window.location.search; 
+    loadPage(newUrl).then();
 }
 
 function stats(data) {
     if (getSplitUrl().length == 4) {
-        refresh(data);
-
+        tournament_refresh(data);
+    } 
+    else if (getSplitUrl().length == 5) {
+        playersTree(data);
     }
+}
+
+function pestilence() {
+    TournamentSocket.send(JSON.stringify({"type":"apocalypse"}));
+}
+
+function reconnect() {
+    TournamentSocket.send(JSON.stringify({"type": "reconnect"}))
 }
 

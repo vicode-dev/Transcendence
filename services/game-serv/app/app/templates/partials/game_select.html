@@ -1,13 +1,12 @@
 {% csrf_token %}
-{%load static %}
+{% load static %}
+{% load i18n %}
+
 
 <script>
     urls = {
-        home: "{% url 'home' %}",
         localgame: "{% url 'localgame' %}",
-        lobby: "{% url 'lobby_index' %}",
-        matchmaking: "{% url 'matchmaking' %}",
-};
+    };
 </script>
 
 {% block stylesheets %}
@@ -17,7 +16,7 @@
 <!-- <div id="game_select-content" class="d-flex flex-column flex-wrap align-items-center justify-content-center"> -->
 <div id="game_select-content">
 
-<h3 id="game_select-title" class="mx-3 mt-4 d-flex justify-content-center">[ game settings ]</h3>
+<h2 id="game_select-title" class="mx-3 mt-4 d-flex justify-content-center" style="color: var(--secondary-color);">{% translate "Game Settings" %}</h2>
 
 <div id="main-div" class="d-flex justify-content-center" >
 
@@ -26,26 +25,25 @@
         <div class="my-3 content" style="max-width: 1023px;">
             <div class="left">
                 <h2>
-                    Online or<br/>
-                    local?<br/>
+                    {% translate "Online or <br/>local?<br/>" %}
                 </h2>
             </div>
 
             <div class="right ml-2">
-                <input value="5" onclick="showRender()" required type="radio" name="matchmaking" id="local" class="one"/>
+                <input value="local" onclick="showRender()" required type="radio" name="matchmaking" id="local" class="one"/>
                 <label class="input-label" for="local">
                     <div class="input-content">
                         <div class="item-title">
-                            Local
+                            {% translate "Local" %}
                         </div>
                     </div>
                 </label>
 
-                <input value="5" onclick="hideRender()" required type="radio" name="matchmaking" id="online" class="two" />
+                <input value="online" onclick="hideRender()" required type="radio" name="matchmaking" id="online" class="two" />
                 <label class="input-label" for="online">
                     <div class="input-content">
                         <div class="item-title">
-                            Online
+                            {% translate "Online" %}
                         </div>
                     </div>
                 </label>
@@ -55,8 +53,7 @@
         <div class="my-3 content" style="max-width: 1023px;">
             <div class="left">
                 <h2>
-                    Choose a game<br/>
-                    to play<br/>
+                    {% translate "Choose a game <br/>to play<br/>" %}
                 </h2>
             </div>
 
@@ -65,7 +62,7 @@
                 <label class="input-label" for="connect4">
                     <div class="input-content">
                         <div class="item-title">
-                            Connect4
+                            {% translate "Connect4" %}
                         </div>
                     </div>
                 </label>
@@ -74,19 +71,18 @@
                 <label class="input-label" for="pong">
                     <div class="input-content">
                         <div class="item-title">
-                            Pong
+                            {% translate "Pong" %}
                         </div>
                     </div>
                 </label>
             </div>
         </div>
 
-        <div id="pong-content">
+        <div id="pong-content" style="display: none;">
             <div class="my-3 content" style="max-width: 1023px;">
                 <div class="left">
                     <h2>
-                        Choose the number<br/>
-                        of players<br/>
+                        {% translate "Choose the number <br/>of players<br/>" %}
                     </h2>
                 </div>
 
@@ -95,7 +91,7 @@
                     <label class="input-label" for="2players">
                         <div class="input-content">
                             <div class="item-title">
-                                2 Players
+                                {% translate "2 Players" %}
                             </div>
                         </div>
                     </label>
@@ -104,43 +100,42 @@
                     <label class="input-label" for="4players">
                         <div class="input-content">
                             <div class="item-title">
-                                4 Players
+                                {% translate "4 Players" %}
                             </div>
                         </div>
                     </label>
                 </div>
             </div>
 
-            <div id="online-content">
+            <!-- <div id="online-content"> -->
                 <div class="my-3 content"  style="max-width: 1023px;">
                     <div class="left">
                         <h2>
-                            Choose 3D<br/>
-                            or 2D<br/>
+                            {% translate "Choose 3D <br/>or 2D<br/>" %}
                         </h2>
                     </div>
 
                     <div class="right">
-                        <input value="1" class="online-required" type="radio" name="render" id="3D" />
+                        <input value="true" class="online-required pong-required" type="radio" name="render" id="3D" />
                         <label class="input-label" for="3D">
                             <div class="input-content">
                                 <div class="item-title">
-                                    3D
+                                    {% translate "3D" %}
                                 </div> 
                             </div>
                         </label>
 
-                        <input value="0" class="online-required" type="radio" name="render" id="2D" />
+                        <input value="false" class="online-required pong-required" type="radio" name="render" id="2D" />
                         <label class="input-label" for="2D">
                             <div class="input-content">
                                 <div class="item-title">
-                                    2D
+                                    {% translate "2D" %}
                                 </div>
                             </div>
                         </label>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
 
         <!-- <div class="d-flex justify-content-center align-items-center">
@@ -150,9 +145,10 @@
     </form>
 </div>
 
-<div class="d-flex justify-content-center align-items-center">
-    <button style="margin: 0" form="game-form" id="submit-form" type="submit">Start Game</button>
+<div class="submit-form d-flex justify-content-center align-items-center" style="display: none;">
+    <button style="margin: 0; color: var(--secondary-color)" form="game-form" id="submit-form" type="submit">{% translate "Start Game" %}</button>
 </div>
+<div style="height: 100px;"></div>
 </div>
 
 <!-- </div> -->

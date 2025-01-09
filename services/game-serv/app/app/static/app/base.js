@@ -1,19 +1,17 @@
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-let backgroundColor = window.getComputedStyle(document.documentElement).getPropertyValue('--background-color');
-let secondaryColor = window.getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
-let accentColor = window.getComputedStyle(document.documentElement).getPropertyValue('--accent-color');
+// let backgroundColor = window.getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+// let secondaryColor = window.getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
+// let accentColor = window.getComputedStyle(document.documentElement).getPropertyValue('--accent-color');
 
 const originalScripts = new Set();
 const scripts = document.querySelectorAll('script');
 scripts.forEach(script => originalScripts.add(script));
-// window.addEventListener('DOMContentLoaded', function () {
-// console.log("Captured original scripts:", originalScripts);
-// });
 
+let destructors = [];
+let mains = new Map();
 
 redirect();
-
 function redirect() {
     searchUrl = new URLSearchParams(window.location.search);
     if(searchUrl.has("redirect_url"))
@@ -22,96 +20,200 @@ function redirect() {
         searchUrl.delete("redirect_url")
         if (searchUrl.size > 0)
             new_url += "?" + searchUrl.toString();
-        loadPage(new_url);
+            loadPage(new_url).then();
     }
     else
     {
-        loadPage("/home/");
+        loadPage("/home/").then();
     }
-    // else load page /home
 }
 
 function loadPageEvent(event, url) {
     event.preventDefault();
-    loadPage(url);
+    loadPage(url).then();
 }
 
-function loadPage(url) {
-    console.log("Load Page", url);
-    fetch(url, {
+/**
+ * 
+ * @param {string} url 
+ * @param {boolean} update_url 
+ * @returns {string}
+ */
+async function loadPage(url, update_url = true) {
+    destructors.forEach(destructor => destructor());
+    destructors = [];
+    let response = await fetch(url, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            // redirect: 'manual'
         }
     })
-        .then(response => {
-            if (response.status == 302)
-                return loadPage(response.headers.get('Location'));
-            if (response.ok) {
-                return response.text();
-            }
-            throw new Error('Network response was not ok');
-        })
-        .then(html => {
-            document.getElementById('content').innerHTML = html;
-            // const loadedPartial = document.querySelector('[data-partial]').getAttribute('data-partial');
-            // initializeScriptsForPartial(loadedPartial);
-            // unloadScripts();
-            initializeScriptsForPartial(originalScripts);
-            window.history.pushState({ path: url }, '', url);
+    .catch(error => {
+        console.error(url, error)
+    })
+    if (!response)
+    {
+        document.getElementById('content').innerHTML = "Soft 404";
+        return
+    }
+    switch (response.status) {
+        case 403:
+            console.log("Load Page", url);
+            return loadPage("/login/");
+        case 502:
+            console.log("Load Page", url);
+            window.alert("Backend error contact administrator");
+            break;
+        default:
+            content = await response.text();
+            if (response.redirected)
+                url = response.url;
+            console.log("Load Page", url);
+			if (update_url)
+            	window.history.pushState({ path: url }, '', url);
+            document.getElementById('content').innerHTML = content;
+            // Set the title based on the URL
+            setTitleBasedOnURL(url);
+
+            await loadAllScripts(originalScripts);
             checkTournament();
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-    // loadPageContent(url);
-    // initializeScriptsForPartial(originalScripts);
-    // window.history.pushState({ path: url }, '', url);
+            execMains();
+    }
+}
+
+// Function to get a cookie value by name
+function getCookieValue(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+// Function to set the title based on the URL
+function setTitleBasedOnURL(url) {
+    const language = getCookieValue('language');
+    console.log("Setting title based on URL", url);
+    if (url.includes("/login/")) {
+        document.title = getTranslation(language, 'login');
+    } else if (url.includes("register/")) {
+        document.title = getTranslation(language, 'register');
+    } else if (url.includes("logout/")) {
+        document.title = getTranslation(language, 'logout');
+    } else if (url.includes("home/")) {
+        document.title = getTranslation(language, 'home');
+    } else if (url.includes("tournament/")) {
+        document.title = getTranslation(language, 'tournament');
+    } else if (url.includes("lobby/")) {
+        document.title = getTranslation(language, 'lobby');
+    } else if (url.includes("settings/")) {
+        document.title = getTranslation(language, 'settings');
+    } else if (url.includes("loading/")) {
+        document.title = getTranslation(language, 'loading');
+    } else if (url.includes("game/local/select/")) {
+        document.title = getTranslation(language, 'selectGame');
+    } else if (url.includes("profile/")) {
+        document.title = getTranslation(language, 'otherProfile');
+    } else if (url.includes("/?gameType=0")) {
+        if(url.includes("&render=true"))
+            document.title = getTranslation(language, 'pong3D');
+        else
+            document.title = getTranslation(language, 'pong2D');
+    }
+    else if (url.includes("/?gameType=1")) {
+        document.title = getTranslation(language, 'connect4');
+    }
+    else {
+        document.title = getTranslation(language, 'default');
+    }
+}
+
+// Translation arrays for each language
+const translations = {
+    en: {
+        login: "Login",
+        register: "Register",
+        logout: "Logout",
+        home: "Home",
+        tournament: "Tournament",
+        lobby: "Lobby",
+        settings: "Settings",
+        loading: "Loading",
+        selectGame: "Select Game",
+        otherProfile: "Other Profile",
+        pong2D: "Pong 2D",
+        pong3D: "Pong 3D",
+        connect4: "Connect 4",
+        default: "Default"
+    },
+    fr: {
+        login: "Connexion",
+        register: "S'inscrire",
+        logout: "Déconnexion",
+        home: "Accueil",
+        tournament: "Tournoi",
+        lobby: "Salon",
+        settings: "Paramètres",
+        loading: "Chargement",
+        selectGame: "Sélectionner un jeu",
+        otherProfile: "Autre profil",
+        pong2D: "Pong 2D",
+        pong3D: "Pong 3D",
+        connect4: "Puissance 4",
+        default: "Défaut"
+    },
+    nl: {
+        login: "Inloggen",
+        register: "Registreren",
+        logout: "Uitloggen",
+        home: "Home",
+        tournament: "Toernooi",
+        lobby: "Lobby",
+        settings: "Instellingen",
+        loading: "Laden",
+        selectGame: "Selecteer spel",
+        otherProfile: "Ander profiel",
+        pong2D: "Pong 2D",
+        pong3D: "Pong 3D",
+        connect4: "Vier op een rij",
+        default: "Standaard"
+    },
+    es: {
+        login: "Iniciar sesión",
+        register: "Registrarse",
+        logout: "Cerrar sesión",
+        home: "Inicio",
+        tournament: "Torneo",
+        lobby: "Sala",
+        settings: "Configuraciones",
+        loading: "Cargando",
+        selectGame: "Seleccionar juego",
+        otherProfile: "Otro perfil",
+        pong2D: "Pong 2D",
+        pong3D: "Pong 3D",
+        connect4: "Línea 4",
+        default: "Predeterminado"
+    }
+};
+
+// Function to get translation based on language and key
+function getTranslation(language, key) {
+    return translations[language] && translations[language][key] ? translations[language][key] : translations['en'][key];
 }
 
 window.addEventListener('popstate', (event) => {
-    // event.preventDefault();
-    console.log(event.state, event.state.path);
-    if (event.state && event.state.path) {
-        loadPageContent(event.state.path);
+    event.preventDefault();
+    if (event.state.path[0] != "/")
+        path = "/" + event.state.path;
+    else
+        path = event.state.path;
+    console.log(path);
+
+    if (event.state && path) {
+        loadPage(path);
     }
 });
-
-function unloadScripts() {
-    document.querySelectorAll('script').forEach(script => {
-        console.log('removing script: ', script);
-        script.remove();
-    });
-}
-
-function loadPageContent(url) {
-    console.log("Load Page Content", url);
-    fetch(url, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('content').innerHTML = html;
-        })
-        .catch(error => {
-            if(error.status == 404)
-            {document.getElementById('content').innerHTML = html}
-            console.error('There was a problem with the fetch operation:', error);
-        });
-}
-
-const loadedScripts = new Set(); //sinon utliser local storage
-function loadScriptOnce(src, callback) {
-
-    // const scriptUrl = new URL(src, window.location.href);
-    // const scriptPath = scriptUrl.pathname;
-    // const scriptHref = scriptUrl.href;
-
-    // console.log("Attempting to load script:", src);
+        
+const loadedScripts = new Set();
+async function loadScriptOnce(src, callback) {
     if (loadedScripts.has(src)) {
-        // || loadedScripts.has(scriptHref)) {
         console.log('Script already loaded:', src);
         callback();
         return;
@@ -119,62 +221,60 @@ function loadScriptOnce(src, callback) {
     const script = document.createElement('script');
     script.src = src;
     script.type = 'text/javascript';
-    script.onload = () => {
-        // console.log('Script loaded successfully:', src);
-        loadedScripts.add(src);
-        // loadedScripts.add(scriptUrl.href);
-        // window.scriptLoaded = true;
-        callback();
-    };
     script.onerror = () => {
         console.error(`Error loading script: ${src}`);
     };
     // document.head.appendChild(script);
+    loadedScripts.add(src);
+    callback();
     document.body.appendChild(script);
-
-    // console.log('Script tag appended:', src);
+    return new Promise((resolve, reject) => { script.onload = () => resolve()})
 }
 
-function initializeScriptsForPartial(originalScripts) {
-    console.log("Initialize script")
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM fully loaded');
-            loadAllScripts(originalScripts);
-        });
-    } else {
-        console.log('DOM already loaded');
-        loadAllScripts(originalScripts);
-    }
-}
 
-function loadAllScripts(originalScripts) {
+async function loadAllScripts(originalScripts) {
     const scripts = document.querySelectorAll('script');
+    const scriptPromises = [];
 
     scripts.forEach(script => {
         const scriptSrc = script.src;
         if (scriptSrc && !loadedScripts.has(scriptSrc)) {
 
-            const scriptUrl = new URL(scriptSrc);
-            // const scriptPath = scriptUrl.pathname;
             for (const originalScript of originalScripts) {
                 if (script.getAttribute('src') === originalScript.getAttribute('src')) {
-                    // console.log("ORIGINAL MATCH: ", originalScript);
                     return;
                 }
             }
 
-            loadScriptOnce(scriptSrc, () => {
+            const scriptPromise = loadScriptOnce(scriptSrc, () => {
                 console.log('Script loaded successfully:', scriptSrc);
-                // originalScripts.add(script);
-                // console.log('Script removing:', scriptSrc);
-                // delete window.scriptLoaded;
                 // script.remove();
             });
+            scriptPromises.push(scriptPromise);
 
-        } else {
-            // console.log('Script not found or already loaded: ',  scriptSrc);
-            // script.remove();
-        }
+        } //else {
+        //     // console.log('Script not found or already loaded: ',  scriptSrc);
+        //     script.remove();
+        // }
     });
+
+    await Promise.all(scriptPromises);
+}
+
+function addMain(fnptr) {
+    key = document.querySelector('[name=pageKey]').value;
+    fnarray = []
+    if (mains.has(key))
+        fnarray = mains.get(key);
+    fnarray.push(fnptr);
+    mains.set(key, fnarray);
+}
+
+function execMains() {
+    if (document.querySelector('[name=pageKey]'))
+    {
+        key = document.querySelector('[name=pageKey]').value;
+        if (mains.has(key))
+            mains.get(key).forEach(fnptr => fnptr());
+    }
 }

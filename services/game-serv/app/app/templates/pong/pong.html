@@ -1,129 +1,312 @@
 {% load static %}
+<script src="{% static 'pong/pong.js' %}"></script>
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'pong/local/pong2D.css' %}">
 {% endblock %}
 
-<div class="wrapper d-flex flex-column align-items-center">
+{% if online == False %}
+<div id="local-rotate" style="display: grid; place-items: center" class="{% if game.maxPlayers == 4 %} local-rotate-4p {% endif %}">
+{% else %}
+<div style="display: grid; place-items: center">
+{% endif %}
 
-    <div class="start-btn">
-        <div class="d-flex justify-content-center align-items-center scores mt-2 mb-3">
-            <div class="mx-4">
-                Player 1 <div id="player1"></div>
-                <p class="score">
-                    Score:
-                <div id="score1">{{game.score.0}}</div>
-                </p>
-            </div>
-            <div class="mx-4">
-                Player 2 <div id="player2"></div>
-                <p class="score">
-                    Score:
-                <div id="score2">{{game.score.1}}</div>
-                </p>
-            </div>
-            {% if game.maxPlayers == 4 %}
-            <div class="mx-4">
-                Player 3 <div id="player3"></div>
-                <p id="score1" class="score">
-                    Score:
-                <div id="score3">{{game.score.2}}</div>
-                </p>
-            </div>
-            <div class="mx-4">
-                Player 4 <div id="player4"></div>
-                <p id="score2" class="score">
-                    Score:
-                <div id="score4">{{game.score.3}}</div>
-                </p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-  
-    {% if online == False %}
-    <button class="start-btn d-flex justify-content-center align-items-center" onclick="gameLoop()">
-        <div class="btn-text">
-            start
-        </div>
-    </button>
+{% if online == True %}
+<input type="hidden" name="gameId" value="{{game.gameId}}">
+<div id="wrapper" class="online-wrapper">
+{% else %}
+<div id="wrapper" class="local-wrapper">
+{% endif %}
+
+    {% if online == True %}
+    <div id="pong-main-content-online" class="pong-main-content d-flex justify-content-center align-items-center rounded-4">
+    {% else %}
+    <div id="pong-main-content-local" class="pong-main-content d-flex justify-content-center align-items-center rounded-4">
     {% endif %}
 
-
-    <div class="pong-main-content d-flex justify-content-center align-items-center m-2">
-
- 
-     
-        <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center"
-            style="transform: rotate(-90deg);">
-            <button id="left-arrow-up" class="m-2 arrows-btn rounded-2">
+    {% if online == False %}
+        {% if game.maxPlayers == 4 %}
+            <div id="left-arrows" class="local-arrows-left-4p local-arrows d-flex align-items-center justify-content-center">
+        {% else %}
+            <div id="left-arrows" class="local-arrows local-arrows-left d-flex align-items-center">
+        {% endif %}
+        <button onpointerdown="enterFullScreen()" id="enterFullScreen" class="rounded-2 {% if game.maxPlayers == 4 %} fullScreen-btn-4P {% else %} fullScreen-btn-2P {% endif %}"><i class="fas fa-solid fa-expand"></i></button>
+        <button onpointerdown="exitFullScreen()" id="exitFullScreen" class="rounded-2 {% if game.maxPlayers == 4 %} fullScreen-btn-4P {% else %} fullScreen-btn-2P {% endif %}"><i class="fas fa-solid fa-xmark"></i></button>
+        {% if game.maxPlayers == 4 %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('s')" onpointerup="resetClick()" id="left-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% else %}
+            <button onpointerdown="clickDown3d4p('s')" onpointerup="resetClick()" id="left-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% endif %}
+        {% else %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('s', 'button1');" onpointerup="resetClick('button1');" onpointercancel="resetClick('button1');" id="left-arrows-up-2p-2d" class="m-2 arrows-btn rounded-2">
+            {% else %}
+            <button onpointerdown="clickDown3d2p('s', 'leftUp')" onpointerup="resetClick('leftUp')" id="left-arrows-up-2p-3d" class="m-2 arrows-btn rounded-2">
+            {% endif %}
+        {% endif %}
                 <i class="fas fa-solid fa-arrow-left"></i>
             </button>
-            <button id="left-arrow-down" class="m-2 arrows-btn rounded-2">
+        {% if game.maxPlayers == 4 %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('w')" onpointerup="resetClick()" id="left-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% else %}
+            <button onpointerdown="clickDown3d4p('w')" onpointerup="resetClick()" id="left-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% endif %}
+        {% else %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('w', 'button2');" onpointerup="resetClick('button2');" onpointercancel="resetClick('button2');" id="left-arrows-down-2p-2d" class="m-2 arrows-btn rounded-2">
+            {% else %}
+            <button onpointerdown="clickDown3d2p('w', 'leftDown')" onpointerup="resetClick('leftDown')" id="left-arrows-down-2p-3d" class="m-2 arrows-btn rounded-2">
+            {% endif %}
+        {% endif %}
                 <i class="fas fa-solid fa-arrow-right"></i>
             </button>
         </div>
-  
+    {% endif %}
+
+        {% if game.maxPlayers == 4 %}
+            {% if online == True %}
+                <div id="score3" class="score-4p score-4p-left">5</div>
+            {% else %}
+                <div id="score1" class="score-4p score-4p-left">5</div>
+            {% endif %}
+        {% endif %}
+
+    {% if online == True %}
+    <div id="center-div-online" class="center-div d-flex flex-column justify-content-center align-items-center m-2">
+    {% else %}
+    {% if game.maxPlayers == 4 %}
+    <div id="center-div-local-4p" class="center-div-local-4p center-div d-flex flex-column justify-content-center align-items-center">
+    {% else %}
+    <div id="center-div-local" class="center-div-local-2p center-div d-flex flex-column justify-content-center align-items-center">
+    {% endif %}
+
+    {% endif %}
+ 
+    {% if online or not online and game.maxPlayers == 2 %}
+        {% if online == True %}
+            <div id="scores-online" class="scores d-flex justify-content-center align-items-center">
+        {% else %}
+            <div id="scores-local" class="scores scores-local-2p d-flex justify-content-center align-items-center">
+        {% endif %}
+                <div class="mx-sm-4 mx-2">
+                    {% if online == True and game.maxPlayers == 2 %}
+                    <div id="player1" class="d-flex justify-content-center align-items-center"></div>
+                    {% endif %}
+                    {% if game.maxPlayers == 2 %}
+                    <div id="score1" class="score1 score score-local">
+                        {{game.score.0}}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mx-sm-4 mx-2">
+                    {% if online == True and game.maxPlayers == 2 %}
+                    <div id="player2" class="d-flex justify-content-center align-items-center"></div>
+                    {% endif %}
+                    {% if game.maxPlayers == 2 %}
+                    <div id="score2" class="score2 score score-local">
+                        {{game.score.1}}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+    {% endif %}
+    
+        {% if online == False %}
+            {% if game.maxPlayers == 4 %}
+            <div id="up-arrows-4p" class="d-flex align-items-center">
+                {% if render == False %}
+                <button onpointerdown="clickDown('ArrowLeft')" onpointerup="resetClick()" id="top-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% else %}
+                <button onpointerdown="clickDown3d4p('ArrowLeft')" onpointerup="resetClick()" id="top-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% endif %}
+                    <i class="fas fa-solid fa-arrow-left"></i>
+                </button>
+                {% if render == False %}
+                <button onpointerdown="clickDown('ArrowRight')" onpointerup="resetClick()" id="top-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% else %}
+                <button onpointerdown="clickDown3d4p('ArrowRight')" onpointerup="resetClick()" id="top-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% endif %} 
+                    <i class="fas fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        {% if online == True %}
+            <div class="pong-board-online"></div>
+        {% endif %}
+            {% if game.maxPlayers == 4 %}
+                {% if online == True %}
+                    <div id="score2" class="score-4p score-4p-up">5</div>
+                {% else %}
+                    <div id="score3" class="score-4p score-4p-up">5</div>
+                {% endif %}
+            {% endif %}
+
+
+       
+
         {% if render == False %}
             {% include "pong/2DBoard.html" %}
         {% else %}
             {% include "pong/3DBoard.html" %}
         {% endif %}
+
+        {% if online == True %}
+            <div class="pong-board-online"></div>
+        {% endif %}
+        {% if game.maxPlayers == 4 %}
+            {% if online == True %}
+                <div id="score1" class="score-4p score-4p-down">5</div>
+            {% else %}
+                <div id="score4" class="score-4p score-4p-down">5</div>
+            {% endif %}
+        {% endif %}
+
         {% if online == False %}
-        <div id="right-arrows" class="flex-shrink-1 arrows arrows-right d-flex align-items-center"
-            style="transform: rotate(-90deg);">
-            <button id="right-arrow-up" class="m-2 arrows-btn rounded-2">
+            {% if game.maxPlayers == 4 %}
+            <div id="down-arrows-4p" class="d-flex align-items-center">
+                {% if render == False %}
+                <button onpointerdown="clickDown('a')" onpointerup="resetClick()" id="bottom-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% else %}
+                <button onpointerdown="clickDown3d4p('a')" onpointerup="resetClick()" id="bottom-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% endif %}     
+                    <i class="fas fa-solid fa-arrow-left"></i>
+                </button>
+                {% if render == False %}
+                <button onpointerdown="clickDown('d')" onpointerup="resetClick()" id="bottom-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% else %}
+                <button onpointerdown="clickDown3d4p('d')" onpointerup="resetClick()" id="bottom-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                {% endif %}
+                    <i class="fas fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            {% endif %}
+        {% endif %}
+    
+        <div id="winner-msg"></div>
+
+        {% if online == False %}
+            {% if game.maxPlayers == 2 %}
+                {% if render == False %}
+                    <button id="start-btn" class="btn btn-lg start-btn-2p" onpointerdown="of2p_gameLoop()">
+                {% else %}
+                    <button id="start-btn" class="btn btn-lg start-btn-2p" onpointerdown="of3d2p_gameLoop()">
+                {% endif %}
+            {% else %}
+                {% if render == False %}
+                    <button id="start-btn" class="btn btn-lg start-btn-4p" onpointerdown="of4p_gameLoop()">
+                {% else %}
+                    <button id="start-btn" class="btn btn-lg start-btn-4p" onpointerdown="of3d4p_gameLoop()">
+            {% endif %}
+        {% endif %}
+
+            start
+        </button>
+
+        {% if game.maxPlayers == 4 %}
+        <div id="rules" class="rules-4p">
+        {% else %}
+        <div id="rules" class="rules-2p">
+        {% endif %}
+
+            <div class="d-flex justify-content-center align-items-center mb-2">
+                <div class="flex-shrink-0 d-flex justify-content-center align-items-center mx-2">
+                    Left player:
+                    <div class="rule px-1 rounded-2 mx-1">w</div>
+                    <div class="rule px-1 rounded-2">s</div>
+                </div>
+                <div class="flex-shrink-0 d-flex justify-content-center align-items-center mx-2">
+                    Right player:
+                    <div class="rule px-1 rounded-2 mx-1"><i class="rule-arrow fas fa-solid fa-arrow-up" style="color: var(--secondary-color);"></i></div>
+                    <div class="rule px-1 rounded-2"><i class="rule-arrow fas fa-solid fa-arrow-down" style="color: var(--secondary-color);"></i></div>
+                </div>
+            </div>
+            {% if game.maxPlayers == 4 %}
+            <div class="d-flex justify-content-center align-items-center mt-1 mb-1">
+                <div class="flex-shrink-0 d-flex justify-content-center align-items-center mx-2">
+                    Top player:
+                    <div class="rule px-1 rounded-2 mx-1"><i class="rule-arrow fas fa-solid fa-arrow-left" style="color: var(--secondary-color);"></i></div>
+                    <div class="rule px-1 rounded-2"><i class="rule-arrow fas fa-solid fa-arrow-right" style="color: var(--secondary-color);"></i></div>
+                </div>
+                <div class="flex-shrink-0 d-flex justify-content-center align-items-center mx-2">
+                    Bottom player:
+                    <div class="rule px-1 rounded-2 mx-1">a</i></div>
+                    <div class="rule px-1 rounded-2">d</i></div>
+                </div>
+            <!-- <div  class="d-flex justify-content-center align-items-center">-->
+            </div>
+            {% endif %}
+        </div>
+
+        {% else %}        
+        <div id="online-arrows" class="flex-shrink-1 d-flex align-items-center mb-3">
+            <button onpointerdown="movePaddle(-1, 'button1')" onpointerup="resetClick('button1')" onpointercancel="resetClick('button1')" id="online-left-arrow" class="m-2 arrows-btn rounded-2 mx-4">
                 <i class="fas fa-solid fa-arrow-left"></i>
             </button>
-            <button id="right-arrow-down" class="m-2 arrows-btn rounded-2">
+            <button onpointerdown="movePaddle(1, 'button2')" onpointerup="resetClick('button2')" onpointercancel="resetClick('button2')" id="online-right-arrow" class="m-2 arrows-btn rounded-2 mx-4">
                 <i class="fas fa-solid fa-arrow-right"></i>
             </button>
         </div>
         {% endif %}
-    </div>
-    <!-- 
-    <div class="d-flex justify-content-center align-items-center scores mt-2 mb-5">
-        <div class="mx-4">
-            Player 1
-            <p id="score1" class="score">
-                Score: {{ game.score.0 }}
-            </p>
-        </div>
-        <div class="mx-4">
-            Player 2
-            <p id="score2" class="score">
-                Score: {{ game.score.1 }}
-            </p>
-        </div>
-        {% if game.maxPlayers == 4 %}
-        <div class="mx-4">
-            Player 3
-            <p id="score3" class="score">
-                Score: {{ game.score.2 }}
-            </p>
-        </div>
-        <div class="mx-4">
-            Player 4
-            <p id="score4" class="score">
-                Score: {{ game.score.3 }}
-            </p>
-        </div>
-        {% endif %}
-    </div>
-    -->
-    {% if game.maxPlayers == 4 %}
-    <div id="left-arrows" class="flex-shrink-1 arrows arrows-left d-flex align-items-center mt-4 mb-3">
-        <button id="left-arrow-up" class="m-2 arrows-btn rounded-2 mx-4">
-            <i class="fas fa-solid fa-arrow-left"></i>
-        </button>
-        <button id="left-arrow-down" class="m-2 arrows-btn rounded-2 mx-4">
-            <i class="fas fa-solid fa-arrow-right"></i>
-        </button>
-    </div>
-    {% endif %}
- 
 
-    {% if online == True %}
-    {% include "disconectPopup.html" %}
+    </div>
+    
+    {% if game.maxPlayers == 4 %}
+        {% if online == True %}
+            <div id="score4" class="score-4p score-4p-right">5</div>
+        {% else %}
+            <div id="score2" class="score-4p score-4p-right">5</div>
+        {% endif %}
     {% endif %}
+    {% if online == False %}
+        {% if game.maxPlayers == 4 %}
+            <div id="right-arrows" class="local-arrows-right-4p local-arrows d-flex justify-content-center align-items-center">
+        {% else %}
+            <div id="right-arrows" class="local-arrows local-arrows-right d-flex justify-content-center align-items-center">
+        {% endif %}
+        {% if game.maxPlayers == 4 %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('ArrowDown')" onpointerup="resetClick()" id="right-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% else %}
+            <button onpointerdown="clickDown3d4p('ArrowDown')" onpointerup="resetClick()" id="right-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% endif %}
+        {% else %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('ArrowDown', 'button3');" onpointerup="resetClick('button3');" onpointercancel="resetClick('button3');" id="right-arrows-up-2p-2d" class="m-2 arrows-btn rounded-2">
+            {% else %}
+            <button onpointerdown="clickDown3d2p('ArrowDown', 'rightUp')" onpointerup="resetClick('rightUp')" id="right-arrows-up-2p-3d" class="m-2 arrows-btn rounded-2">
+            {% endif %}
+        {% endif %}
+                <i class="fas fa-solid fa-arrow-left"></i>
+            </button>
+        {% if game.maxPlayers == 4 %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('ArrowUp')" onpointerup="resetClick()" id="right-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% else %}
+            <button onpointerdown="clickDown3d4p('ArrowUp')" onpointerup="resetClick()" id="right-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            {% endif %}     
+        {% else %}
+            {% if render == False %}
+            <button onpointerdown="clickDown('ArrowUp', 'button4');" onpointerup="resetClick('button4');" onpointercancel="resetClick('button4');" id="right-arrows-down-2p-2d" class="m-2 arrows-btn rounded-2">
+            {% else %}
+            <button onpointerdown="clickDown3d2p('ArrowUp', 'rightDown')" onpointerup="resetClick('rightDown')" id="right-arrows-down-2p-3d" class="m-2 arrows-btn rounded-2">
+            {% endif %}    
+        {% endif %}
+
+                <i class="fas fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    {% endif %}
+
+    </div>
+
+{% if online == True %}
+{% include "popup.html" %}
+{% endif %}
+
+</div>
+<!-- <div id="background" class="rounded-2"></div> -->
 </div>

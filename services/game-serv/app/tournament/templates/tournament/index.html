@@ -1,12 +1,10 @@
 {% csrf_token %}
 {% load static %}
+{% load i18n %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'lobby/lobby.css' %}">
-{% endblock %}
 
 <div class="justify-content-center p-3 mt-2">
-    <h1 class="accent-color mb-3">Create a tournament</h1>
+    <h2 class="mb-3">{% translate "Create a tournament" %}</h2>
     <!-- <div>
         <label style="cursor: pointer;">
             <input type="radio" name="gameType" value="0" checked> Pong
@@ -16,12 +14,12 @@
         </label>
     </div> -->
 
-    <button onclick="createTournament(event)">Create the tournament</button>
+    <button onclick="createTournament(event)" style="color: var(--background-color);">{% translate "Create the tournament" %}</button>
 
     <hr class="solid">
-    <h3>Or join an existing one:</h3>
+    <h3>{% translate "Or join an existing one:" %}</h3>
     <input id="tournamentId" placeholder="Lobby ID" style="background-color: var(--secondary-color); border: none;"></input>
-<button onclick="join(event)">Join</button>
+<button onclick="join(event)" style="color: var(--background-color);">{% translate "Join" %}</button>
 </div>
 
 {% block javascripts %}

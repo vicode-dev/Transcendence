@@ -1,37 +1,3 @@
-function getRoomName() {
-    let url =  window.location.pathname.split("/");
-    return url[2];
-}
-function getRenderParam() {
-    let params = new URLSearchParams(document.location.search);
-    let render = parseInt(params.get("render"), 2);
-    if(render)
-    {
-        document.getElementById("render").checked = true;
-        return(true)
-    }
-    else
-        return(false)
-}
-let render = getRenderParam()
-function main() {
-    let lobbySocket = new WebSocket(`wss://${window.location.host}/ws/lobby/${getRoomName()}/`);
-    lobbySocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        if (data.type == 'lobby_game')
-            refresh(data);
-        else if (data.type == 'lobby_redirect')
-        {
-            param = new URLSearchParams(window.location.search);
-            param.set("render", render);
-            loadPage(`/game/${getRoomName()}/?${param.toString()}`);
-        }
-    };
-    lobbySocket.onclose = function (e) {
-        console.error('Lobby socket closed unexpectedly :(');
-    };
-}
-
 async function postData(url = '') {
     const response = await fetch(url, {
         method: 'POST',
@@ -45,7 +11,7 @@ async function postData(url = '') {
         console.error('Error:', response.status);
 }
 
-function refresh(data) {
+function tournament_refresh(data) {
     document.getElementById('userCount').textContent = `${data.players.length}`;
     playersList = document.getElementById('playersList');
     playersList.innerHTML = '';
@@ -85,6 +51,30 @@ function addPlayerToList(playerId, ul) {
         });
 }
 
-function launchGame() {
-    postData(`/tournament/${getRoomName()}/start`)
+function tournament_launchGame() {
+    postData(`/tournament/${document.querySelector('[name=tournamentId]').value}/start`)
+}
+
+function copy_text(button_id = false)
+
+{
+    const copy_text = window.location.href;
+
+
+        if (navigator.clipboard)
+        {
+            navigator.clipboard.writeText(copy_text);
+            if (button_id)
+            {
+                const button = document.getElementById(button_id);
+                if (button)
+                {
+                    button.innerHTML = '<i class="fa-solid fa-copy"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i>';
+                    }, 400);
+                }
+            }
+        }
+
 }

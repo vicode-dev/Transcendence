@@ -4,6 +4,9 @@ from app.models import Game
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
+from django.utils.timezone import now
+import requests
 
 GGDD = {} #Global Game Data Dictionary
 COLUMNS = 7
@@ -29,7 +32,6 @@ class ConnectConsumer(AsyncWebsocketConsumer):
                 GGDD[self.room_name].playersId.append(self.scope["token_check"]["id"])
         if len(GGDD[self.room_name].playersId) == 2:
             await self.channel_layer.group_send(self.room_group_name, {'type': 'freeze', "state": False})
-
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -87,6 +89,7 @@ class ConnectConsumer(AsyncWebsocketConsumer):
                 return i
 
     async def dropPiece(self, col):
+        gameEnded = False
         if (col == -1 or col >= COLUMNS):
             await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'error', 'err':"Column out of range"})
             return
@@ -95,14 +98,22 @@ class ConnectConsumer(AsyncWebsocketConsumer):
             if checkWin(self.room_name, GGDD[self.room_name].board_state[col], col) == True:
                 GGDD[self.room_name].freeze = True
                 GGDD[self.room_name].score[self.index] += 1
-                await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'end_game', 'score':GGDD[self.room_name].score})
+                gameEnded = True
             GGDD[self.room_name].board_state[col] -= 1
             if (boardFull(self.room_name) == True):
                 GGDD[self.room_name].freeze = True
-                await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'end_game', 'score':GGDD[self.room_name].score})
+                gameEnded = True
             GGDD[self.room_name].turn = (GGDD[self.room_name].turn + 1) % 2
             GGDD[self.room_name].playersMove = [-1, -1]
             await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'data', "col": col, 'board_state': GGDD[self.room_name].board_state, 'turn': GGDD[self.room_name].turn})
+        if (gameEnded == True):
+            await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'end_game', 'score':GGDD[self.room_name].score})
+            game = await getGameById(self.room_name)
+            game.score = GGDD[self.room_name].score
+            game.endTime = now()
+            requests.post("http://user-management:8000/api/games/add", json=game.toJson()).json()
+            await sync_to_async(game.delete)()
+            del GGDD[self.room_name]
 
 class GameData:
 
@@ -134,6 +145,10 @@ def game_exists(room_name):
 @database_sync_to_async
 def isPlayerIdInGame(gameId, playerId):
     return Game.objects.filter(pk=gameId, players__contains=[playerId]).exists() 
+
+@database_sync_to_async
+def getGameById(gameId):
+    return Game.objects.get(pk=gameId)
 
 def boardFull(room_name):
     for i in range(COLUMNS):

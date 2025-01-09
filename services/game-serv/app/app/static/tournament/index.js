@@ -1,32 +1,24 @@
-async function postData(url = '', data = {}) {
-const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-        'X-CSRFToken': csrftoken,
-        'Content-Type': 'application/json'
-    },
-    mode: 'same-origin',
-});
-
-if (!response.ok)
-    throw new Error('Network response was not ok');
-return response.json();
-}
-
-function createTournament(event) {
-    postData('/tournament/api/create')
-    .then(data => {
-        let tournament = data
-        room_url = "/tournament/" + tournament.id;
-        loadPageEvent(event, room_url);
+async function createTournament(event) {
+    response = await fetch(`/tournament/api/create`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        },
+        mode: 'same-origin',
     })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    if (response.status == 200) {
+        content = await response.json();
+        room_url = `/tournament/${content.id}/`;
+        loadPageEvent(event, room_url);
+    } else {
+        content = await response.text();
+        console.error('Error:', content);
+    };
 }
 
 function join(event) {
     id = document.getElementById('tournamentId').value
-    room_url = "/tournament/" + id;
+    room_url = `/tournament/${id}`;
     loadPageEvent(event, room_url);
 }

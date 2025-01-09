@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-08 16:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:8
+msgid "Create a Lobby"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:12
+msgid "Pong"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:15
+msgid "Connect 4"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:20
+msgid "2 Players"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:23
+msgid "4 Players"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:26
+msgid "Create the lobby"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:29
+msgid "Or join an existing one:"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/index.html:31
+msgid "Join"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:11
+msgid "Create a Pong Lobby"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:13
+msgid "Create a Connect 4 Lobby"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:19
+msgid "Users list:"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:27
+msgid "Properties :"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:42
+msgid "2Players/4Players:"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:50
+msgid "Private:"
+msgstr ""
+
+#: services/game-serv/app/lobby/templates/lobby/room.html:65
+msgid "Launch"
+msgstr ""

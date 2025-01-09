@@ -46,3 +46,33 @@ window.onresize = function () {
     }
   }
 };
+
+let debounceTimeout;
+let prevScrollpos = window.scrollY;
+
+function handleScroll() {
+  console.log('test');
+  clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => {
+    let currentScrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("nav").style.bottom = "0";
+      // nav.classList.add("bounce");
+      // setTimeout(() => {
+      //   nav.classList.remove("bounce");
+      // }, 500);
+    } else {
+      document.getElementById("nav").style.bottom = "-100px";
+    }
+    prevScrollpos = currentScrollPos;
+  }, 20);
+}
+
+function addMenu() {
+  document.getElementById("nav").style.bottom = "-100px";
+}
+
+window.addEventListener("scroll", handleScroll);
+// window.addEventListener("touchmove", handleScroll);
+// window.addEventListener("touchstart", handleScroll);
+// window.addEventListener("touchend", handleScroll);

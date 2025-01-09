@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: services/game-serv/app/tournament/templates/tournament/dashboard.html:5
+msgid "Dashboard"
+msgstr "Tablero"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:7
+msgid "Create a tournament"
+msgstr "Crear un torneo"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:17
+msgid "Create the tournament"
+msgstr "Crear el torneo"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:20
+msgid "Or join an existing one:"
+msgstr "O únete a un torneo existente:"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:22
+msgid "Join"
+msgstr "Unirse"
+
+#: services/game-serv/app/tournament/templates/tournament/room.html:12
+msgid "Tournament"
+msgstr "Torneo"
+
+#: services/game-serv/app/tournament/templates/tournament/room.html:16
+msgid "Users list:"
+msgstr "Lista de usuarios:"
+
+#: services/game-serv/app/tournament/templates/tournament/room.html:26
+msgid "Properties :"
+msgstr "Propiedades:"
+
+#: services/game-serv/app/tournament/templates/tournament/room.html:30
+msgid "Private:"
+msgstr "Privado:"
+
+#: services/game-serv/app/tournament/templates/tournament/room.html:41
+msgid "Launch"
+msgstr "Iniciar"
+
+#~ msgid "Public"
+#~ msgstr "Público"

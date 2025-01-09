@@ -40,11 +40,12 @@
 
 .item-title {
     position: absolute;
-    bottom: 0.6rem;
-    left: 2rem;
+    bottom: 0.5rem;
+    left: 1.5rem;
     transform: rotate(-90deg);
     transform-origin: bottom left;
-    color: whitesmoke;
+    /* color: whitesmoke; */
+    color: var(--background-color);
     white-space: nowrap;
 }
 
@@ -63,7 +64,7 @@
     .right {
         grid-column: 1 / -1;
         grid-row: 2;
-        height: 100px;
+        height: 80px;
         margin-left: 0;
     }
     .left h2 {
@@ -71,9 +72,9 @@
         /* display: none; */
     }
     .item-title {
-        bottom: 0.6rem;
-        left: 1.5rem;
-        font-size: .9rem;
+        bottom: 0.45rem;
+        left: 1.3rem;
+        font-size: .8rem;
     }
     br {
         display: none;
@@ -167,4 +168,13 @@
 
 .right input[type="radio"]:checked + .input-label .input-content .item-title {
     color: var(--secondary-color);
+}
+
+.submit-form {
+    margin-bottom: 100px;
+}
+
+#submit-form {
+    background-color: var(--fourth-color);
+
 }

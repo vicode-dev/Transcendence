@@ -7,3 +7,55 @@
         cy: 0;
     }
 }
+
+#players {
+    margin-top: 3rem;
+}
+
+#connect4-main-content {
+    margin: 1.5rem;
+    padding: 1.5rem;
+}
+
+.player-btn {
+    font-size: .9rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    -webkit-user-select: none;       
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.player-btn:hover {
+    appearance: none;
+}
+
+#start-again {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: solid 2px var(--accent-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+@media (max-width: 600px) {
+    #players {
+        margin-top: 1rem;
+    }
+    .player-btn {
+        padding: .5rem;
+    }
+    #connect4-main-content {
+        margin: 0rem;
+        padding-top: .8rem;
+        padding-bottom: 0rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .player-btn {
+        font-size: .8rem;
+    }
+}

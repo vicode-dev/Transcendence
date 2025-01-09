@@ -1,23 +1,44 @@
 {% load static %}
-
-    <h1>Tournament</h1>
-    <p id="userCount">{{ playercount }}</p>
-    <h3>Users list:</h3>
-    <ul id="playersList" style="list-style-type: none;">
-    </ul>
-    {% block javascripts %}
-        <script src="{% static 'tournament/room.js' %}"></script>
+{% load i18n %}
+{% load chat %}
+    <input type="hidden" name="pageKey" value="roomTournament">
+    <input type="hidden" name="tournamentId" value="{{ room_name}}">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{% static 'lobby/room.css' %}">
     {% endblock %}
-    {% if admin == True %}
-    <div id="main">
-        {% endif %}
-        <button id="launchButton" onclick="launchGame()" disabled>Launch</button>
-
-        <div>
-            <input type="radio" name="visibility" id="private" onchange="handleVisibility()" checked>
-            <label for="private" class="slider-label">Private</label>      
-            <input type="radio" name="visibility" id="public" onchange="handleVisibility()" >
-            <label for="public" class="slider-label">Public</label>
+    {% block javascripts %}
+    <script src="{% static 'tournament/room.js' %}"></script>
+    {% endblock %}
+    <h1>{% translate "Tournament" %}</h1>
+    <div class="main-content d-flex section">
+        <div id="user" class="section rounded-4">
+            <div class="d-flex flex-row justify-content-between">
+                <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Users list:" %}
+                </h3>
+                <div id="userCount">0/{{ game.maxPlayers }}</div>
+            </div>
+            <ul id="playersList" style="padding: 0; list-style-type: none" class="mt-3">
+            </ul>
         </div>
+    
+
+    <div id="properties" class="section rounded-4">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Properties :" %}
+        </h3>
+        <ul style="padding: 0; list-style-type: none" class="mt-3">
+            <li class="my-2 rounded-2 m-1">
+                <p>{% translate "Private:" %}</p>
+                <label class="switch">
+                    <input type="checkbox" name="private" id="private" onchange="handleVisibility()" {% if tournament.private %}checked{% endif %}>
+                    <span class="slider round"></span>
+                </label>
+            </li>
+        </ul>
     </div>
-    {% include "chat/room.html" %}
+</div>
+    <div id="buttons" class="d-flex section rounded-4">
+        <button id="copy" onclick="copy_text('copy')"><i class="fa-regular fa-copy"></i></button>
+        <button id="launchButton" onclick="tournament_launchGame()" disabled>{% translate "Launch" %}</button>
+    </div>
+
+    {% chat room_name %}

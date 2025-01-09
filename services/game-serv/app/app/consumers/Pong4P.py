@@ -43,6 +43,8 @@ class PongConsumer4P(PongConsumer):
                 if GGDD[self.room_name].score[self.index] <= 0:
                     pass
                 GGDD[self.room_name].playersMove[self.index] = msg["paddleMove"]
+            if msg["type"] == 'refresh':
+                await self.channel_layer.group_send(self.room_group_name, {'type':'init', 'playersList':GGDD[self.room_name].playersOrder})
         except:
             pass
 
@@ -51,16 +53,20 @@ class PongConsumer4P(PongConsumer):
 def ballReachObstacle(ball, score, p1, p2, p3, p4, x, y):
     if score[0] > 0 and willHitLeftPaddle(ball, p1._x, p1._y, x, y) == True:
         ballHitPlayer(ball, 280, 160, y - p1._y)
-        ball._speed += 0.1
+        if ball._speed < MAX_SPEED:
+            ball._speed += 0.1
     elif score[1] > 0 and willHitRightPaddle(ball, p2._x, p2._y, x, y) == True:
         ballHitPlayer(ball, 260, -160, y - p2._y)
-        ball._speed += 0.1
+        if ball._speed < MAX_SPEED:
+            ball._speed += 0.1
     elif score[2] > 0 and willHitTopPaddle(ball, p3._x, p3._y, x, y) == True:
         ballHitPlayer(ball, 170, -160, x - p3._x)
-        ball._speed += 0.1
+        if ball._speed < MAX_SPEED:
+            ball._speed += 0.1
     elif score[3] > 0 and willHitBottomPaddle(ball, p4._x, p4._y, x, y) == True:
         ballHitPlayer(ball, 190, 160, x - p4._x)
-        ball._speed += 0.1
+        if ball._speed < MAX_SPEED:
+            ball._speed += 0.1
     elif willHitWall(x) == True:
         if ball._x < SIZE / 2:
             ball._x = BALL_SIZE
@@ -139,7 +145,8 @@ async def ballMovement(score, ball, players, room_name):
         if playersAreWall == False:
             ball._x = 4.5
             ball._y = 4.5
-            ball._speed = 1
+            ball._speed = INIT_SPEED
+            return
     x = ball._x + (math.cos(math.radians(ball._angle)) / 8) * ball._speed
     y = ball._y + (math.sin(math.radians(ball._angle)) / 8) * ball._speed
 

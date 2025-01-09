@@ -1,3 +1,26 @@
 input[type="text"]{
 	background-color: var(--secondary-color);
 }
+
+input[type="radio"] {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	/* display: none; */
+	margin-right: .25rem;
+}
+
+.custom-radio {
+	/* background-color: var(--secondary-color); */
+}
+
+.checkmark {
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+}
+
+.custom-radio input[type="radio"]:checked ~ label {
+	border: solid 2px var(--secondary-color);
+}
