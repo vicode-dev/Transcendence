@@ -23,6 +23,7 @@ def update_password(user, password):
 
 def user_login(login, password, by_id=False):
 	try:
+		login = login.lower()
 		if by_id:
 			user = User.objects.filter(
 	  			id=login, password=hash_password(password)).first()
@@ -50,13 +51,6 @@ def get_user_by_42_id(ft_id):
 	try:
 		user = User.objects.get(ft_id=ft_id)
 		# print(user)
-		return user
-	except User.DoesNotExist:
-		return None
-
-def get_user_by_login(login):
-	try:
-		user = User.objects.get(login=login)
 		return user
 	except User.DoesNotExist:
 		return None
@@ -253,11 +247,11 @@ def create_classic_user(login, first_name, last_name, password):
 	# if User is not None:
 	# 	return user
 	user = User(
-		login=login,
+		login=login.lower(),
 		password = hash_password(password)
 	)
 	user.save()
-	user = get_user_by_login(login)
+	# user = get_user_by_login(login)
 	if create_user(user.id, first_name, last_name):
 		return user
 	user.delete()

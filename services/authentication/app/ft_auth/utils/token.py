@@ -12,7 +12,7 @@ from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
 from datetime import datetime, timezone, timedelta
 from os import environ
 
-from ft_auth.utils.api_users import get_user
+from ft_auth.utils.api_users import get_user, create_user
 from ft_auth.utils.user import get_user_by_id
 
 ########################################################
@@ -22,7 +22,10 @@ from ft_auth.utils.user import get_user_by_id
 def encode_jwt(user_info, otp_required = False):
 	user = get_user(user_info["id"], target="role")
 	if user is None:
-		return None
+		create_user(user_info["id"], user_info["login"], "Wild")
+		user = get_user(user_info["id"], target="role")
+		if user is None:
+			return None
 	header = {
 		"alg": "HS256",
   		"typ": "JWT"
