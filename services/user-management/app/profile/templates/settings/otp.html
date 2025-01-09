@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load static %}
+<div id="otp-container" class="container">
+{% if otp_enabled == "True" %}
+    <button type="button" id="disable_otp" onclick="disable_otp()" class="btn btn-danger">
+        {% translate "Disable Double Authentication" %} 
+    </button>
+{% else %}
+<button type="button" id="generate_otp" onclick="generate_qr_code()" class="btn btn-danger">
+    {% translate "Add Double Authentication" %}
+</button>
+{% endif %} 
+</div>

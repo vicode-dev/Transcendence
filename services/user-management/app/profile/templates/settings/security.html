@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load static %}
+<div class="container">
+	<div class="typewriter">
+        <h2>{% translate "Security" %}</h2>
+    </div>
+	{% include "settings/cli.html" %}
+	{% include "settings/otp.html" %}
+    <button type="button" id="change_password" onclick="loadPageEvent(event, '/password/')" class="btn btn-danger">
+        {% translate "Change password" %}
+    </button>
+</div>
+
+{% block javascripts %}
+    <script src="https://{{ domain_name }}/static/authentication/cli.js"></script>
+    <script src="https://{{ domain_name }}/static/authentication/otp.js"></script>
+    <script src="https://{{ domain_name }}/static/authentication/pin.js"></script>
+{% endblock %}
+

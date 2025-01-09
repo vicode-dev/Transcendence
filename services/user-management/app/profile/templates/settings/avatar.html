@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+<div>
+    <div>
+        <label for="profile-pic-input" class="profile-picture-label">
+            <img id="profile-pic" src="/api/player/{{ user.playerId }}/avatar/" alt="Profile Picture" class="profile-picture">
+            <i id="profile-pic-icon" class="fa-solid fa-upload"></i>
+        </label>
+        <input type="file" id="profile-pic-input" class="profile-pic-input"  accept="image/png, image/jpeg, image.jpg" onchange="previewProfilePic(event)" />
+    </div>
+</div>
+{% block css %}
+    <link rel="stylesheet" href="{% static 'user-management/settings/avatar.css' %}">
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'user-management/settings/avatar.js' %}"></script>
+{% endblock %}

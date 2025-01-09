@@ -1,0 +1,22 @@
+{% load i18n %}
+<input type="hidden" name="playerId" value="{{ playerId }}">
+<input type="hidden" name="pageKey" value="settings">
+<div class="container-fluid p-l-5 mb-5">
+	<h2  style="color: var(--secondary-color);" id="game_select-title" class="mx-3 mt-4 d-flex justify-content-center">{% translate "User Settings" %}</h2>
+
+    <div class="section rounded-4">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Profile :" %}
+        </h3>
+        {% include "settings/avatar.html" %}
+        {% include "settings/username.html" %}
+    </div>
+    <div class="section rounded-4">
+        {% include "settings/language_selector.html" %}
+    </div>
+	<div class="section rounded-4">
+		{% include "settings/theme_picker.html" %}
+	</div>
+	<div class="section rounded-4">
+		{% include "settings/security.html" %}
+	</div>
+</div>

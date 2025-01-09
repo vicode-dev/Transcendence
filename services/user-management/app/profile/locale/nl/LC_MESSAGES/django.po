@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: services/user-management/app/profile/settings.py:116
+msgid "English"
+msgstr "Engels"
+
+#: services/user-management/app/profile/settings.py:117
+msgid "Spanish"
+msgstr "Spaans"
+
+#: services/user-management/app/profile/settings.py:118
+msgid "French"
+msgstr "Frans"
+
+#: services/user-management/app/profile/settings.py:119
+msgid "Dutch"
+msgstr "Nederlands"
+
+#: services/user-management/app/profile/templates/friendButton.html:8
+msgid "add as friend"
+msgstr "toevoegen als vriend"
+
+#: services/user-management/app/profile/templates/friendButton.html:11
+msgid "remove as friend"
+msgstr "verwijderen van vrienden"
+
+#: services/user-management/app/profile/templates/profil.html:31
+msgid "logout"
+msgstr "Uitloggen"
+
+#: services/user-management/app/profile/templates/profil.html:46
+msgid "Friends"
+msgstr "Vrienden"
+
+#: services/user-management/app/profile/templates/profil.html:50
+msgid "no friends 😢"
+msgstr ""
+
+#: services/user-management/app/profile/templates/profil.html:62
+msgid "Game History"
+msgstr "Spelgeschiedenis"
+
+#: services/user-management/app/profile/templates/profil.html:66
+msgid "no game played yet!"
+msgstr "nog geen spel gespeeld!"
+
+#: services/user-management/app/profile/templates/profil.html:74
+msgid "Connect4"
+msgstr "Vier op een rij"
+
+#: services/user-management/app/profile/templates/profil.html:77
+msgid "Pong"
+msgstr "Pong"
+
+#: services/user-management/app/profile/templates/profil.html:83
+msgid "draw"
+msgstr "gelijkspel"
+
+#: services/user-management/app/profile/templates/profil.html:87
+#: services/user-management/app/profile/templates/profil.html:93
+msgid "won"
+msgstr "gewonnen"
+
+#: services/user-management/app/profile/templates/profil.html:89
+#: services/user-management/app/profile/templates/profil.html:95
+msgid "lost"
+msgstr "verloren"
+
+#: services/user-management/app/profile/templates/profil.html:144
+msgid "Tournament History"
+msgstr "Toernooigeschiedenis"
+
+#: services/user-management/app/profile/templates/profil.html:147
+msgid "no tournament played yet!"
+msgstr "nog geen toernooi gespeeld!"
+
+#: services/user-management/app/profile/templates/settings/cli.html:4
+msgid "Generate token"
+msgstr "Token genereren"
+
+#: services/user-management/app/profile/templates/settings/index.html:5
+msgid "User Settings"
+msgstr "Gebruikersinstellingen"
+
+#: services/user-management/app/profile/templates/settings/index.html:8
+msgid "Profile :"
+msgstr "Profiel:"
+
+#: services/user-management/app/profile/templates/settings/language_selector.html:4
+msgid "Select your language:"
+msgstr "Selecteer je taal:"
+
+#: services/user-management/app/profile/templates/settings/otp.html:6
+msgid "Disable Double Authentication"
+msgstr "Dubbele authenticatie uitschakelen"
+
+#: services/user-management/app/profile/templates/settings/otp.html:10
+msgid "Add Double Authentication"
+msgstr "Dubbele authenticatie toevoegen"
+
+#: services/user-management/app/profile/templates/settings/security.html:5
+msgid "Security"
+msgstr "Beveiliging"
+
+#: services/user-management/app/profile/templates/settings/security.html:10
+msgid "Change password"
+msgstr "Wachtwoord wijzigen"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:9
+msgid "Theme Picker:"
+msgstr "Themakiezer:"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:10
+msgid "Theme Picker"
+msgstr "Themakiezer"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:11
+msgid "Select a default theme:"
+msgstr "Selecteer een standaardthema:"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:226
+msgid "Or choose three colors for your theme:"
+msgstr "Of kies drie kleuren voor je thema:"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:244
+msgid "Test the theme"
+msgstr "Test het thema"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:262
+msgid "Please choose three different colors 😉"
+msgstr "Kies alstublieft drie verschillende kleuren 😉"
+
+#: services/user-management/app/profile/templates/settings/username.html:9
+msgid "Username:"
+msgstr "Gebruikersnaam:"

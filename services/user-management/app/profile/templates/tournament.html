@@ -1,0 +1,19 @@
+{% load static %}
+{% load i18n %}
+{% load userComponents %}
+<script src="{% static 'tournament/playersTree.js' %}"></script>
+<input type="hidden" name="tournament" value="{{tournament}}">
+<input type="hidden" name="games" value="{{games}}">
+<input type="hidden" name="pageKey" value="tournamentTree">
+
+<h1>TOURNAMENT RESULT</h1>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" id="tree" viewBox="0 0 300 300"></svg>
+
+{% for game in games %}
+<div>
+	Game
+	{% for player, score in game.combined %}
+		{% userComponent player %} : {{ score }}
+		{% endfor %}
+</div>
+{% endfor %}

@@ -1,0 +1,162 @@
+{% load static %}
+{% load i18n %}
+{% load userComponents %}
+<script>
+    let urls = {
+        settings: "{% url 'settings' %}",
+    };
+</script>
+
+
+<link rel="stylesheet" href="{% static 'user-management/profil.css' %}">
+
+<div id="user-title" class="mt-4 p-l-5">
+    <div id="profile" class="rounded-4 p-2 mb-4" style="background-color: var(--accent-color); max-width: 350px;">
+        <div class="d-flex align-items-center" style="margin: 2px">
+            <img id="profil-picture" class="fit-picture" src="/api/player/{{ user.playerId }}/avatar"
+                alt="User profile picture" style="height: 3rem; width: 3rem; border-radius: 50%; margin-left: .3rem;" />
+            <div style="margin-left: 1rem; margin-right: .25rem;">
+                <h1 style="margin-bottom: 0; font-size: 1.2rem; color: var(--background-color);">{{ user.username }}
+                </h1>
+                <!-- <h2 style="font-size: .8rem; color: var(--background-color);">online (placeholder)</h2> -->
+                <!-- <button style="background-color: transparent;"> -->
+                {% if id == user.playerId %}
+                <a href="/logout/" onclick="logout(event)"
+                    style="margin-bottom: 2px; text-decoration: none;">
+                    <div id="settings" class="d-flex align-items-center" style="margin-top: 3px;">
+                        <i class="fas fa-solid fa-sign-out"
+                            style=" color: var(--background-color); font-size: .9rem;"></i>
+                        <h2
+                            style="margin-bottom: 1px; margin-left: .3rem; font-size: .9rem; color: var(--background-color);">
+                            {% translate "logout" %}</h2>
+                    </div>
+                </a>
+                {% endif %}
+                <div style="font-size: .8rem;">
+                    {% friendButton id user.playerId %}
+                </div>
+
+                <!-- </button> -->
+            </div>
+        </div>
+    </div>
+
+
+    <div id="friends" class="section rounded-4">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Friends" %}</h3>
+        <ul id="friends-list" style="padding: 0; list-style-type: none">
+
+            {% if not user.friends %}
+            <p>{% translate "no friends 😢"%}</p>
+            {% endif %}
+
+            {% for friend in user.friends %}
+            <li class="friends my-2 rounded-2 m-1">
+                {% userComponent friend %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="games" class="section rounded-4">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Game History" %}
+        </h3>
+        <ul id="games-list" style="padding: 0; list-style-type: none;">
+            {% if not games %}
+            <p>{% translate "no game played yet!" %}</p>
+            {% endif %}
+
+            {% for game in games %}
+            <li class="one-game m-1 d-flex align-items-center flex-row flex-wrap">
+                <div class="game-title d-flex align-items-center">
+                    {% if game.gameType %}
+                    <i class="game-title-icon fas fa-solid fa-table-cells"></i>
+                    <div class="game-title-text">{% translate "Connect4"%}</div>
+                    {% else %}
+                    <i class="game-title-icon fas fa-solid fa-table-tennis-paddle-ball"></i>
+                    <div class="game-title-text">{% translate "Pong"%}</div>
+                    {% endif %}
+
+                    {% for player, score in game.combined %}
+                    {% if player == user.playerId %}
+                    {% if game.score.0 == game.score.1 %}
+                    <div class="game-status game-status-draw mx-1 rounded-2">{% translate "draw"%}</div>
+                    {% else %}
+                    {% if not game.gameType and game.score.2 %}
+                        {% if score == 1 %}
+                            <div class="game-status game-status-won mx-1 rounded-2">{% translate "won"%}</div>
+                        {% else %}
+                            <div class="game-status game-status-lost mx-1 rounded-2">{% translate "lost"%}</div>
+                        {% endif %}
+                    {% else %}
+                        {% if score > game.score.0 or score > game.score.1 %}
+                            <div class="game-status game-status-won mx-1 rounded-2">{% translate "won"%}</div>
+                        {% else %}
+                            <div class="game-status game-status-lost mx-1 rounded-2">{% translate "lost"%}</div>
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if not game.gameType and not game.score.2 %}
+                <div class="scores rounded-2 d-flex align-items-center">
+                    <div class="mx-1">[score: </div>
+                    <div class="mx-1">
+                        {% if game.score.0 > game.score.1 %}
+                        {{ game.score.0 }} - {{ game.score.1 }}]
+                        {% else %}
+                        {{ game.score.1 }} - {{ game.score.0 }}]
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+                <!-- {% for player, score in game.combined %}
+                        <div class="mx-1">
+                            {% if score != max_score %}
+                                {{ score }}
+                            {% endif %}
+                        </div>
+                    {% endfor %} -->
+                <div class="ennemy-profile rounded-2 d-flex flex-wrap align-items-center mt-1">
+                    <div class="against mb-1" style="color: var(--accent-color)">Against:</div>
+                    <br\>
+                        {% for player, score in game.combined %}
+                        {% if player != user.playerId %}
+                        <div class="userComponent mb-1">
+                            {% userComponent player %}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                </div>
+                <!-- <hr class="bar solid"> -->
+
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+    <div id="tournament" class="section rounded-4">
+        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Tournament History" %}</h3>
+        <ul id="tournament-list" style="padding: 0; list-style-type: none">
+            {% if not tournaments %}
+            <p>{% translate "no tournament played yet!" %}</p>
+            {% else %}
+                {% for tournament in tournaments %}
+                <li class="one-game m-1 d-flex align-items-center flex-row flex-wrap"><a href="/tournament/summary/{{ tournament.tournamentId }}/" onclick="loadPageEvent(event, '/tournament/summary/{{ tournament.tournamentId }}/')">#{{ tournament.id }}</a></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+</div>
+
+</div>
+
+{% block javascripts %}
+	<script src="{% static 'authentication/logout.js' %}"></script>
+{% endblock %}

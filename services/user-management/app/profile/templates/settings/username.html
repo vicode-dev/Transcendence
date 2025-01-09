@@ -1,0 +1,15 @@
+{% load static %}
+{% load i18n %}
+{% block javascripts %}
+    <script src="{% static 'user-management/settings/username.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'user-management/settings/username.css' %}">
+{% endblock %}
+<label for="username">{% translate "Username:" %}</label>
+<div>
+    <div id="username-error"></div>
+        <input type="text" name="username" id="username" placeholder="{{ user.username }}" disabled>
+        <i id="edit-username" class="fa-solid fa-pen-to-square" onclick="editUsername()"></i>
+        <i id="save-username" class="fa-solid fa-check" style="display: none;" onclick="sendUsername()"></i>
+</div>

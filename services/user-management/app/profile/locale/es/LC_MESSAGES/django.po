@@ -1,0 +1,153 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: services/user-management/app/profile/settings.py:116
+msgid "English"
+msgstr "Inglés"
+
+#: services/user-management/app/profile/settings.py:117
+msgid "Spanish"
+msgstr "Español"
+
+#: services/user-management/app/profile/settings.py:118
+msgid "French"
+msgstr "Francés"
+
+#: services/user-management/app/profile/settings.py:119
+msgid "Dutch"
+msgstr "Holandés"
+
+#: services/user-management/app/profile/templates/friendButton.html:8
+msgid "add as friend"
+msgstr "agregar como amigo"
+
+#: services/user-management/app/profile/templates/friendButton.html:11
+msgid "remove as friend"
+msgstr "eliminar como amigo"
+
+#: services/user-management/app/profile/templates/profil.html:31
+msgid "logout"
+msgstr "cerrar sesión"
+
+#: services/user-management/app/profile/templates/profil.html:46
+msgid "Friends"
+msgstr "Amigos"
+
+#: services/user-management/app/profile/templates/profil.html:50
+msgid "no friends 😢"
+msgstr "sin amigos 😢"
+
+#: services/user-management/app/profile/templates/profil.html:62
+msgid "Game History"
+msgstr "Historial de juegos"
+
+#: services/user-management/app/profile/templates/profil.html:66
+msgid "no game played yet!"
+msgstr "¡aún no se ha jugado ningún juego!"
+
+#: services/user-management/app/profile/templates/profil.html:74
+msgid "Connect4"
+msgstr "Conecta4"
+
+#: services/user-management/app/profile/templates/profil.html:77
+msgid "Pong"
+msgstr "Pong"
+
+#: services/user-management/app/profile/templates/profil.html:83
+msgid "draw"
+msgstr "empate"
+
+#: services/user-management/app/profile/templates/profil.html:87
+#: services/user-management/app/profile/templates/profil.html:93
+msgid "won"
+msgstr "ganó"
+
+#: services/user-management/app/profile/templates/profil.html:89
+#: services/user-management/app/profile/templates/profil.html:95
+msgid "lost"
+msgstr "perdido"
+
+#: services/user-management/app/profile/templates/profil.html:144
+msgid "Tournament History"
+msgstr "Historial de torneos"
+
+#: services/user-management/app/profile/templates/profil.html:147
+msgid "no tournament played yet!"
+msgstr "¡aún no se ha jugado ningún torneo!"
+
+#: services/user-management/app/profile/templates/settings/cli.html:4
+msgid "Generate token"
+msgstr "Generar token"
+
+#: services/user-management/app/profile/templates/settings/index.html:5
+msgid "User Settings"
+msgstr "Configuraciones de usuario"
+
+#: services/user-management/app/profile/templates/settings/index.html:8
+msgid "Profile :"
+msgstr "Perfil :"
+
+#: services/user-management/app/profile/templates/settings/language_selector.html:4
+msgid "Select your language:"
+msgstr "Selecciona tu idioma:"
+
+#: services/user-management/app/profile/templates/settings/otp.html:6
+msgid "Disable Double Authentication"
+msgstr "Desactivar la autenticación doble"
+
+#: services/user-management/app/profile/templates/settings/otp.html:10
+msgid "Add Double Authentication"
+msgstr "Agregar autenticación doble"
+
+#: services/user-management/app/profile/templates/settings/security.html:5
+msgid "Security"
+msgstr "Seguridad"
+
+#: services/user-management/app/profile/templates/settings/security.html:10
+msgid "Change password"
+msgstr "Cambiar contraseña"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:9
+msgid "Theme Picker:"
+msgstr "Selector de tema :"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:10
+msgid "Theme Picker"
+msgstr "Selector de tema"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:11
+msgid "Select a default theme:"
+msgstr "Selecciona un tema predeterminado :"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:226
+msgid "Or choose three colors for your theme:"
+msgstr "O elige tres colores para tu tema :"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:244
+msgid "Test the theme"
+msgstr "Probar el tema"
+
+#: services/user-management/app/profile/templates/settings/theme_picker.html:262
+msgid "Please choose three different colors 😉"
+msgstr "Por favor elige tres colores diferentes 😉"
+
+#: services/user-management/app/profile/templates/settings/username.html:9
+msgid "Username:"
+msgstr "Nombre de usuario:"
