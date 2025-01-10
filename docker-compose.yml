@@ -23,6 +23,8 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DOMAIN_NAME: ${DOMAIN_NAME}
+      CLIENT_42_ID: ${CLIENT_42_ID}
+      CLIENT_42_SECRET: ${CLIENT_42_SECRET}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       SALT : ${SALT}
     volumes:
@@ -31,6 +33,7 @@ services:
     - 8000:8000
     depends_on:
     - postgres
+    - user-management
 # Django app
   user-management:
     build:
@@ -42,12 +45,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
+      DJANGO_SECRET: ${DJANGO_SECRET}
     develop:
       watch:
         - path: ./services/user-management/app/
           target: /app/
           action: sync
     volumes:
+     - ./services/user-management/app/app/migrations:/app/app/migrations:rw
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     depends_on:
@@ -64,6 +69,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
+      DJANGO_SECRET: ${DJANGO_SECRET}
+    ports:
+      - 8001:8000
+    volumes:
+      - ./services/game-serv/app/app/migrations:/app/app/migrations:rw
     develop:
       watch:
         - path: ./services/game-serv/app/
@@ -71,6 +81,24 @@ services:
           action: sync
     depends_on:
     - postgres
+  game-cron:
+    image: game-serv
+    container_name: game-cron
+    user: root
+    command: ./cron.sh
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET_KEY : ${JWT_SECRET_KEY}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      DJANGO_SECRET: ${DJANGO_SECRET}
+    depends_on:
+    - game-serv
+  adminer:
+    build: ./services/adminer
+    container_name:  adminer
+    volumes:
+      - adminer_data:/home/container/adminer
+    restart: always
 # AI
   # ai-bot:
   #   build:
@@ -167,16 +195,18 @@ services:
       xpack.security.enabled: false
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     mem_limit: 4g
+    ports:
+      - 9200:9200
     volumes:
       - ./services/elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
     networks:
       - elk
   logstash:
     image: logstash:8.15.0
     container_name: logstash
     restart: unless-stopped
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     volumes:
       - ./services/logstash:/usr/share/logstash/pipeline:ro
     networks:
@@ -185,14 +215,12 @@ services:
     image: kibana:8.15.0
     container_name: kibana
     restart: unless-stopped
-    # volumes:
-    #   - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     environment:
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
       xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+      # KBN_PATH_CONF: "/usr/share/kibana/config"
+      SERVER_BASEPATH: "/kibana"
       #elasticsearch.password: ${ELASTIC_PASSWORD}
-    ports:
-      - "5601:5601"
     networks:
       - elk
   filebeat:
@@ -212,13 +240,17 @@ services:
   nginx:
     container_name: nginx
     restart: unless-stopped
-    image: nginx:stable-alpine3.20
+    build:
+      context: ./services/nginx
+      args:
+         KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
         - 80:80
         - 443:443
     volumes:
-        - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+        # - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
         - ./services/nginx/certificates/:/etc/certificates/
+        - adminer_data:/home/container/adminer
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     networks:
@@ -227,6 +259,6 @@ services:
 volumes:
   postgres_data:
   prometheus_data:
-  elasticsearch_data:
+  adminer_data:
 networks:
   elk:
