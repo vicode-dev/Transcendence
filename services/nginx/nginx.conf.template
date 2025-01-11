@@ -17,9 +17,14 @@
  		ssl_certificate_key /etc/nginx/ssl/$DOMAIN_NAME.key;
 
         server_name $DOMAIN_NAME;
-        root /var/www/html;
+        #root /home/container;
         index index.php index.html index.htm;
 
+        location /favicon.ico {
+            proxy_pass http://game-serv:8000/static/icon/favicon.ico;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+        }
         location /ws {
             proxy_pass http://game-serv:8000/ws;
             proxy_http_version 1.1;
@@ -31,9 +36,6 @@
 			proxy_set_header Cookie $http_cookie;
     		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             ##proxy_set_header Origin $http_origin;
-
-
-			
         }
         location / {
             proxy_pass http://game-serv:8000/;
@@ -43,10 +45,41 @@
         location /api {
             proxy_pass http://user-management:8000/api;
             proxy_set_header Host $host;
-			location /api/games/add
+			# for security perpose
+            location /api/games/add
 			{
 
 			}
+            location /api/tournament/add
+			{
+
+			}
+            location /api/authentication
+			{
+                proxy_pass http://authentication:8000/api;
+                proxy_set_header Host $host;
+			}
+        }
+		location /adminer {
+			root /home/container/;
+			fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+			index index.php;
+
+		    try_files $uri $uri/ =404;
+
+			set $path_info $fastcgi_path_info;
+			fastcgi_param PATH_INFO $path_info;
+
+			fastcgi_index index.php;
+			include fastcgi.conf;
+
+			fastcgi_pass adminer:9000;
+			fastcgi_param SCRIPT_FILENAME /home/container$fastcgi_script_name;
+    		fastcgi_param DOCUMENT_ROOT /home/container/;
+        }
+        location /home {
+            proxy_pass http://user-management:8000/home;
+            proxy_set_header Host $host;
         }
 		location /profil {
             proxy_pass http://user-management:8000/profil;
@@ -108,6 +141,16 @@
             proxy_set_header Host $host;
             proxy_cache                     off;
         }
+        location /tournament {
+            proxy_pass http://game-serv:8000/tournament;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+            location /tournament/summary {
+                proxy_pass http://user-management:8000/tournament/summary;
+                proxy_set_header Host $host;
+                proxy_cache                     off;
+            }
+        }
         location /game {
             proxy_pass http://game-serv:8000/game;
             proxy_set_header Host $host;
@@ -115,6 +158,21 @@
         }
         location /login {
             proxy_pass http://authentication:8000/login;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+        }
+        location /password {
+            proxy_pass http://authentication:8000/password;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+        }
+        location /otp {
+            proxy_pass http://authentication:8000/otp;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+        }
+        location /loading {
+            proxy_pass http://authentication:8000/loading;
             proxy_set_header Host $host;
             proxy_cache                     off;
         }
@@ -132,5 +190,15 @@
             proxy_pass http://authentication:8000/42-oauth2;
             proxy_set_header Host $host;
             proxy_cache                     off;
+        }
+        location /kibana/ {
+            proxy_pass http://kibana:5601/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $http_connection;
+            auth_basic "Restricted";
+            auth_basic_user_file  /etc/nginx/.htpasswd;
+            proxy_cache off;
         }
     }
