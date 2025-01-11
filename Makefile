@@ -20,7 +20,7 @@ DOCKER_STOP		= $(DOCKER_COMPOSE) down
 
 # Main Rules
 
-all: check-env webhook 
+all: check-env webhook images
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}${NAME} ${DEFAULT}..."
 	@$(DOCKER_RUN)
 
@@ -95,6 +95,11 @@ php-base:
 	docker build -t php-base:sources ./images/php-base/.
 	docker build -t php-base:7.4 ./images/php-7.4/.
 
+images:
+	docker build -t php-base:sources ./images/php-base/.
+	docker build -t php-base:7.4 ./images/php-7.4/.
+	docker build -t game-serv ./services/game-serv/.
+
 .PHONY: all clean fclean re certificate webhook \
 	ai-bot alertmanager authentication blockchain \
-	nginx user-management
+	nginx user-management images
