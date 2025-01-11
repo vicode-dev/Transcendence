@@ -1,5 +1,9 @@
 FROM nginx:stable-alpine3.20
 ARG KIBANA_PASSWD
 COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
-RUN apk add --no-cache apache2-utils
+RUN apk add --no-cache apache2-utils openssl
+RUN mkdir /etc/nginx/ssl/
+RUN openssl req -x509 -nodes -out /etc/nginx/ssl/transcendence.crt \
+	-keyout /etc/nginx/ssl/transcendence.key \
+	-subj "/C=BE/ST=BXL/L=Brussels/O=42/OU=42/CN=transcendence/UID=rbarbiot"
 RUN htpasswd -b -c /etc/nginx/.htpasswd admin $KIBANA_PASSWD
