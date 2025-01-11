@@ -1,11 +1,11 @@
 NAME	= Transcendence
-
 # Colors
 
 YELLOW	= \033[1;33m
 GREEN	= \033[1;32m
 BLUE	= \033[0;36m
 DEFAULT	= \033[0;0m
+ENV_FILE=.env
 
 # Exec
 
@@ -20,9 +20,9 @@ DOCKER_STOP		= $(DOCKER_COMPOSE) down
 
 # Main Rules
 
-all: webhook images
+all: check-env webhook images
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}${NAME} ${DEFAULT}..."
-	$(DOCKER_RUN)
+	@$(DOCKER_RUN)
 
 clean:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Shutting down ${YELLOW}${NAME} ${DEFAULT}..."
@@ -30,42 +30,70 @@ clean:
 
 fclean: clean
 	@echo "${BLUE} [MAKE] ${DEFAULT}Cleaning ${YELLOW}${NAME} ${DEFAULT}..."
-	docker system prune -af
-	docker volume prune -f
+	@docker system prune -af
+	@docker volume prune -f
 
 re: fclean all
 
 webhook: # put webhook uri for alertmanager
-	sed "s|{{DISCORD_WEBHOOK_URL}}|$(shell grep '^DISCORD_WEBHOOK_URL=' .env | cut -d '=' -f2-)|g" ./services/alertmanager/config.yml.default > ./services/alertmanager/config.yml
+	@sed "s|{{DISCORD_WEBHOOK_URL}}|$(shell grep '^DISCORD_WEBHOOK_URL=' .env | cut -d '=' -f2-)|g" ./services/alertmanager/config.yml.default > ./services/alertmanager/config.yml
 
 certificate: clean
-	docker run -it -p 80:80 -v ./services/nginx/certificates:/etc/letsencrypt/archive --rm --name certbot certbot/certbot certonly --standalone -d $(shell grep '^DOMAIN_NAME=' .env | cut -d '=' -f2-)
+	@docker run -it -p 80:80 -v ./services/nginx/certificates:/etc/letsencrypt/archive --rm --name certbot certbot/certbot certonly --standalone -d $(shell grep '^DOMAIN_NAME=' .env | cut -d '=' -f2-)
 
+check-env:
+	@echo -n "[🔄] Checking .env file"
+	@if [ -f $(ENV_FILE) ]; then \
+		keys="POSTGRES_PASSWORD= ELASTIC_PASSWORD= DISCORD_WEBHOOK_URL= KIBANA_ENCRYPTION_KEY= DOMAIN_NAME= JWT_SECRET_KEY= SALT= KIBANA_PASSWD="; \
+		for key in $$keys; do \
+			if ! grep -q "^$$key" $(ENV_FILE); then \
+				echo -e "\r[❌] Missing argument in .env file"; \
+				exit 1; \
+			fi; \
+		done; \
+		echo -e "\r[✅] .env complete"; \
+	else \
+		echo -e "\r[❌] .env file needed."; \
+		exit 1; \
+	fi;
+
+test:
+	@echo -n "This is the initial line. Waiting for replacement..."
+	@sleep 2	
+	@echo "\rThis is the replacement line.                       "
 # Specifics dockers
 
 ai-bot:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}AI-Bot ${DEFAULT}..."
-	${DOCKER_BUILD} ai-bot
+	${DOCKER_RUN} ai-bot
 
 alertmanager:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Alertmanager ${DEFAULT}..."
-	${DOCKER_BUILD} alertmanager
+	${DOCKER_RUN} alertmanager
 
 authentication:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Authentication ${DEFAULT}..."
-	${DOCKER_BUILD} authentication
+	${DOCKER_RUN} authentication
 
 blockchain:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Blockchain ${DEFAULT}..."
-	${DOCKER_BUILD} blockchain
+	${DOCKER_RUN} blockchain
 
 nginx:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Nginx ${DEFAULT}..."
-	${DOCKER_BUILD} nginx
+	${DOCKER_RUN} nginx
 
 user-management:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}User Management ${DEFAULT}..."
-	${DOCKER_BUILD} user-management
+	${DOCKER_RUN} user-management
+
+adminer:
+	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Adminer ${DEFAULT}..."
+	${DOCKER_RUN} adminer
+
+php-base:
+	docker build -t php-base:sources ./images/php-base/.
+	docker build -t php-base:7.4 ./images/php-7.4/.
 
 images:
 	docker build -t php-base:sources ./images/php-base/.
