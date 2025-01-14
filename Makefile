@@ -20,7 +20,7 @@ DOCKER_STOP		= $(DOCKER_COMPOSE) down
 
 # Main Rules
 
-all: check-env webhook images
+all: check-env webhook images migrations
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}${NAME} ${DEFAULT}..."
 	@$(DOCKER_RUN)
 
@@ -104,8 +104,10 @@ images:
 	docker build -t php-base:7.4 ./images/php-7.4/.
 	docker build -t game-serv ./services/game-serv/.
 
-path:
-	mkdir -p /goinfre/volumes/Transcendence
+migrations:
+	mkdir -p ./services/authentication/app/ft_auth/migrations
+	mkdir -p ./services/user-management/app/profile/migrations
+	mkdir -p ./services/game-serv/app/profile/migrations
 
 .PHONY: all clean fclean re certificate webhook \
 	ai-bot alertmanager authentication blockchain \

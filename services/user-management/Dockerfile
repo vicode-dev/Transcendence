@@ -8,6 +8,6 @@ EXPOSE 8000
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=app:app ./app/ .
-RUN mkdir /app/profile/migrations
+RUN mkdir -p /app/profile/migrations
 
 CMD ["./entrypoint.sh"]

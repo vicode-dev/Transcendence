@@ -5,8 +5,8 @@ WORKDIR /app
 EXPOSE 8000
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
-USER app
+# USER app
 COPY --chown=app:app ./app/ .
-RUN mkdir /app/app/migrations
+RUN mkdir -p /app/app/migrations
 
 CMD ["./entrypoint.sh"]

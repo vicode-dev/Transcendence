@@ -6,6 +6,6 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
-RUN mkdir /app/ft_auth/migrations
+RUN mkdir -p /app/ft_auth/migrations && touch ft_auth/migrations/__init__.py
 
 CMD ["./entrypoint.sh"]
