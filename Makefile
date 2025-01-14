@@ -87,6 +87,10 @@ user-management:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}User Management ${DEFAULT}..."
 	${DOCKER_RUN} user-management
 
+game-serv:
+	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Game Serv ${DEFAULT}..."
+	${DOCKER_RUN} game-serv
+
 adminer:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}Adminer ${DEFAULT}..."
 	${DOCKER_RUN} adminer
@@ -99,6 +103,9 @@ images:
 	docker build -t php-base:sources ./images/php-base/.
 	docker build -t php-base:7.4 ./images/php-7.4/.
 	docker build -t game-serv ./services/game-serv/.
+
+path:
+	mkdir -p /goinfre/volumes/Transcendence
 
 .PHONY: all clean fclean re certificate webhook \
 	ai-bot alertmanager authentication blockchain \
