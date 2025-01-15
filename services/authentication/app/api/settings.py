@@ -10,14 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-import environ
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
+from os import environ
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -31,30 +29,23 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'authentication', 
     'localhost', 
-    env('DOMAIN_NAME'),
+    environ.get('DOMAIN_NAME'),
     ]
-CSRF_TRUSTED_ORIGINS = [f"https://{env('DOMAIN_NAME')}"]
+CSRF_TRUSTED_ORIGINS = [f"https://{environ.get('DOMAIN_NAME')}"]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
 	'ft_auth',
+    'api'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ft_auth.middleware.LanguageCookieMiddleware',
 ]
 
 ROOT_URLCONF = 'ft_auth.urls'
@@ -87,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD'),
     }
 }
 
@@ -120,7 +111,17 @@ CACHES = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('es', _('Spanish')),
+    ('fr', _('French')),
+    ('nl', _('Dutch')),
+    # Add other languages as needed
+]
+
+LANGUAGE_COOKIE_NAME = 'language'
 
 TIME_ZONE = 'UTC'
 
