@@ -107,7 +107,7 @@ images:
 migrations:
 	mkdir -p ./services/authentication/app/ft_auth/migrations
 	mkdir -p ./services/user-management/app/profile/migrations
-	mkdir -p ./services/game-serv/app/profile/migrations
+	mkdir -p ./services/game-serv/app/app/migrations
 
 .PHONY: all clean fclean re certificate webhook \
 	ai-bot alertmanager authentication blockchain \
