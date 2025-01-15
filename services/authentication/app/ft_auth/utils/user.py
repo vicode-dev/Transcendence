@@ -22,18 +22,18 @@ def update_password(user, password):
 ########################################################
 
 def user_login(login, password, by_id=False):
-	try:
-		login = login.lower()
-		if by_id:
-			user = User.objects.filter(
-	  			id=login, password=hash_password(password)).first()
-		else:
-			user = User.objects.filter(
-	  			login=login, password=hash_password(password)).first()
-	  		# login=login, password=password).first()
-		return user
-	except User.DoesNotExist:
-		return None
+    try:
+        if not by_id:
+            login = login.lower()
+        if by_id:
+            user = User.objects.filter(
+                    id=login, password=hash_password(password)).first()
+        else:
+            user = User.objects.filter(
+                login=login, password=hash_password(password)).first()
+        return user
+    except User.DoesNotExist:
+        return None
 
 ########################################################
 ###                    Gettors                       ###
