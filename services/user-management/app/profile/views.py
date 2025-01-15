@@ -1,6 +1,5 @@
 from django.http import HttpResponse, FileResponse
 from django.http import JsonResponse
-from django.core import serializers
 from django.http import Http404, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +8,7 @@ from django.db.models import F, Func, Value
 from . import blockchain
 from django.conf import settings as GlobalSettings
 from profile.models import User
-from profile.utils.token import get_jwt_data, generate_jwt
+from profile.utils.token import get_jwt_data
 from profile.eloUpdater import elo
 import requests, json, os
 import logging
@@ -352,7 +351,6 @@ def settings(request):
         {
             "playerId": jwtData["id"], "user": user,
             "available_languages": dict(GlobalSettings.LANGUAGES).keys(),
-            "domain_name": os.environ.get("DOMAIN_NAME"),
             "otp_enabled": otp_enabled
         }
     )

@@ -29,8 +29,6 @@ services:
       SALT : ${SALT}
     volumes:
      - ./services/authentication/app:/app
-    ports:
-    - 8000:8000
     depends_on:
     - postgres
     - user-management
@@ -70,8 +68,6 @@ services:
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
       DJANGO_SECRET: ${DJANGO_SECRET}
-    ports:
-      - 8001:8000
     volumes:
       - ./services/game-serv/app/app/migrations:/app/app/migrations:rw
     develop:
@@ -195,8 +191,6 @@ services:
       xpack.security.enabled: false
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     mem_limit: 4g
-    ports:
-      - 9200:9200
     volumes:
       - ./services/elasticsearch:/usr/share/elasticsearch/data
     networks:
@@ -230,7 +224,7 @@ services:
     user: root
     volumes:
       - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ${DOCKER_PATH}/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - elk
@@ -245,8 +239,8 @@ services:
       args:
          KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
-        - 80:80
-        - 443:443
+        - 1080:80
+        - 1443:443
     volumes:
         # - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
         - ./services/nginx/certificates/:/etc/certificates/
