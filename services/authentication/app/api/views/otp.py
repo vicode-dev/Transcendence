@@ -5,6 +5,7 @@
 ### Django ###
 
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.translation import gettext as _
 
 ### Utils ###
 
@@ -44,13 +45,13 @@ def validate_otp_code(request):
 		otp.save()
 	code = request.POST.get('otp-code')
 	if code is None:
-		return HttpResponse(False, status=400)
+		return HttpResponse(_("Invalid code"), status=400)
 	totp = TOTP(otp.secret)
 	if totp.verify(code):
 		otp.validated = True
 		otp.save()
 		return HttpResponse(True)
-	return HttpResponse(False, status=401)
+	return HttpResponse(_("Invalid code"), status=401)
 
 @require_http_methods(["GET"])
 def disable_otp(request):

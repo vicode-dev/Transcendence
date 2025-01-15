@@ -52,7 +52,7 @@ async function check_otp_code(event)
 	{
 		document.getElementById('enter-code').innerHTML = 
 `<input type="text" class="col-sm-9 form-control"
-	placeholder="ERROR" name="otp-code" id="otp-code" required>	
+	placeholder="${await response.text()}" name="otp-code" id="otp-code" required>	
 `
 		return
 	}

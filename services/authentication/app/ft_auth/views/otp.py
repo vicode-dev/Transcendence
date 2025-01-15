@@ -42,14 +42,6 @@ def get_otp_page(request):
 	)
 
 def post_otp(request, data):
-	result = ""#check_otp()
-	if "error" in result:
-		return render(
-			request,
-			"/app/ft_auth/templates/otp.html",
-			status=401
-		)
-
 	otp = OTP.objects.filter(owner_id=data["id"]).first()
 	code = request.POST.get('otp-code')
 	if code is None:

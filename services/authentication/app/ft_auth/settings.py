@@ -100,7 +100,6 @@ LANGUAGES = [
     # Add other languages as needed
 ]
 
-
 LANGUAGE_COOKIE_NAME = 'language'
 
 TIME_ZONE = 'UTC'
