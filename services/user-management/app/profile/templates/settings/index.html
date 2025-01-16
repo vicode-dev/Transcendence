@@ -1,7 +1,9 @@
+{%load static %}
 {% load i18n %}
 <input type="hidden" name="playerId" value="{{ playerId }}">
 <input type="hidden" name="pageKey" value="settings">
-<div class="container-fluid p-l-5 mb-5">
+<!-- <div class="container-fluid p-l-5 user-management-margin-bottom"> -->
+<div class="p-l-5 user-management-margin-bottom">
 	<h2  style="color: var(--secondary-color);" id="game_select-title" class="mx-3 mt-4 d-flex justify-content-center">{% translate "User Settings" %}</h2>
 
     <div class="section rounded-4">
@@ -20,3 +22,10 @@
 		{% include "settings/security.html" %}
 	</div>
 </div>
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'user-management/global.css' %}">
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'user-management/global.js' %}"></script>
+{% endblock %}

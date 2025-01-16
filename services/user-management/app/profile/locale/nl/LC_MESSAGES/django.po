@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"POT-Creation-Date: 2025-01-16 10:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,9 +51,10 @@ msgstr "Vrienden"
 
 #: services/user-management/app/profile/templates/profil.html:50
 msgid "no friends 😢"
-msgstr ""
+msgstr "geen vrienden 😢"
 
 #: services/user-management/app/profile/templates/profil.html:62
+#: services/user-management/app/profile/templates/tournament.html:17
 msgid "Game History"
 msgstr "Spelgeschiedenis"
 
@@ -63,7 +64,7 @@ msgstr "nog geen spel gespeeld!"
 
 #: services/user-management/app/profile/templates/profil.html:74
 msgid "Connect4"
-msgstr "Vier op een rij"
+msgstr "4 op een rij"
 
 #: services/user-management/app/profile/templates/profil.html:77
 msgid "Pong"
@@ -83,6 +84,10 @@ msgstr "gewonnen"
 msgid "lost"
 msgstr "verloren"
 
+#: services/user-management/app/profile/templates/profil.html:126
+msgid "Against:"
+msgstr "Tegen:"
+
 #: services/user-management/app/profile/templates/profil.html:144
 msgid "Tournament History"
 msgstr "Toernooigeschiedenis"
@@ -91,15 +96,20 @@ msgstr "Toernooigeschiedenis"
 msgid "no tournament played yet!"
 msgstr "nog geen toernooi gespeeld!"
 
+#: services/user-management/app/profile/templates/profil.html:156
+#| msgid "Tournament History"
+msgid "Tournament"
+msgstr "Toernooi"
+
 #: services/user-management/app/profile/templates/settings/cli.html:4
 msgid "Generate token"
 msgstr "Token genereren"
 
-#: services/user-management/app/profile/templates/settings/index.html:5
+#: services/user-management/app/profile/templates/settings/index.html:6
 msgid "User Settings"
 msgstr "Gebruikersinstellingen"
 
-#: services/user-management/app/profile/templates/settings/index.html:8
+#: services/user-management/app/profile/templates/settings/index.html:9
 msgid "Profile :"
 msgstr "Profiel:"
 
@@ -135,18 +145,27 @@ msgstr "Themakiezer"
 msgid "Select a default theme:"
 msgstr "Selecteer een standaardthema:"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:226
+#: services/user-management/app/profile/templates/settings/theme_picker.html:227
 msgid "Or choose three colors for your theme:"
 msgstr "Of kies drie kleuren voor je thema:"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:244
+#: services/user-management/app/profile/templates/settings/theme_picker.html:245
 msgid "Test the theme"
 msgstr "Test het thema"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:262
+#: services/user-management/app/profile/templates/settings/theme_picker.html:263
 msgid "Please choose three different colors 😉"
 msgstr "Kies alstublieft drie verschillende kleuren 😉"
 
 #: services/user-management/app/profile/templates/settings/username.html:9
 msgid "Username:"
 msgstr "Gebruikersnaam:"
+
+#: services/user-management/app/profile/templates/tournament.html:10
+#| msgid "Tournament History"
+msgid "Tournament Result"
+msgstr "Resultaat van Toernooi"
+
+#: services/user-management/app/profile/templates/tournament.html:12
+msgid "Tree"
+msgstr "Boom"

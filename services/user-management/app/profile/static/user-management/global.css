@@ -1,0 +1,4 @@
+.user-management-margin-bottom {
+    --bottom-margin: 95px;
+    margin-bottom: var(--bottom-margin);
+}

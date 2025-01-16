@@ -50,9 +50,9 @@ function clickColor()
     let checkedRadio = document.querySelector('input[type="radio"]:checked');
     let label = document.querySelector(`label[for="${checkedRadio.id}"]`);
     
-    const color1 = label.querySelector('#color1').value;
-    const color2 = label.querySelector('#color2').value;
-    const color3 = label.querySelector('#color3').value;
+    const color1 = label.querySelector('.color1').value;
+    const color2 = label.querySelector('.color2').value;
+    const color3 = label.querySelector('.color3').value;    
 
     let errorMsg = document.getElementById("error-msg");
     if (new Set([color1, color2, color3]).size < 3) {

@@ -1,6 +1,6 @@
 #user-title {
 	margin-top: 1rem;
-	margin-bottom: 6.3rem;
+	/* margin-bottom: 6.3rem; */
 }
 
 #profile {
@@ -14,10 +14,10 @@
 	}
 }
 
-#profil-picture:hover {
+/* #profil-picture:hover {
 	opacity: 60%;
 	cursor: pointer;
-}
+} */
 
 /* #settings {
 	border: solid var(--background-color) 1px;
@@ -29,16 +29,14 @@
 #friends-list {
 	margin-top: .7rem;
 	max-height: 7rem;
-	overflow-y: scroll;
 }
-#games-list {
+
+#games-list, #tournament-list {
 	margin-top: .7rem;
 	max-height: 15rem;
-	overflow-y: scroll;
 }
-#tournament-list {
-	margin-top: .7rem;
-	max-height: 15rem;
+
+#friends-list, #games-list, #tournament-list {
 	overflow-y: scroll;
 }
 
@@ -50,7 +48,7 @@
 	/* box-shadow: 0 0 9999px 9999px rgba(0, 0, 0, 0.5); */
 	/* margin: 1rem; */
 	/* border: solid #E1E0DD 2px; */
-	padding: .5rem;
+	padding: .2rem;
 }
 
 @media (max-width: 356px) {
@@ -147,19 +145,22 @@
 .game-status {
 	padding: .3rem;
 	/* line-height: 1.4; */
-	padding-top: .1rem;
-	padding-bottom: .1rem;
-	margin-bottom: .1rem;
+	padding-top: .05rem;
+	padding-bottom: .05rem;
+	/* margin-bottom: .1rem; */
 	border: transparent solid 1.5px;
 }
 
 .game-status-won {
-	background-color: var(--secondary-color);
-	color: var(--background-color);
+	/* background-color: var(--secondary-color);
+	color: var(--background-color); */
+	background-color: var(--accent-color);
 }
 
 .game-status-lost {
-	background-color: var(--accent-color);
+	/* background-color: var(--accent-color); */
+	background-color: var(--secondary-color);
+	color: var(--background-color);
 }
 
 .game-status-draw {
@@ -172,3 +173,32 @@
 	background-color: var(--accent-color);
 	z-index: 999;
 }
+
+.one-tournament {
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+	border: 1px solid var(--secondary-color);
+}
+
+.one-tournament:hover {
+	opacity: 60%;
+	cursor: pointer;
+}
+
+.tournament-div {
+	margin-right: 2px;
+	margin-left: 2px;
+	color: var(--secondary-color);
+}
+
+.scores {
+	margin-top: .1rem;
+}
+
+/* 
+@media (max-width: 700px) {
+	.one-game {
+		flex-wrap: wrap;
+	}
+} */
