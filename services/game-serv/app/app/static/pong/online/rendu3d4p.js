@@ -1,6 +1,8 @@
 let scores3d;
 
 async function on3d4p_freeze(msg) {
+    showNavbar();
+    navBarManualOverride = false;
     let state = msg.state;
     if (msg.state == true) {
         loopBreaker = true;
@@ -11,7 +13,7 @@ async function on3d4p_freeze(msg) {
             let timeout = 60;
             msg.players.forEach((player) => addPlayerToList(player, ul))
             timer.innerHTML = timeout;
-            while (state && timeout >= 0) 
+            while (state && timeout >= 0)
             {
                 await sleep(1000);
                 timeout--;
@@ -32,7 +34,7 @@ async function on3d4p_freeze(msg) {
         }
         modal.style.display = "none";
         loopBreaker = false;
-        on3d4p_gameLoop(gameWebSocket);  
+        on3d4p_gameLoop(gameWebSocket);
     }
 }
 
@@ -61,6 +63,9 @@ function on3d4p_UpdateScore(score) {
 }
 
 function on3d4p_GameEnd(score, winner) {
+    showNavbar();
+    navBarManualOverride = false;
+    loopBreaker = true;
     if (score == 1)
         endPopup("typeVictory", winner);
     else
@@ -183,7 +188,7 @@ function on3d4p_ballMovement(ball, scores3d) {
         return;
     ball.x = x;
     ball.y = y;
-    
+
 }
 
 function on3d4p_generateScene(scene) {
@@ -196,6 +201,8 @@ function on3d4p_generateScene(scene) {
 }
 
 async function on3d4p_gameLoop() {
+    hideNavbar();
+    clearTimeout(inactivityTimeout);
     setupScene();
 	setupLight(scene);
 	on3d4p_generateScene(scene);
@@ -216,6 +223,7 @@ async function on3d4p_gameLoop() {
             break;
     }
     loopBreaker = false;
+    navBarManualOverride = false;
 	// window.addEventListener('resize', () => {
 	// 	camera.aspect = container.clientWidth / container.clientHeight;
 	// 	camera.updateProjectionMatrix();
@@ -288,7 +296,7 @@ function mainRendu3d4pOnline() {
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
     white = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
     yellow = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
-    pink = style.getPropertyValue('--secondary-color').trim();
+    pink = style.getPropertyValue('--accent-color').trim();
     scene = new THREE.Scene();
     renderer = new THREE.WebGLRenderer({ antialias: true });
     container = document.getElementById('center-div');

@@ -1,6 +1,8 @@
 let scores2d;
 
 async function on4p_freeze(msg) {
+    showNavbar();
+    navBarManualOverride = false;
     let state = msg.state;
     if (msg.state == true) {
         loopBreaker = true;
@@ -56,6 +58,9 @@ function on4p_UpdateScore(score) {
 }
 
 function on4p_GameEnd(score, winner) {
+    showNavbar();
+    navBarManualOverride = false;
+    loopBreaker = true;
     console.log("winner, score", winner, score);
     if (score == 1)
         endPopup("typeVictory", winner);
@@ -189,12 +194,14 @@ function on4p_drawPaddle() {
 }
 
 async function on4p_gameLoop(gameWebSocket) {
+    hideNavbar();
+    clearTimeout(inactivityTimeout);
     while(1) {
         const startTime = Date.now();
-        on4p_ballMovement(ball)
+        on4p_ballMovement(ball);
         drawBall(ball)
-        on4p_drawPaddle()
-        sendMove(gameWebSocket)
+        on4p_drawPaddle();
+        sendMove(gameWebSocket);
         const EndTime = Date.now();
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
@@ -202,6 +209,7 @@ async function on4p_gameLoop(gameWebSocket) {
             break;
     }
     loopBreaker = false;
+    navBarManualOverride = false;
 }
 
 function on4p_keydownEvent(event) {
@@ -251,6 +259,11 @@ function on4p_messageEvent(event) {
             break;
         case "tick_data":
             on4p_UpdateGameData(msg);
+            if (state == false)
+                {
+                    drawBall();
+                    on2p_drawPaddle();
+                }
             break;
         case "score_update":
             on4p_UpdateScore(msg['scores']);
@@ -260,12 +273,14 @@ function on4p_messageEvent(event) {
             error = false;
             break;
         case "freeze":
+            state = msg.state;
             on4p_freeze(msg, gameWebSocket);
     }
 }
 
 function mainGameLoop4pOnline()
 {
+    state = false;
     gameWebSocket = new WebSocket(
         'wss://'
         + window.location.host

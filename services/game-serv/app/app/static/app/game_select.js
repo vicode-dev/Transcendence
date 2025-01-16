@@ -33,8 +33,12 @@ function hideRender () {
 async function matchmaking(gameType, maxPlayers, render) {
     let searchParams = new URLSearchParams();
     searchParams.set("gameType", gameType);
-    if (gameType == 0)
+
+    console.log("gameType, maxPlayers, Render: ", gameType, maxPlayers, render);
+
+    if (gameType === "false") { //Pong
         searchParams.set("maxPlayers", maxPlayers);
+    }
     const response = await fetch(`/game/api/join/?${searchParams.toString()}`, {
         method: 'POST',
         headers: {
@@ -44,7 +48,7 @@ async function matchmaking(gameType, maxPlayers, render) {
     })
     if (response.status == 200) {
         const data = await response.json();
-        if (render != 0)
+        if (render === "true")
             loadPage(`/lobby/${data.gameId}/?render=` + render );
         else
             loadPage(`/lobby/${data.gameId}/`);
@@ -58,12 +62,13 @@ async function matchmaking(gameType, maxPlayers, render) {
 function loadLocalGame(event, localgameUrl) {
     let render = 0;
     let maxPlayers = 0;
+
     event.preventDefault();
     const url = new URL(localgameUrl, window.location.href);
 
     const gameType = document.querySelector('input[type=radio][name=gameType]:checked').value;
     url.searchParams.append('gameType', gameType);
-    if (gameType == 0)
+    if (gameType === "false") //Pong
     {
         maxPlayers = document.querySelector('input[type=radio][name=maxPlayers]:checked').value;
         if (document.querySelector('input[type=radio][name=render]:checked'))
@@ -75,6 +80,7 @@ function loadLocalGame(event, localgameUrl) {
     }
     if (document.querySelector('input[type=radio][name=matchmaking]:checked').value == 'online')
         return matchmaking(gameType, maxPlayers, render);
+
     document.getElementById('pong-content').style.display ='none';
     loadPageEvent(event, url.toString());
 }

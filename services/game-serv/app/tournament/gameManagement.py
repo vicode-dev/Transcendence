@@ -1,4 +1,4 @@
-from app.models import Tournament, Game
+from app.models import Tournament, Game, ChatMessage
 from django.utils.timezone import now
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.layers import get_channel_layer
@@ -30,6 +30,7 @@ def startGames(tournament):
                         "url": f"{tournament.pk}/game/{game.pk}/"
                     })
             else:
+                logger.debug("Redirect from startGames")
                 async_to_sync(channel_layer.group_send)(
                     f'tournament_{tournament.pk}',
                     {
@@ -47,6 +48,20 @@ async def war(tournament):
             leftChild = tournament.playersId[2 * i + 1]
             rightChild = tournament.playersId[2 * i + 2]
             if (leftChild and rightChild and leftChild != 0 and rightChild != 0):
+                if leftChild in tournament.disconnectedPlayersId:
+                    logger.debug("LEFT CHILD")
+                    logger.debug(tournament.playersId)
+                    logger.debug(tournament.disconnectedPlayersId)
+                    tournament.playersId[2 * i + 1] = 0
+                    await death(tournament)
+                    return
+                elif rightChild in tournament.disconnectedPlayersId:
+                    logger.debug("RIGHT CHILD")
+                    logger.debug(tournament.playersId)
+                    logger.debug(tournament.disconnectedPlayersId)
+                    tournament.playersId[2 * i + 2] = 0
+                    await death(tournament)
+                    return
                 game = await sync_to_async(Game)(players=[leftChild, rightChild], admin=0, score=[0,0], maxPlayers=2, startTime=now(), gameType=False, state=True)
                 await sync_to_async(game.save)()
                 tournament.gamesUUID[i] = game.pk
@@ -68,6 +83,7 @@ async def war(tournament):
 
 async def death(tournament):
     channel_layer = get_channel_layer()
+    logger.debug(tournament.playersId)
     for i in range(len(tournament.gamesUUID)):
         if (tournament.gamesUUID[i] != None):
             game = await sync_to_async(Game.objects.get)(pk=tournament.gamesUUID[i])
@@ -94,15 +110,24 @@ async def death(tournament):
             elif (rightChild == 0):
                 tournament.playersId[i] = leftChild
         await sync_to_async(tournament.save)()
-    if tournament.playersId[0]:
+    if tournament.playersId[0] != None:
         logger.debug("Winner")
         reponse = requests.post("http://user-management:8000/api/tournament/add", json=tournament.toJson()).json()
         # asyncio.sleep(5000)
+        messages = await sync_to_async(ChatMessage.objects.filter)(chatId=tournament.tournamentId)
+        await sync_to_async(messages.delete)()
+        for game in tournament.gamesUUID:
+            if game:
+                gameObject = await sync_to_async(Game.objects.get)(pk=game)
+                await sync_to_async(gameObject.delete)()
+        logger.debug("Tournament redirected")
         await channel_layer.group_send(
                     f'tournament_{tournament.pk}',
                     {
                         'type': 'redirect',
                         "url": f"summary/{reponse["tournamentId"]}/"
                     })
+        logger.debug("Tournament deleted")
+        await sync_to_async(tournament.delete)()
         return
     await war(tournament)

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:56+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: services/game-serv/app/app/settings.py:132
+#: services/game-serv/app/app/settings.py:133
 msgid "English"
 msgstr ""
 
-#: services/game-serv/app/app/settings.py:133
+#: services/game-serv/app/app/settings.py:134
 msgid "Spanish"
 msgstr ""
 
-#: services/game-serv/app/app/settings.py:134
+#: services/game-serv/app/app/settings.py:135
 msgid "French"
 msgstr ""
 
-#: services/game-serv/app/app/settings.py:135
+#: services/game-serv/app/app/settings.py:136
 msgid "Dutch"
 msgstr ""
 
-#: services/game-serv/app/app/templates/base.html:12
+#: services/game-serv/app/app/templates/base.html:13
 msgid "Welcome!"
 msgstr ""
 
@@ -76,11 +75,11 @@ msgid "More"
 msgstr ""
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:7
-msgid "player 1"
+msgid "Player 1"
 msgstr ""
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:13
-msgid "player 2"
+msgid "Player 2"
 msgstr ""
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:72
@@ -111,31 +110,31 @@ msgstr ""
 msgid "Connect4"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:85
+#: services/game-serv/app/app/templates/partials/game_select.html:87
 msgid "Choose the number <br/>of players<br/>"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:94
+#: services/game-serv/app/app/templates/partials/game_select.html:96
 msgid "2 Players"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:103
+#: services/game-serv/app/app/templates/partials/game_select.html:105
 msgid "4 Players"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:114
+#: services/game-serv/app/app/templates/partials/game_select.html:115
 msgid "Choose 3D <br/>or 2D<br/>"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:123
+#: services/game-serv/app/app/templates/partials/game_select.html:124
 msgid "3D"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:132
+#: services/game-serv/app/app/templates/partials/game_select.html:133
 msgid "2D"
 msgstr ""
 
-#: services/game-serv/app/app/templates/partials/game_select.html:149
+#: services/game-serv/app/app/templates/partials/game_select.html:150
 msgid "Start Game"
 msgstr ""
 

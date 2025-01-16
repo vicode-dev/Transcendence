@@ -30,13 +30,13 @@ function ofc_dropPiece(col) {
         svg.appendChild(piece);
         boardState[col] -= 1;
         turn = (turn + 1) % 2;
-        
+
         ofc_updatePlayersBtnColor();
         if (boardFull() == true) {
             gameOver = 1;
-
+            document.getElementById("start-again").style.visibility = "visible";
             let msg = document.getElementById('end_msg');
-            msg.innerHTML = "<p>Game has two losers :(</p>";
+            msg.innerHTML = "<p>Game has two losers 🙁</p>";
         }
     }
 }
@@ -47,7 +47,7 @@ function ofc_updatePlayersBtnColor() {
         playerBtn2.style.backgroundColor = "";
     } else {
         playerBtn2.style.backgroundColor = accentColor;
-        playerBtn1.style.backgroundColor = ""; 
+        playerBtn1.style.backgroundColor = "";
     }
 }
 
@@ -58,9 +58,9 @@ function ofc_finishGameUpdate() {
 
     if (turn % 2 == 0)
     {
-        msg.innerHTML = "<p>Player 1 won!</p>";
+        msg.innerHTML = "Player 1 won!";
         document.getElementById("player1-score").remove();
-        
+
         let newScore = document.createElement("div");
         newScore.setAttribute("id", "player1-score");
         newScore.innerHTML = (player1Score += 1);
@@ -68,9 +68,9 @@ function ofc_finishGameUpdate() {
     }
     else
     {
-        msg.innerHTML = "<p>Player 2 won!</p>";
+        msg.innerHTML = "Player 2 won!";
         document.getElementById("player2-score").remove();
-        
+
         let newScore = document.createElement("div");
         newScore.setAttribute("id", "player2-score");
         newScore.innerHTML = (player2Score += 1);

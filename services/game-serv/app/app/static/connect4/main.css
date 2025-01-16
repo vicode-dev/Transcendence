@@ -28,7 +28,8 @@
 }
 
 .player-btn:hover {
-    appearance: none;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
 }
 
 #start-again {
@@ -56,6 +57,6 @@
 
 @media (max-width: 400px) {
     .player-btn {
-        font-size: .8rem;
+        font-size: .9rem;
     }
 }

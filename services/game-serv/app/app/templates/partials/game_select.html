@@ -58,7 +58,7 @@
             </div>
 
             <div class="right ml-2">
-                <input value="1" onclick="hidePong()" required type="radio" name="gameType" id="connect4" class="one" />
+                <input value="true" onclick="hidePong()" required type="radio" name="gameType" id="connect4" class="one" />
                 <label class="input-label" for="connect4">
                     <div class="input-content">
                         <div class="item-title">
@@ -67,7 +67,7 @@
                     </div>
                 </label>
 
-                <input value="0" onclick="showPong()" required type="radio" name="gameType" id="pong" class="two" />
+                <input value="false" onclick="showPong()" required type="radio" name="gameType" id="pong" class="two" />
                 <label class="input-label" for="pong">
                     <div class="input-content">
                         <div class="item-title">
@@ -77,6 +77,8 @@
                 </label>
             </div>
         </div>
+
+        <div id="online-content">
 
         <div id="pong-content" style="display: none;">
             <div class="my-3 content" style="max-width: 1023px;">
@@ -107,7 +109,6 @@
                 </div>
             </div>
 
-            <!-- <div id="online-content"> -->
                 <div class="my-3 content"  style="max-width: 1023px;">
                     <div class="left">
                         <h2>
@@ -135,7 +136,7 @@
                         </label>
                     </div>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
 
         <!-- <div class="d-flex justify-content-center align-items-center">

@@ -16,7 +16,15 @@ class Game(Model):
     GameIdEth = PositiveIntegerField(default=None, null=True)
 
     def toJson(self):
-        return {"players": self.players, "score": self.score, "maxPlayers": self.maxPlayers, "gameType": self.gameType, "startTime": int(self.startTime.timestamp()), "endTime": int(self.endTime.timestamp())}
+        if self.endTime is None:
+            endTime = None
+        else:
+            endTime = int(self.endTime.timestamp())
+        if self.startTime is None:
+            startTime = None
+        else:
+            startTime = int(self.startTime.timestamp())
+        return {"players": self.players, "score": self.score, "maxPlayers": self.maxPlayers, "gameType": self.gameType, "startTime": startTime, "endTime": endTime}
 
 class ChatMessage(Model):
     chatId = UUIDField(editable=False, db_index=True)

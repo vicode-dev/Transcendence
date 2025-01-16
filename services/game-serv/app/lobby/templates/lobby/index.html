@@ -4,15 +4,16 @@
     <link rel="stylesheet" href="{% static 'lobby/index.css' %}">
 {% endblock %}
 
-<div class="justify-content-center p-3 mt-2">
-    <h2 class="mb-3">{% translate "Create a Lobby" %}</h2>
+<div class="d-flex flex-column justify-content-center p-3 mt-2">
+    <h2 class="mb-3">{% translate "Create a new Lobby" %}</h2>
+
+    <div id="lobby-form" class="mb-1 d-flex flex-column justify-content-center align-items-center">
     <div id="gametype-fields">
         <label style="cursor: pointer;" class="custom-radio">
-            <span class="checkmark"></span>
             <input type="radio" name="gameType" value="0" checked>{% translate "Pong" %}
         </label>
         <label style="cursor: pointer;" class="custom-radio">
-            <input type="radio" name="gameType" value="1">{% translate "Connect 4" %}
+            <input type="radio" name="gameType" value="1">{% translate "Connect4" %}
         </label>
     </div>
     <!-- <div id="players-fields">
@@ -23,8 +24,8 @@
             <input type="radio" name="players" value="4">{% translate "4 Players" %}
         </label>
     </div> -->
-    <button onpointerdown="create(event)" style="color: var(--background-color);">{% translate "Create the lobby" %}</button>
-
+        <button class="rounded-2" onpointerdown="create(event)" style="color: var(--background-color);">{% translate "Create the lobby" %}</button>
+    </div>
     <!-- <hr class="solid">
     <h3>{% translate "Or join an existing one:" %}</h3>
     <input id="lobbyId" placeholder="Lobby ID" style="background-color: var(--secondary-color); border: none;"></input>

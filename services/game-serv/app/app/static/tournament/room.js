@@ -78,3 +78,4 @@ function copy_text(button_id = false)
         }
 
 }
+addMain(chat_main);

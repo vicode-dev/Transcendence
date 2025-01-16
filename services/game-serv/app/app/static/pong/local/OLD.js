@@ -512,7 +512,7 @@ function ballMovement(ball, scores) {
         return;
     ball.x = x;
     ball.y = y;
-    
+
 }
 
 // document.addEventListener('DOMContentLoaded', gameLoop, false);
@@ -578,7 +578,7 @@ const style = getComputedStyle(root);
 const background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
 const white = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
 const yellow = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
-const pink = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
+const pink = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
 const radius = 0.125;
 const heightSegments = 32;
 const widthSegments = heightSegments;

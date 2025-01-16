@@ -20,6 +20,11 @@
 
     {% if online == True %}
     <div id="pong-main-content-online" class="pong-main-content d-flex justify-content-center align-items-center rounded-4">
+    <button onpointerdown="showHideNavbar()" id="onlineFullScreen" class="rounded-2">
+        <!-- <i class="fas fa-solid fa-bars"></i> -->
+        Toggle Menu
+    </button>
+    <!-- <button onpointerdown="showNavbar()" id="exitFullScreen" class="rounded-2"><i class="fas fa-solid fa-xmark"></i></button> -->
     {% else %}
     <div id="pong-main-content-local" class="pong-main-content d-flex justify-content-center align-items-center rounded-4">
     {% endif %}
@@ -34,9 +39,9 @@
         <button onpointerdown="exitFullScreen()" id="exitFullScreen" class="rounded-2 {% if game.maxPlayers == 4 %} fullScreen-btn-4P {% else %} fullScreen-btn-2P {% endif %}"><i class="fas fa-solid fa-xmark"></i></button>
         {% if game.maxPlayers == 4 %}
             {% if render == False %}
-            <button onpointerdown="clickDown('s')" onpointerup="resetClick()" id="left-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown('s', 's')" onpointerup="resetClick('s')" id="left-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% else %}
-            <button onpointerdown="clickDown3d4p('s')" onpointerup="resetClick()" id="left-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown3d4p('s', 's')" onpointerup="resetClick('s')" id="left-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% endif %}
         {% else %}
             {% if render == False %}
@@ -49,9 +54,9 @@
             </button>
         {% if game.maxPlayers == 4 %}
             {% if render == False %}
-            <button onpointerdown="clickDown('w')" onpointerup="resetClick()" id="left-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown('w', 'w')" onpointerup="resetClick('w')" id="left-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% else %}
-            <button onpointerdown="clickDown3d4p('w')" onpointerup="resetClick()" id="left-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown3d4p('w', 'w')" onpointerup="resetClick('w')" id="left-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% endif %}
         {% else %}
             {% if render == False %}
@@ -90,22 +95,22 @@
         {% else %}
             <div id="scores-local" class="scores scores-local-2p d-flex justify-content-center align-items-center">
         {% endif %}
-                <div class="mx-sm-4 mx-2">
+                <div class="mx-sm-4 mx-2 {% if online == True and game.maxPlayers == 2 %} d-flex flex-column justify-content-between align-items-center {% endif %}">
                     {% if online == True and game.maxPlayers == 2 %}
                     <div id="player1" class="d-flex justify-content-center align-items-center"></div>
                     {% endif %}
                     {% if game.maxPlayers == 2 %}
-                    <div id="score1" class="score1 score score-local">
+                    <div id="score1" class="score1 score score-local {% if online == True %} score-online {% endif %}">
                         {{game.score.0}}
                     </div>
                     {% endif %}
                 </div>
-                <div class="mx-sm-4 mx-2">
+                <div class="mx-sm-4 mx-2 {% if online == True and game.maxPlayers == 2 %} d-flex flex-column justify-content-between align-items-center {% endif %}">
                     {% if online == True and game.maxPlayers == 2 %}
                     <div id="player2" class="d-flex justify-content-center align-items-center"></div>
                     {% endif %}
                     {% if game.maxPlayers == 2 %}
-                    <div id="score2" class="score2 score score-local">
+                    <div id="score2" class="score2 score score-local {% if online == True %} score-online {% endif %}">
                         {{game.score.1}}
                     </div>
                     {% endif %}
@@ -117,16 +122,16 @@
             {% if game.maxPlayers == 4 %}
             <div id="up-arrows-4p" class="d-flex align-items-center">
                 {% if render == False %}
-                <button onpointerdown="clickDown('ArrowLeft')" onpointerup="resetClick()" id="top-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown('ArrowLeft', 'ArrowLeft')" onpointerup="resetClick('ArrowLeft')" id="top-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% else %}
-                <button onpointerdown="clickDown3d4p('ArrowLeft')" onpointerup="resetClick()" id="top-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown3d4p('ArrowLeft', 'ArrowLeft')" onpointerup="resetClick('ArrowLeft')" id="top-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% endif %}
                     <i class="fas fa-solid fa-arrow-left"></i>
                 </button>
                 {% if render == False %}
-                <button onpointerdown="clickDown('ArrowRight')" onpointerup="resetClick()" id="top-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown('ArrowRight', 'ArrowRight')" onpointerup="resetClick('ArrowRight')" id="top-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% else %}
-                <button onpointerdown="clickDown3d4p('ArrowRight')" onpointerup="resetClick()" id="top-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown3d4p('ArrowRight', 'ArrowRight')" onpointerup="resetClick('ArrowRight')" id="top-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% endif %} 
                     <i class="fas fa-solid fa-arrow-right"></i>
                 </button>
@@ -169,16 +174,16 @@
             {% if game.maxPlayers == 4 %}
             <div id="down-arrows-4p" class="d-flex align-items-center">
                 {% if render == False %}
-                <button onpointerdown="clickDown('a')" onpointerup="resetClick()" id="bottom-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown('a', 'a')" onpointerup="resetClick('a')" id="bottom-arrows-left-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% else %}
-                <button onpointerdown="clickDown3d4p('a')" onpointerup="resetClick()" id="bottom-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown3d4p('a', 'a')" onpointerup="resetClick('a')" id="bottom-arrows-left-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% endif %}     
                     <i class="fas fa-solid fa-arrow-left"></i>
                 </button>
                 {% if render == False %}
-                <button onpointerdown="clickDown('d')" onpointerup="resetClick()" id="bottom-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown('d', 'd')" onpointerup="resetClick('d')" id="bottom-arrows-right-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% else %}
-                <button onpointerdown="clickDown3d4p('d')" onpointerup="resetClick()" id="bottom-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+                <button onpointerdown="clickDown3d4p('d', 'd')" onpointerup="resetClick('d')" id="bottom-arrows-right-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
                 {% endif %}
                     <i class="fas fa-solid fa-arrow-right"></i>
                 </button>
@@ -269,9 +274,9 @@
         {% endif %}
         {% if game.maxPlayers == 4 %}
             {% if render == False %}
-            <button onpointerdown="clickDown('ArrowDown')" onpointerup="resetClick()" id="right-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown('ArrowDown', 'ArrowDown')" onpointerup="resetClick('ArrowDown')" id="right-arrows-up-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% else %}
-            <button onpointerdown="clickDown3d4p('ArrowDown')" onpointerup="resetClick()" id="right-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown3d4p('ArrowDown', 'ArrowDown')" onpointerup="resetClick('ArrowDown')" id="right-arrows-up-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% endif %}
         {% else %}
             {% if render == False %}
@@ -284,9 +289,9 @@
             </button>
         {% if game.maxPlayers == 4 %}
             {% if render == False %}
-            <button onpointerdown="clickDown('ArrowUp')" onpointerup="resetClick()" id="right-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown('ArrowUp', 'ArrowUp')" onpointerup="resetClick('ArrowUp')" id="right-arrows-down-4p-2d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% else %}
-            <button onpointerdown="clickDown3d4p('ArrowUp')" onpointerup="resetClick()" id="right-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
+            <button onpointerdown="clickDown3d4p('ArrowUp', 'ArrowUp')" onpointerup="resetClick('ArrowUp')" id="right-arrows-down-4p-3d" class="m-2 arrows-btn rounded-2 d-flex justify-content-center align-items-center arrows-4p">
             {% endif %}     
         {% else %}
             {% if render == False %}

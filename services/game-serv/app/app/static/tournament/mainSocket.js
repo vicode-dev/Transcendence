@@ -1,4 +1,4 @@
-let TournamentSocket
+let TournamentSocket = null;
 let actualTournament = null
 function getSplitUrl() {
     let url =  window.location.pathname.split("/");
@@ -31,22 +31,26 @@ function checkTournament() {
 function openSocket(tournamentId) {
     TournamentSocket = new WebSocket(`wss://${window.location.host}/ws/tournament/${tournamentId}/`);
     console.log("Open tournament connection");
-    TournamentSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        switch(data.type) {
-            case "redirect":
-                redirectTournament(data);
-                break;
-            case "stats":
-                stats(data);
-                break;
-        }
-    };
+    TournamentSocket.addEventListener('message', receiveMessage);
+}
+
+function receiveMessage(e) {
+    const data = JSON.parse(e.data);
+    switch(data.type) {
+        case "redirect":
+            redirectTournament(data);
+            break;
+        case "stats":
+            stats(data);
+            break;
+    }
 }
 
 function closeSocket() {
     console.log("Close tournament connection");
+    TournamentSocket.removeEventListener('message', receiveMessage);
     TournamentSocket.close();
+    TournamentSocket = null;
 }
 
 function redirectTournament(data) {
@@ -60,14 +64,20 @@ function stats(data) {
     } 
     else if (getSplitUrl().length == 5) {
         playersTree(data);
+        gameList(data);
     }
 }
 
-function pestilence() {
-    TournamentSocket.send(JSON.stringify({"type":"apocalypse"}));
-}
-
 function reconnect() {
-    TournamentSocket.send(JSON.stringify({"type": "reconnect"}))
+    if(TournamentSocket.readyState != WebSocket.OPEN)
+    {
+        TournamentSocket.addEventListener('open', reconnect);
+    }
+    else
+    {
+        console.log("Reconnect to tournament")
+        TournamentSocket.removeEventListener('open', reconnect);
+        TournamentSocket.send(JSON.stringify({"type": "reconnect"}))
+    }
 }
 

@@ -1,0 +1,26 @@
+.game {
+    border: solid var(--accent-color) 1.5px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+.game #score {
+    margin: auto;
+    
+}
+.score {
+    margin: auto;
+    margin-left: 0.5rem;
+}
+.game .button {
+    margin: auto;
+    margin-right: 0.5rem;
+    color: var(--accent-color);
+    background-color: var(--secondary-color);
+}
+.game .button::hover {
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+}
+/* .game #userComponent {
+    width: 10rem;
+} */

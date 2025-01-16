@@ -14,6 +14,8 @@
 
 
 async function on3d2p_freeze(msg, gameWebSocket) {
+    showNavbar();
+    navBarManualOverride = false;
     let state = msg.state
     if (msg.state == true) {
         loopBreaker = true;
@@ -66,6 +68,9 @@ function on3d2p_UpdateScore(data) {
 }
 
 function on3d2p_GameEnd(score, winner) {
+    showNavbar();
+    navBarManualOverride = false;
+    loopBreaker = true;
     if (score == 10)
         endPopup("typeVictory", winner);
     else
@@ -130,6 +135,8 @@ function on3d2p_generateScene(scene) {
 }
 
 async function on3d2p_gameLoop(gameWebSocket) {
+    hideNavbar();
+    clearTimeout(inactivityTimeout);
     setupScene();
     setupLight(scene);
     on3d2p_generateScene(scene);
@@ -148,6 +155,7 @@ async function on3d2p_gameLoop(gameWebSocket) {
             break;
     }
     loopBreaker = false;
+    navBarManualOverride = false;
 }
 
 function on3d2p_init(playersList) {
@@ -212,7 +220,7 @@ function mainRendu3d2pOnline() {
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
     white = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
     yellow = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
-    pink = style.getPropertyValue('--secondary-color').trim();
+    pink = style.getPropertyValue('--accent-color').trim();
     scene = new THREE.Scene();
     renderer = new THREE.WebGLRenderer({ antialias: true });
     container = document.getElementById('center-div');
@@ -252,7 +260,7 @@ function mainRendu3d2pOnline() {
     gameWebSocket.addEventListener("close", on3d2p_closeEvent);
     gameWebSocket.addEventListener("open", on3d2p_openEvent);
     document.addEventListener("keydown", on3d2p_keydownEvent);
-    
+
 }
 
 function on3d2p_destructor() {

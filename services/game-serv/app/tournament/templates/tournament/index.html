@@ -1,10 +1,13 @@
 {% csrf_token %}
 {% load static %}
 {% load i18n %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'tournament/index.css' %}">
+{% endblock %}
 
 
-<div class="justify-content-center p-3 mt-2">
-    <h2 class="mb-3">{% translate "Create a tournament" %}</h2>
+<div id="tournament-content" class="d-flex flex-column align-items-center justify-content-center p-3">
+    <h2 class="mb-3">{% translate "Ready to see who's the best?" %}</h2>
     <!-- <div>
         <label style="cursor: pointer;">
             <input type="radio" name="gameType" value="0" checked> Pong
@@ -13,13 +16,15 @@
             <input type="radio" name="gameType" value="1"> Connect4
         </label>
     </div> -->
+    <div id="tournament-btn" class="d-flex justify-content-center align-items-center">
+        <button class="rounded-2" onpointerdown="createTournament(event)" style="color: var(--background-color);">{% translate "Create a new tournament" %}</button>
+    </div>
 
-    <button onclick="createTournament(event)" style="color: var(--background-color);">{% translate "Create the tournament" %}</button>
-
-    <hr class="solid">
+    <!-- <i class="fa-solid fa-medal" style="color: var(--fourth-color); font-size: 3.5rem;"></i> -->
+    <!-- <hr class="solid">
     <h3>{% translate "Or join an existing one:" %}</h3>
     <input id="tournamentId" placeholder="Lobby ID" style="background-color: var(--secondary-color); border: none;"></input>
-<button onclick="join(event)" style="color: var(--background-color);">{% translate "Join" %}</button>
+<button onclick="join(event)" style="color: var(--background-color);">{% translate "Join" %}</button> -->
 </div>
 
 {% block javascripts %}

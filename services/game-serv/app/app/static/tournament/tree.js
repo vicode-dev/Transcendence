@@ -57,35 +57,30 @@ function addBranch(svg, x1, y1, x2, y2) {
     branch.setAttribute("y1", y1);
     branch.setAttribute("x2", x2);
     branch.setAttribute("y2", y2);
-    branch.setAttribute("stroke", "black");
     branch.setAttribute("stroke-width", "2");
-    svg.appendChild(branch);
+    branch.setAttribute("stroke", "var(--accent-color)");
+    svg.insertBefore(branch, svg.firstChild);
 }
 
 function addPlayer(svg, id, x, y) {
+    let link = document.createElementNS("http://www.w3.org/2000/svg", "a");
+    link.setAttribute("href", `/profile/${id}/`);
+    link.setAttribute("target", "_blank");
     let player = document.createElementNS("http://www.w3.org/2000/svg", "image");
     if (id == 0) {
-        player.setAttribute("href", '/static/tournament/question_mark.jpg');
-        player.setAttribute("x", x - 10);
-        player.setAttribute('y', y - 10);
-        player.setAttribute('width', 20);
-        player.setAttribute('height', 20);
-        svg.appendChild(player)
-        return ;
+        player.setAttribute("href", '/static/tournament/ghost.svg');        
+        link.setAttribute("href", `https://youtu.be/dQw4w9WgXcQ?si=mQH-vkJNxHjCHyIB`);
+    } else {
+        player.setAttribute("href", `/api/player/${id}/avatar/`);
+        player.style.clipPath = "circle(50% at 50% 50%)";
     }
-    fetch("/api/player/" + id + "/avatar/")
-        .then(response => {return response.blob();
-        })
-        .then(blob => {
-            let imgUrl = URL.createObjectURL(blob);
-            player.setAttribute("href", imgUrl);
-            player.setAttribute("x", x - 10);
-            player.setAttribute('y', y - 10);
-            player.setAttribute('width', 20);
-            player.setAttribute('height', 20);
-            svg.appendChild(player)
-
-        })
+    player.setAttribute("x", x - 10);
+    player.setAttribute('y', y - 10);
+    player.setAttribute('width', 20);
+    player.setAttribute('height', 20);
+    player.setAttribute('preserveAspectRatio', 'none');
+    link.appendChild(player);
+    svg.appendChild(link);
 
 }
 
@@ -143,9 +138,8 @@ function playersTree(data) {
     // data.players = [1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, 1, null, null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, null, null, null]
     // data.players = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, null]
     let players = new Tree(data.players);
-    console.log(players);
     let tree = document.getElementById("tree");
     // tree.innerHTML = '';
     // createTree(tree, players, 1, 0);
-    // createTree2(tree, players, players.leaves, players.height, 0);
+    createTree2(tree, players, players.leaves, players.height, 0);
 }

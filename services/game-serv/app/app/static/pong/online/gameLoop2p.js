@@ -1,5 +1,6 @@
 async function on2p_freeze(msg, gameWebSocket) {
-    let state = msg.state
+    showNavbar();
+    navBarManualOverride = false;
     if (msg.state == true) {
         loopBreaker = true;
         if (msg.players.length) {
@@ -10,7 +11,7 @@ async function on2p_freeze(msg, gameWebSocket) {
 
             msg.players.forEach((player) => addPlayerToList(player, ul))
             timer.innerHTML = timeout;
-            while (state && timeout >= 0) {
+            while (timeout >= 0) {
                 await sleep(1000);
                 timeout--;
                 timer.innerHTML = timeout;
@@ -43,6 +44,9 @@ function on2p_UpdateScore(data) {
 }
 
 function on2p_GameEnd(score, winner) {
+    showNavbar();
+    navBarManualOverride = false;
+    loopBreaker = true;
     if (score == 10)
         endPopup("typeVictory", winner);
     else
@@ -53,7 +57,6 @@ function on2p_GameEnd(score, winner) {
             loadPage(`/tournament/${url[2]}/dashboard/`).then();
         })
     }
-    showNavbar();
 }
 
 function on2p_ballReachObstacle(ball, x, y) {
@@ -113,7 +116,18 @@ function on2p_drawPaddle() {
     rightPaddle.setAttribute("y", p2.y);
 }
 
+// function setNavbarInactivityTimeout(secAmount) {
+//     clearTimeout(inactivityTimeout);
+//     inactivityTimeout = setTimeout(() => {
+//       document.getElementById("nav").style.bottom = "0";
+//     }, secAmount);
+// }
+
+
+
 async function on2p_gameLoop(gameWebSocket) {
+    hideNavbar();
+    clearTimeout(inactivityTimeout);
     while (1) {
         const startTime = Date.now();
         on2p_ballMovement(ball)
@@ -127,6 +141,7 @@ async function on2p_gameLoop(gameWebSocket) {
             break;
     }
     loopBreaker = false;
+    navBarManualOverride = false;
 }
 
 function on2p_init(playersList) {
@@ -174,6 +189,11 @@ function on2p_messageEvent(event) {
             break;
         case "tick_data":
             on2p_UpdateGameData(msg);
+            if (state == false)
+            {
+                drawBall();
+                on2p_drawPaddle();
+            }
             break;
         case "score_update":
             on2p_UpdateScore(msg);
@@ -183,12 +203,14 @@ function on2p_messageEvent(event) {
             error = false;
             break;
         case "freeze":
+            state = msg.state;
             on2p_freeze(msg, gameWebSocket);
     }
 
 }
 
 function mainGameLoop2pOnline() {
+    state = false;
     gameWebSocket = new WebSocket(`wss://${window.location.host}/ws/game/${document.querySelector('[name=gameId]').value}/2pong`);
     ball = new Ball(4.5, 4.5, 180);
     p1 = new Player(0, 3.75);

@@ -27,6 +27,7 @@ urlpatterns = [
     path('tournament/', include('tournament.urls'), name='tournament'),
     # path('profile/', include('profile.urls'), name='profile'),
     path('game/<uuid:gameId>/', views.game),
+    path('game/<uuid:gameId>/api/', views.game_api),
     path('game/join/', views.matchmaking_page, name='matchmaking_page'),
     path('game/api/join/', views.matchmaking, name='matchmaking'),
     path('game/local/', views.localgame, name='localgame'),

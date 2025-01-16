@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 17:34+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,47 +18,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: services/game-serv/app/lobby/templates/lobby/index.html:8
-msgid "Create a Lobby"
-msgstr "Créer un salon"
+#| msgid "Create a Lobby"
+msgid "Create a new Lobby"
+msgstr "Créer un nouveau Salon"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:12
+#: services/game-serv/app/lobby/templates/lobby/index.html:13
 msgid "Pong"
 msgstr "Pong"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:15
-msgid "Connect 4"
+#: services/game-serv/app/lobby/templates/lobby/index.html:16
+#| msgid "Connect 4"
+msgid "Connect4"
 msgstr "Puissance 4"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:20
+#: services/game-serv/app/lobby/templates/lobby/index.html:21
 msgid "2 Players"
 msgstr "2 Joueurs"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:23
+#: services/game-serv/app/lobby/templates/lobby/index.html:24
 msgid "4 Players"
 msgstr "4 Joueurs"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:26
+#: services/game-serv/app/lobby/templates/lobby/index.html:27
 msgid "Create the lobby"
 msgstr "Créer le salon"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:29
+#: services/game-serv/app/lobby/templates/lobby/index.html:30
 msgid "Or join an existing one:"
 msgstr "Ou rejoindre un salon existant :"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:31
+#: services/game-serv/app/lobby/templates/lobby/index.html:32
 msgid "Join"
 msgstr "Rejoindre"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:11
-msgid "Create a Pong Lobby"
-msgstr "Créer un salon Pong"
+#| msgid "Create a Pong Lobby"
+msgid "New Pong Lobby"
+msgstr "Nouveau salon Pong"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:13
-msgid "Create a Connect 4 Lobby"
-msgstr "Créer un salon Puissance 4"
+#| msgid "Create a Connect 4 Lobby"
+msgid "New Connect 4 Lobby"
+msgstr "Nouveau salon Puissance 4"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:19
-msgid "Users list:"
+#| msgid "Users list:"
+msgid "Users list :"
 msgstr "Liste des utilisateurs :"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:27
@@ -66,7 +71,8 @@ msgid "Properties :"
 msgstr "Propriétés :"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:42
-msgid "2Players/4Players:"
+#| msgid "2Players/4Players:"
+msgid "2 Players/4 Players:"
 msgstr "2 Joueurs/4 Joueurs :"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:50

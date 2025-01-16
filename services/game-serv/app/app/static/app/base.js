@@ -14,7 +14,7 @@ let mains = new Map();
 redirect();
 function redirect() {
     searchUrl = new URLSearchParams(window.location.search);
-    if(searchUrl.has("redirect_url"))
+    if(searchUrl.has("redirect_url") && !window.history.state?.fromBack)
     {
         new_url = searchUrl.get("redirect_url")
         searchUrl.delete("redirect_url")
@@ -42,6 +42,10 @@ function loadPageEvent(event, url) {
 async function loadPage(url, update_url = true) {
     destructors.forEach(destructor => destructor());
     destructors = [];
+
+    // let cleanUrl = new URL(url, window.location.origin);
+    // cleanUrl.searchParams.delete("redirect_url");
+    
     let response = await fetch(url, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
@@ -68,8 +72,19 @@ async function loadPage(url, update_url = true) {
             if (response.redirected)
                 url = response.url;
             console.log("Load Page", url);
-			if (update_url)
-            	window.history.pushState({ path: url }, '', url);
+
+            if (url === "/home/") {
+                if (update_url) {
+                    window.history.replaceState({ path: url, fromBack: false }, '', url);
+                }
+            } else {
+                if (update_url) {
+                    // window.history.pushState({ path: url }, '', url);
+                    window.history.pushState({ path: url, fromBack: false }, '', url);
+                }
+            }
+
+
             document.getElementById('content').innerHTML = content;
             // Set the title based on the URL
             setTitleBasedOnURL(url);
@@ -90,7 +105,7 @@ function getCookieValue(name) {
 // Function to set the title based on the URL
 function setTitleBasedOnURL(url) {
     const language = getCookieValue('language');
-    console.log("Setting title based on URL", url);
+    // console.log("Setting title based on URL", url);
     if (url.includes("/login/")) {
         document.title = getTranslation(language, 'login');
     } else if (url.includes("register/")) {
@@ -120,6 +135,9 @@ function setTitleBasedOnURL(url) {
     else if (url.includes("/?gameType=1")) {
         document.title = getTranslation(language, 'connect4');
     }
+    else if (url.includes("/password/")) {
+        document.title = getTranslation(language, 'password');
+    }
     else {
         document.title = getTranslation(language, 'default');
     }
@@ -141,6 +159,7 @@ const translations = {
         pong2D: "Pong 2D",
         pong3D: "Pong 3D",
         connect4: "Connect 4",
+        password: "Password",
         default: "Default"
     },
     fr: {
@@ -157,6 +176,7 @@ const translations = {
         pong2D: "Pong 2D",
         pong3D: "Pong 3D",
         connect4: "Puissance 4",
+        password: "Mot de passe",
         default: "Défaut"
     },
     nl: {
@@ -172,7 +192,8 @@ const translations = {
         otherProfile: "Ander profiel",
         pong2D: "Pong 2D",
         pong3D: "Pong 3D",
-        connect4: "Vier op een rij",
+        connect4: "4 op een rij",
+        password: "Wachtwoord",
         default: "Standaard"
     },
     es: {
@@ -189,6 +210,7 @@ const translations = {
         pong2D: "Pong 2D",
         pong3D: "Pong 3D",
         connect4: "Línea 4",
+        password: "Contraseña",
         default: "Predeterminado"
     }
 };
@@ -200,15 +222,20 @@ function getTranslation(language, key) {
 
 window.addEventListener('popstate', (event) => {
     event.preventDefault();
-    if (event.state.path[0] != "/")
-        path = "/" + event.state.path;
-    else
-        path = event.state.path;
-    console.log(path);
-
-    if (event.state && path) {
-        loadPage(path);
+    let path;
+    if (event.state && event.state.path) {
+        if (event.state.path[0] != "/")
+            path = "/" + event.state.path;
+        else
+            path = event.state.path;
+    } else {
+        path = window.location.pathname;
     }
+
+    // if (event.state && path) {
+        // loadPage(path, false);
+    // }
+        loadPage(path, false);
 });
         
 const loadedScripts = new Set();
