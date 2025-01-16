@@ -1,10 +1,6 @@
 import curses, time
-
-COLUMNS = 7
-ROWS = 6
-RED = 1
-YELLOW = 2
-COLOR = ['🔴', '🟡']
+from connect4.utils import checkWin, boardFull, COLUMNS, ROWS, COLOR, RED, YELLOW
+from connect4.Bot import Connect4Bot
 
 def debug(j):
     alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
@@ -46,32 +42,6 @@ def drawBoard(stdscr, rows, columns):
 def writePad(pad, turn):
     pad.addstr(0, 0, "Player " + str(turn + 1) + " " + COLOR[turn] + " makes a selection (1 - 7)")
 
-def checkWin(board, x, y):
-    piece = board[x][y]
-    for c in range(COLUMNS - 3):
-        for r in range(ROWS):
-            if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
-                return True
-
-    # Check vertical locations for win
-    for c in range(COLUMNS):
-        for r in range(ROWS-3):
-            if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
-                return True
-
-    # Check positively sloped diaganols
-    for c in range(COLUMNS-3):
-        for r in range(ROWS-3):
-            if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
-                return True
-
-    # Check negatively sloped diaganols
-    for c in range(COLUMNS-3):
-        for r in range(3, ROWS):
-            if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
-                return True
-    return False
-
 def dropPiece(stdscr, key, board, turn):
     col = int(key - ord('1'))
     for i in range(5, -1, -1):
@@ -84,13 +54,6 @@ def dropPiece(stdscr, key, board, turn):
             turn = (turn + 1) % 2
             break
     return turn
-
-def boardFull(board):
-    for i in range(ROWS):
-        for j in range(COLUMNS):
-            if board[i][j] == 0:
-                return False
-    return True
 
 def gameConnectLoop(win, stdscr, pad):
     board = [[0 for i in range(COLUMNS)] for j in range(ROWS)]
@@ -107,8 +70,9 @@ def gameConnectLoop(win, stdscr, pad):
             win.refresh()
         elif key == ord('q') or key == 27:
             break
-        elif ord('1') <= key <= ord('7'):
+        elif ord('1') <= key <= ord('7'):  # Human move
             turn = dropPiece(stdscr, key, board, turn)
+
         if turn > 1:
             pad.addstr(0, 0, "Player " + str(turn - 1) + " won! (Press any key to exit)")
             pad.refresh(0, 0, 0, 0, 2, width)
@@ -125,3 +89,45 @@ def gameConnectLoop(win, stdscr, pad):
         writePad(pad, turn)
         pad.refresh(0, 0, 0, 0, 2, width)
 
+def gameConnectLoopAi(win, stdscr, pad):
+    board = [[0 for i in range(COLUMNS)] for j in range(ROWS)]
+    bot_player = 1  # Change to the player number you want the bot to be (1 or 2)
+    bot = Connect4Bot(depth=7)
+    turn = 0
+    stdscr.keypad(True)
+    stdscr.nodelay(True)
+    height, width = win.getmaxyx()
+    drawBoard(stdscr, ROWS * 2 + 1, COLUMNS * 3 + 1)
+    while True:
+        key = stdscr.getch()
+        if key == curses.KEY_RESIZE:
+            height, width = win.getmaxyx()
+            curses.resize_term(*win.getmaxyx())
+            win.refresh()
+        elif key == ord('q') or key == 27:
+            break
+        elif ord('1') <= key <= ord('7') and turn != bot_player:  # Human move
+            turn = dropPiece(stdscr, key, board, turn)
+
+        # Bot's turn
+        if turn == bot_player:
+            bot_move = bot.get_move(board, bot_player)
+            if bot_move is not None:  # Check if the bot found a valid move
+                bot_key = ord(str(bot_move + 1))
+                turn = dropPiece(stdscr, bot_key, board, turn)
+
+        if turn > 1:
+            pad.addstr(0, 0, "Player " + str(turn - 1) + " won! (Press any key to exit)")
+            pad.refresh(0, 0, 0, 0, 2, width)
+            # stdscr.getch()
+            while stdscr.getch() == -1:
+                continue
+            break
+        if boardFull(board) == True:
+            pad.addstr(0, 0, "Board full, it's a draw (press any key to exit)")
+            pad.refresh(0, 0, 0, 0, 2, width)
+            while stdscr.getch() == -1:
+                continue
+            break
+        writePad(pad, turn)
+        pad.refresh(0, 0, 0, 0, 2, width)
