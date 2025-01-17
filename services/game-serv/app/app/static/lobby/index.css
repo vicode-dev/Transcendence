@@ -1,17 +1,28 @@
-input[type="text"]{
+/* input[type="text"]{
 	background-color: var(--secondary-color);
-}
+} */
 
 input[type="radio"] {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	/* display: none; */
+	display: none;
 	margin-right: .25rem;
 }
 
+/* input[type="radio"]:checked ~ .custom-radio {
+    color: var(--accent-color);
+} */
+
+label:has(input[type="radio"]:checked) {
+    color: var(--accent-color);
+}
+
+
+
 .custom-radio {
+	font-size: 1.03rem;
 	/* background-color: var(--secondary-color); */
 }
 
@@ -20,7 +31,16 @@ input[type="radio"] {
 	width: 25px;
 	background-color: #eee;
 }
-
+/* 
 .custom-radio input[type="radio"]:checked ~ label {
 	border: solid 2px var(--secondary-color);
+} */
+
+#lobby-form {
+	margin-top: 20vh;
+}
+@media (min-width: 488px) {
+    #lobby-form {
+        margin-top: 25vh;
+    }
 }

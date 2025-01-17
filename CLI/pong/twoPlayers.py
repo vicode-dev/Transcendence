@@ -1,11 +1,7 @@
 from pong.GameClass import Player, Ball, GameData
+from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED
+from pong.Bot import Bot
 import math, curses, time
-SIZE = 9
-PADDLE_SIZE = 1.5
-PADDLE_WIDTH = 0.25
-BALL_SIZE = 0.125
-TICK_RATE = 1 / 20
-MAX_SPEED = 10
 
 # def hitPlayer(px, py, x, y):
 #     if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
@@ -258,7 +254,75 @@ def gameLoop2P(win, stdscr, pad, scale):
         #     stdscr.addch(int((ball._y + BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
 
         drawScore(pad, gameData)
-        pad.refresh(0, 0, 0, 0, 2, SIZE * scale)
+        pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+        stdscr.refresh()
+        elapsedTime = time.time() - startTime
+        curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
+
+def gameLoopBot2P(win, stdscr, pad, scale):
+    # Initialize bot and player
+    p1 = Bot(0, 3.75, PADDLE_SIZE, MAX_SPEED, "left")  # Bot testing
+    p2 = Player(8.75, 3.75)
+    ball = Ball(4.25, 4.25)
+    gameData = GameData(0)
+    stdscr.keypad(True)
+    stdscr.timeout(100)
+    stdscr.nodelay(True)
+    stdscr.border()
+    while True:
+        if gameData._score[0] == 10 or gameData._score[1] == 10:
+            # pad.clear()
+            if gameData._score[0] == 10:
+                pad.addstr(0, 0, "Player 1 won! Congratulations!")
+            elif gameData._score[1] == 10:
+                pad.addstr(0, 0, "Player 2 won!")
+            pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            key = stdscr.getch()
+            if key == ord('q') or key == 27:
+                break
+            continue
+        startTime = time.time()
+        stdscr.erase()
+        stdscr.border()
+        key = stdscr.getch()
+        if key == ord('q') or key == 27:
+            break
+        elif key == curses.KEY_RESIZE:
+            win.erase()
+            height, width = win.getmaxyx()
+            curses.resize_term(*win.getmaxyx())
+            scale = height - height % SIZE if height < width else width - width % SIZE
+            scale = int(scale / 10)
+            length = (SIZE * scale) + 2
+            stdscr.resize(length, length)
+            stdscr.mvwin(1, int(width / 2 - length / 2))
+            win.refresh()
+        elif key == curses.KEY_UP and p2._y > 0:
+            p2._y -= 0.25
+        elif key == curses.KEY_DOWN and p2._y < SIZE - PADDLE_SIZE:
+            p2._y += 0.25
+        elif isinstance(p1, Bot):
+            bot_move = p1.get_input(ball)
+            if bot_move == -1 and p1._y > 0:
+                p1._y -= 0.25
+            elif bot_move == 1 and p1._y < SIZE - PADDLE_SIZE:
+                p1._y += 0.25
+        ballMovement(gameData._score, ball, p1, p2)
+        drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
+        drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
+        drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
+
+        # if (ball._x - BALL_SIZE > 0):
+        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x - BALL_SIZE) * scale) + 1, '.')
+        # if (ball._y - BALL_SIZE > 0):
+        #     stdscr.addch(int((ball._y - BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
+        # if (ball._x + BALL_SIZE < SIZE):
+        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x + BALL_SIZE) * scale) + 1, '.')
+        # if (ball._y + BALL_SIZE < SIZE):
+        #     stdscr.addch(int((ball._y + BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
+
+        drawScore(pad, gameData)
+        pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))

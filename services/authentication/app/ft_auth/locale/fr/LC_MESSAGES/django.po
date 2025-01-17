@@ -2,13 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 17:34+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,25 +106,21 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: services/authentication/app/ft_auth/templates/password.html:12
-#, fuzzy
 #| msgid "Password"
 msgid "Old Password"
 msgstr "Ancien mot de passe"
 
 #: services/authentication/app/ft_auth/templates/password.html:15
-#, fuzzy
 #| msgid "Enter Password"
 msgid "Enter old password"
 msgstr "Entrez l'ancien mot de passe"
 
 #: services/authentication/app/ft_auth/templates/password.html:19
-#, fuzzy
 #| msgid "Password"
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
 #: services/authentication/app/ft_auth/templates/password.html:22
-#, fuzzy
 #| msgid "Enter Password"
 msgid "Enter new password"
 msgstr "Entrez le nouveau mot de passe"
@@ -136,7 +130,6 @@ msgid "Update"
 msgstr "Mettre à jour"
 
 #: services/authentication/app/ft_auth/templates/password_updated.html:8
-#, fuzzy
 #| msgid "Password"
 msgid "Password updated!"
 msgstr "Mot de passe mis à jour !"
@@ -170,102 +163,89 @@ msgstr "Vous avez déjà un compte ?"
 msgid "Or maybe"
 msgstr "Ou peut-être"
 
-#: services/authentication/app/ft_auth/utils/token.py:50
-#: services/authentication/app/ft_auth/utils/user.py:178
+#: services/authentication/app/ft_auth/utils/token.py:53
+#: services/authentication/app/ft_auth/utils/user.py:172
 msgid "Unknow user"
 msgstr "Utilisateur inconnu"
 
-#: services/authentication/app/ft_auth/utils/token.py:55
+#: services/authentication/app/ft_auth/utils/token.py:58
 msgid "Token expired"
 msgstr "Le jeton a expiré"
 
-#: services/authentication/app/ft_auth/utils/token.py:57
+#: services/authentication/app/ft_auth/utils/token.py:60
 msgid "Invalid token"
 msgstr "Jeton invalide"
 
-#: services/authentication/app/ft_auth/utils/user.py:114
+#: services/authentication/app/ft_auth/utils/user.py:108
 msgid "One or more required fields are empty"
 msgstr "Un ou plusieurs champs obligatoires sont vides"
 
-#: services/authentication/app/ft_auth/utils/user.py:118
+#: services/authentication/app/ft_auth/utils/user.py:112
 msgid "Your login name isn't an option!"
 msgstr "Votre nom d'utilisateur n'est pas valide !"
 
-#: services/authentication/app/ft_auth/utils/user.py:120
+#: services/authentication/app/ft_auth/utils/user.py:114
 msgid "Login size must be between 8 and 19 characters."
-msgstr ""
-"La taille du nom d'utilisateur doit être comprise entre 8 et 19 caractères."
+msgstr "La taille du nom d'utilisateur doit être comprise entre 8 et 19 caractères."
 
-#: services/authentication/app/ft_auth/utils/user.py:124
+#: services/authentication/app/ft_auth/utils/user.py:118
 msgid "Your password isn't an option!"
 msgstr "Votre mot de passe n'est pas valide !"
 
-#: services/authentication/app/ft_auth/utils/user.py:126
-#: services/authentication/app/ft_auth/utils/user.py:197
+#: services/authentication/app/ft_auth/utils/user.py:120
+#: services/authentication/app/ft_auth/utils/user.py:191
 msgid "Password size must be between 8 and 32 characters."
 msgstr "La taille du mot de passe doit être comprise entre 8 et 32 caractères."
 
-#: services/authentication/app/ft_auth/utils/user.py:130
-#: services/authentication/app/ft_auth/utils/user.py:133
+#: services/authentication/app/ft_auth/utils/user.py:124
+#: services/authentication/app/ft_auth/utils/user.py:127
 msgid "Your first name isn't an option!"
 msgstr "Votre prénom n'est pas valide !"
 
-#: services/authentication/app/ft_auth/utils/user.py:135
-#, fuzzy
+#: services/authentication/app/ft_auth/utils/user.py:129
 #| msgid ""
 #| "Combination of first name and last name must be between 8 and 32 "
 #| "characters."
-msgid ""
-"Combination of fisrt name and last name must be between 4 and 32 characters."
-msgstr ""
-"La combinaison du prénom et du nom de famille doit être comprise entre 4 et "
-"32 caractères."
+msgid "Combination of fisrt name and last name must be between 4 and 32 characters."
+msgstr "La combinaison du prénom et du nom de famille doit être comprise entre 4 et 32 caractères."
 
-#: services/authentication/app/ft_auth/utils/user.py:138
-#, fuzzy
+#: services/authentication/app/ft_auth/utils/user.py:132
 #| msgid "Login must contain only alphabetic characters."
 msgid "Login must contains only alphabetic characters."
-msgstr ""
-"Le nom d'utilisateur doit contenir uniquement des caractères alphabétiques."
+msgstr "Le nom d'utilisateur doit contenir uniquement des caractères alphabétiques."
 
-#: services/authentication/app/ft_auth/utils/user.py:141
-msgid ""
-"First and last names must contain only alphabetic characters and spaces."
-msgstr ""
-"Les prénoms et noms de famille doivent contenir uniquement des caractères "
-"alphabétiques et des espaces."
+#: services/authentication/app/ft_auth/utils/user.py:135
+msgid "First and last names must contain only alphabetic characters and spaces."
+msgstr "Les prénoms et noms de famille doivent contenir uniquement des caractères alphabétiques et des espaces."
 
-#: services/authentication/app/ft_auth/utils/user.py:144
+#: services/authentication/app/ft_auth/utils/user.py:138
 msgid "Login already exists."
 msgstr "Le nom d'utilisateur existe déjà."
 
-#: services/authentication/app/ft_auth/utils/user.py:150
-#: services/authentication/app/ft_auth/utils/user.py:172
+#: services/authentication/app/ft_auth/utils/user.py:144
+#: services/authentication/app/ft_auth/utils/user.py:166
 msgid "You forgot to specify your login name."
 msgstr "Vous avez oublié de spécifier votre nom d'utilisateur."
 
-#: services/authentication/app/ft_auth/utils/user.py:155
+#: services/authentication/app/ft_auth/utils/user.py:149
 msgid "You forgot to specify your password."
 msgstr "Vous avez oublié de spécifier votre mot de passe."
 
-#: services/authentication/app/ft_auth/utils/user.py:162
+#: services/authentication/app/ft_auth/utils/user.py:156
 msgid "Login and password do not match."
 msgstr "Le nom d'utilisateur et le mot de passe ne correspondent pas."
 
-#: services/authentication/app/ft_auth/utils/user.py:183
-#, fuzzy
+#: services/authentication/app/ft_auth/utils/user.py:177
 #| msgid "You forgot to specify your password."
 msgid "You forgot to specify your old password."
 msgstr "Vous avez oublié de spécifier votre ancien mot de passe."
 
-#: services/authentication/app/ft_auth/utils/user.py:189
-#, fuzzy
+#: services/authentication/app/ft_auth/utils/user.py:183
 #| msgid "Login and password do not match."
 msgid "Old password does not match."
 msgstr "L'ancien mot de passe ne correspond pas."
 
-#: services/authentication/app/ft_auth/utils/user.py:193
-#, fuzzy
+#: services/authentication/app/ft_auth/utils/user.py:187
 #| msgid "You forgot to specify your password."
 msgid "You forgot to specify your new password."
 msgstr "Vous avez oublié de spécifier votre nouveau mot de passe."
@@ -278,14 +258,12 @@ msgstr "La création de l'utilisateur a échoué, réessayez plus tard."
 msgid "User login failed, try later."
 msgstr "La connexion de l'utilisateur a échoué, réessayez plus tard."
 
-#: services/authentication/app/ft_auth/views/otp.py:69
-#, fuzzy
+#: services/authentication/app/ft_auth/views/otp.py:61
 #| msgid "Invalid token"
 msgid "Invalid code"
 msgstr "Code invalide"
 
 #: services/authentication/app/ft_auth/views/password.py:79
-#, fuzzy
 #| msgid "Invalid token"
 msgid "Invalid A2F code"
 msgstr "Code A2F invalide"

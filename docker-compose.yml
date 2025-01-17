@@ -50,7 +50,7 @@ services:
           target: /app/
           action: sync
     volumes:
-     - ./services/user-management/app/app/migrations:/app/app/migrations:rw
+     - ./services/user-management/app/profile/migrations:/app/profile/migrations:rw
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     depends_on:

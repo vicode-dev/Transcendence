@@ -5,6 +5,41 @@
 	user-select: none;
 }
 
+#onlineFullScreen {	
+	/* position: absolute; */
+	background-color: var(--fourth-color);
+	/* color: var(--accent-color); */
+	color: var(--secondary-color);
+	/* font-size: x-large; */
+	font-size: small;
+	padding: 0;
+	padding-left: .4rem;
+	padding-right: .4rem;
+	/* margin-top: 95.5vh; */
+	/* margin-bottom: 80vh; */
+	/* margin-right: 73vw; */
+	/* margin-left: 73vw; */
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	/* right: 0; */
+	/* margin-bottom: 1.5rem; */
+	margin-right: 1.5rem;
+
+	transform: rotate(-90deg);
+	/* top left */
+	/* margin-top: 10vh; */
+	/* margin-left: 96vw; */
+	/* middle left */
+	margin-top: 42vh;
+	margin-left: 93vw;
+
+	width: max-content;
+}
+#onlineFullScreen:hover {
+	color: var(--secondary-color);
+}
+
 #exitFullScreen, #enterFullScreen {
 	display: none;
 }
@@ -19,9 +54,12 @@
 	}
 }
 
-
 .score-left-local-hor, .score-right-local-hor {
 	display: none;
+}
+
+.score-online {
+
 }
 
 #wrapper {
@@ -32,6 +70,14 @@
 	-ms-user-select:none;
 	user-select:none;
 	/* overflow: hidden; */
+}
+#local-rotate {
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
 }
 .local-wrapper {
 	width: 94vw;
@@ -90,9 +136,11 @@
 }
 
 /* #### RULES #### */
-#rules {
-	margin-top: 1rem;
-	visibility: visible;
+@media (min-width: 400px) {
+	#rules {
+		margin-top: 1rem;
+		visibility: visible;
+	}
 }
 .rule {
 	border: solid 1px var(--secondary-color);
@@ -366,19 +414,22 @@
 
 	#center-div-local {
 		width: 80vw;
-		margin-bottom: 1rem;
-		margin-top: 1.5rem;
+		/* margin-bottom: 1rem;
+		margin-top: 1.5rem; */
 	}
 	#center-div-local-4p {
 		width: 50vw;
-		margin-bottom: 1rem;
-		margin-top: 5.1rem;
+		/* margin-bottom: 1rem;
+		margin-top: 5.1rem; */
+		margin-top: 4.7rem;
 	}
 	.start-btn-2p {
 		position: absolute;
 		background-color: var(--background-color);
 		color: var(--secondary-color);
-		margin-bottom: 4.7rem;
+		/* margin-bottom: 4.7rem; */
+		margin-bottom: 3.7rem;
+
 		z-index: 999;
 	}
 	.start-btn-2p:hover {
@@ -386,7 +437,8 @@
 
 	}
 	.start-btn-4p {
-		margin-bottom: 13rem;
+		/* margin-bottom: 13rem; */
+		margin-bottom: 11.8rem;
 	}
 	#scores-local {
 		font-size: .85rem;
@@ -421,8 +473,9 @@
 	#exitFullScreen, #enterFullScreen {	
 		position: absolute;
 		background-color: var(--fourth-color);
-		color: var(--accent-color);
-		font-size: x-large;
+		color: var(--secondary-color);
+		/* font-size: x-large; */
+		font-size: small;
 		padding: 0;
 		padding-left: .4rem;
 		padding-right: .4rem;

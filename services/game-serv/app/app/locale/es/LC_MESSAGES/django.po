@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: services/game-serv/app/app/settings.py:132
+#: services/game-serv/app/app/settings.py:133
 msgid "English"
 msgstr "Inglés"
 
-#: services/game-serv/app/app/settings.py:133
+#: services/game-serv/app/app/settings.py:134
 msgid "Spanish"
 msgstr "Español"
 
-#: services/game-serv/app/app/settings.py:134
+#: services/game-serv/app/app/settings.py:135
 msgid "French"
 msgstr "Francés"
 
-#: services/game-serv/app/app/settings.py:135
+#: services/game-serv/app/app/settings.py:136
 msgid "Dutch"
 msgstr "Holandés"
 
-#: services/game-serv/app/app/templates/base.html:12
+#: services/game-serv/app/app/templates/base.html:13
 msgid "Welcome!"
 msgstr "¡Bienvenido!"
 
@@ -76,12 +76,14 @@ msgid "More"
 msgstr "Más"
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:7
-msgid "player 1"
-msgstr "jugador 1"
+#| msgid "player 1"
+msgid "Player 1"
+msgstr "Jugador 1"
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:13
-msgid "player 2"
-msgstr "jugador 2"
+#| msgid "player 2"
+msgid "Player 2"
+msgstr "Jugador 2"
 
 #: services/game-serv/app/app/templates/connect4/connect4.html:72
 msgid "Start again"
@@ -93,7 +95,7 @@ msgstr "Configuraciones del juego"
 
 #: services/game-serv/app/app/templates/partials/game_select.html:28
 msgid "Online or <br/>local?<br/>"
-msgstr "¿En línea o<br/>local?<br/>"
+msgstr "¿En línea o <br/>local?<br/>"
 
 #: services/game-serv/app/app/templates/partials/game_select.html:37
 msgid "Local"
@@ -105,37 +107,37 @@ msgstr "En línea"
 
 #: services/game-serv/app/app/templates/partials/game_select.html:56
 msgid "Choose a game <br/>to play<br/>"
-msgstr "Elige un juego<br/> para jugar<br/>"
+msgstr "Elige un juego <br/> para jugar<br/>"
 
 #: services/game-serv/app/app/templates/partials/game_select.html:65
 msgid "Connect4"
 msgstr "Conecta 4"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:85
+#: services/game-serv/app/app/templates/partials/game_select.html:87
 msgid "Choose the number <br/>of players<br/>"
-msgstr "Elige el número<br/> de jugadores<br/>"
+msgstr "Elige el número <br/> de jugadores<br/>"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:94
+#: services/game-serv/app/app/templates/partials/game_select.html:96
 msgid "2 Players"
 msgstr "2 Jugadores"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:103
+#: services/game-serv/app/app/templates/partials/game_select.html:105
 msgid "4 Players"
 msgstr "4 Jugadores"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:114
+#: services/game-serv/app/app/templates/partials/game_select.html:115
 msgid "Choose 3D <br/>or 2D<br/>"
 msgstr "Elige 3D<br/> o 2D<br/>"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:123
+#: services/game-serv/app/app/templates/partials/game_select.html:124
 msgid "3D"
 msgstr "3D"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:132
+#: services/game-serv/app/app/templates/partials/game_select.html:133
 msgid "2D"
 msgstr "2D"
 
-#: services/game-serv/app/app/templates/partials/game_select.html:149
+#: services/game-serv/app/app/templates/partials/game_select.html:150
 msgid "Start Game"
 msgstr "Empezar"
 

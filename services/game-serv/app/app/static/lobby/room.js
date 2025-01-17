@@ -23,7 +23,7 @@ function copy_text(button_id = false)
 
 function lobby_getRenderParam() {
     let params = new URLSearchParams(document.location.search);
-    let render = parseInt(params.get("render"), 2);
+    let render = params.get("render") === "true";
     if(render)
     {
         document.getElementById("render").checked = true;
@@ -139,3 +139,4 @@ function lobby_destructorRoom() {
 }
 
 addMain(lobby_mainRoom);
+addMain(chat_main);

@@ -3,11 +3,21 @@
 {% load chat %}
 <input type="hidden" name="pageKey" value="dashboard">
 <h1>{% translate "Dashboard" %}</h1>
-
+<div class="section rounded-4">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Tree" %}
+    </h3>
+    {% include "tournament/playersTree.html"%}
+</div>
+<div class="section rounded-4">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Games" %}
+    </h3>
+    <div id="gameList"></div>
+</div>
 {% chat room_name %}
-
-{% include "tournament/playersTree.html"%}
 
 {% block javascripts %}
 <script src="{% static 'tournament/dashboard.js' %}"></script>
+{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'tournament/style.css' %}">
 {% endblock %}

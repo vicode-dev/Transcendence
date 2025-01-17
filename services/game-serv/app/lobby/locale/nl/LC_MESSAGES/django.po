@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"POT-Creation-Date: 2025-01-16 10:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,47 +18,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: services/game-serv/app/lobby/templates/lobby/index.html:8
-msgid "Create a Lobby"
-msgstr "Maak een lobby"
+#| msgid "Create a Lobby"
+msgid "Create a new Lobby"
+msgstr "Maak een nieuw Lobby"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:12
+#: services/game-serv/app/lobby/templates/lobby/index.html:13
 msgid "Pong"
 msgstr "Pong"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:15
-msgid "Connect 4"
-msgstr "Vier op een rij"
+#: services/game-serv/app/lobby/templates/lobby/index.html:16
+#| msgid "Connect 4"
+msgid "Connect4"
+msgstr "4 op een rij"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:20
+#: services/game-serv/app/lobby/templates/lobby/index.html:21
 msgid "2 Players"
 msgstr "2 Spelers"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:23
+#: services/game-serv/app/lobby/templates/lobby/index.html:24
 msgid "4 Players"
 msgstr "4 Spelers"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:26
+#: services/game-serv/app/lobby/templates/lobby/index.html:27
 msgid "Create the lobby"
 msgstr "Maak de lobby"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:29
+#: services/game-serv/app/lobby/templates/lobby/index.html:30
 msgid "Or join an existing one:"
 msgstr "Of sluit je aan bij een bestaande lobby:"
 
-#: services/game-serv/app/lobby/templates/lobby/index.html:31
+#: services/game-serv/app/lobby/templates/lobby/index.html:32
 msgid "Join"
 msgstr "Deelnemen"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:11
-msgid "Create a Pong Lobby"
-msgstr "Maak een Pong-lobby"
+#| msgid "Create a Pong Lobby"
+msgid "New Pong Lobby"
+msgstr "Nieuw Pong Lobby"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:13
-msgid "Create a Connect 4 Lobby"
-msgstr "Maak een Vier op een rij-lobby"
+#| msgid "Create a Connect 4 Lobby"
+msgid "New Connect 4 Lobby"
+msgstr "Nieuw 4 op een rij Lobby"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:19
-msgid "Users list:"
+#| msgid "Users list:"
+msgid "Users list :"
 msgstr "Gebruikerslijst:"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:27
@@ -66,7 +71,8 @@ msgid "Properties :"
 msgstr "Eigenschappen:"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:42
-msgid "2Players/4Players:"
+#| msgid "2Players/4Players:"
+msgid "2 Players/4 Players:"
 msgstr "2 Spelers/4 Spelers:"
 
 #: services/game-serv/app/lobby/templates/lobby/room.html:50

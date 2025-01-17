@@ -81,7 +81,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'app': {
+        'profile': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,

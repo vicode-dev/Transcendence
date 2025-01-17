@@ -97,28 +97,3 @@ function printCameraRotationInDegrees(camera) {
     console.log('Z:', radiansToDegrees(camera.rotation.z));
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

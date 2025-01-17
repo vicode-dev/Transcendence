@@ -39,7 +39,7 @@ class ChatConsumer(WebsocketConsumer):
             self.history()
 
     def history(self):
-        messages = reversed(ChatMessage.objects.filter(chatId=self.room_name).order_by('-time')[:20])
+        messages = ChatMessage.objects.filter(chatId=self.room_name).order_by('time')[:100]
         for message in messages:
             self.send(text_data=json.dumps({"type": "message", "content": message.content, "timestamp": message.time.isoformat(), "playerId":message.playerId}))
     

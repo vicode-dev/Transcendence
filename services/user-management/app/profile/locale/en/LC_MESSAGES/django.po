@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:56+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgid "no friends 😢"
 msgstr ""
 
 #: services/user-management/app/profile/templates/profil.html:62
+#: services/user-management/app/profile/templates/tournament.html:17
 msgid "Game History"
 msgstr ""
 
@@ -83,6 +84,10 @@ msgstr ""
 msgid "lost"
 msgstr ""
 
+#: services/user-management/app/profile/templates/profil.html:126
+msgid "Against:"
+msgstr ""
+
 #: services/user-management/app/profile/templates/profil.html:144
 msgid "Tournament History"
 msgstr ""
@@ -91,15 +96,19 @@ msgstr ""
 msgid "no tournament played yet!"
 msgstr ""
 
+#: services/user-management/app/profile/templates/profil.html:156
+msgid "Tournament"
+msgstr ""
+
 #: services/user-management/app/profile/templates/settings/cli.html:4
 msgid "Generate token"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/index.html:5
+#: services/user-management/app/profile/templates/settings/index.html:6
 msgid "User Settings"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/index.html:8
+#: services/user-management/app/profile/templates/settings/index.html:9
 msgid "Profile :"
 msgstr ""
 
@@ -135,20 +144,28 @@ msgstr ""
 msgid "Select a default theme:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:226
+#: services/user-management/app/profile/templates/settings/theme_picker.html:227
 msgid "Or choose three colors for your theme:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:244
+#: services/user-management/app/profile/templates/settings/theme_picker.html:245
 msgid "Test the theme"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:262
+#: services/user-management/app/profile/templates/settings/theme_picker.html:263
 msgid "Please choose three different colors 😉"
 msgstr ""
 
 #: services/user-management/app/profile/templates/settings/username.html:9
 msgid "Username:"
+msgstr ""
+
+#: services/user-management/app/profile/templates/tournament.html:10
+msgid "Tournament Result"
+msgstr ""
+
+#: services/user-management/app/profile/templates/tournament.html:12
+msgid "Tree"
 msgstr ""
 
 #~ msgid "Hello"

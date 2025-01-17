@@ -1,7 +1,7 @@
 import requests
 import statistics
 from django.http import Http404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.conf import settings
@@ -54,7 +54,8 @@ def localgame(request):
         return redirect
     localgame_url = reverse('localgame')
     maxPlayers = int(request.GET.get('maxPlayers', 2))
-    gameType = int(request.GET.get('gameType', 0))
+    # gameType = int(request.GET.get('gameType', 0))
+    gameType = 1 if request.GET.get('gameType', "false") == "true" else 0
     renderType = True if request.GET.get('render', "false") == "true" else False
     if gameType == 1:
         return render(request, "connect4/connect4.html", {"online": False})
@@ -131,3 +132,13 @@ def theme(request):
     return render(request, "partials/settings.html")
     # return render_redirect(request)
 
+def game_api(request, gameId):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(status=401)
+    if not Game.objects.filter(pk=gameId).exists():
+        raise Http404("Game does not exist")
+    game = Game.objects.get(pk=gameId)
+    return JsonResponse(game.toJson())
+    
+    

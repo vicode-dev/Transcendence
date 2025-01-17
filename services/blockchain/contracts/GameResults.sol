@@ -7,7 +7,6 @@ contract GameResults {
         uint32[] playerIds;
         uint8[] score;
         bool gameType;
-        uint16 duration;
         uint64 startTime;
         uint64 endTime;
     }
@@ -15,7 +14,7 @@ contract GameResults {
     struct Tournament {
         uint32 tournamentId;
         uint64[] gameIds;
-        int[] playerIds;
+        uint32[] playerIds;
     }
 
     // Store game results
@@ -28,25 +27,23 @@ contract GameResults {
     }
 
     // Event to log the addition of a new game result
-    event GameAdded(uint64 gameId, uint64 _StartTime);
+    event GameAdded(uint64 gameId);
 
     event TournamentAdded(uint32 tournamentId);
 
-    function addGame(uint32[] memory _playerIds, uint8[] memory _score, bool _gameType, uint16 _duration, uint64 _startTime, uint64 _endTime) public {
+    function addGame(uint32[] memory _playerIds, uint8[] memory _score, bool _gameType, uint64 _startTime, uint64 _endTime) public {
         require(author == msg.sender, "Not authorized to add a game");
         GameResult memory newResult = GameResult({
-        gameId: uint64(results.length),
-        playerIds: _playerIds,
-        score: _score,
-        gameType: _gameType,
-        duration: _duration,
-        startTime: _startTime,
-        endTime: _endTime
+            gameId: uint64(results.length),
+            playerIds: _playerIds,
+            score: _score,
+            gameType: _gameType,
+            startTime: _startTime,
+            endTime: _endTime
         });
 
         results.push(newResult);
-
-        emit GameAdded(newResult.gameId, _startTime);
+        emit GameAdded(newResult.gameId);
     }
 
     function getGameById(uint64 index) public view returns (GameResult memory) {
@@ -56,16 +53,16 @@ contract GameResults {
 
     function getGamesByPlayer(uint32 index) public view returns (GameResult[] memory) {
         uint64 count = 0;
-        for (uint i = 0; i < results.length; i++) {
-            for (uint j = 0; j < results[i].playerIds.length; j++)
+        for (uint32 i = 0; i < results.length; i++) {
+            for (uint32 j = 0; j < results[i].playerIds.length; j++)
             {
                 if(index == results[i].playerIds[j])
                     count++;
             }
         }
         GameResult[] memory games = new GameResult[](count);
-        for (uint i = 0; i < results.length; i++) {
-            for (uint j = 0; j < results[i].playerIds.length; j++)
+        for (uint32 i = 0; i < results.length; i++) {
+            for (uint32 j = 0; j < results[i].playerIds.length; j++)
             {
                 if(index == results[i].playerIds[j])
                     games[--count] = results[i];
@@ -78,7 +75,7 @@ contract GameResults {
         return results.length;
     }
 
-    function addTournament(uint64[] memory _gameIds, int[] memory _playerIds) public
+    function addTournament(uint64[] memory _gameIds, uint32[] memory _playerIds) public
     {
         require(author == msg.sender, "Not authorized to add a game");
         Tournament memory newResult = Tournament({
@@ -94,6 +91,37 @@ contract GameResults {
     function getTournamentById(uint32 index) public view returns (Tournament memory) {
         require (index < tournament.length, "Tournament does not exist");
         return (tournament[index]);
+    }
+
+    function getAllTournaments() public view returns (Tournament[] memory) {
+        return tournament;
+    }
+
+    function getTournamentByPlayer(uint32 index) public view returns (Tournament[] memory) {
+        uint32 count = 0;
+        for (uint32 i = 0; i < tournament.length; i++) {
+            for (uint32 j = 0; j < tournament[i].playerIds.length; j++)
+            {
+                if(index == tournament[i].playerIds[j])
+                {
+                    count++;
+                    break;
+                }
+                    
+            }
+        }
+        Tournament[] memory tournaments = new Tournament[](count);
+        for (uint32 i = 0; i < tournament.length; i++) {
+            for (uint32 j = 0; j < tournament[i].playerIds.length; j++)
+            {
+                if(index == tournament[i].playerIds[j])
+                {
+                    tournaments[--count] = tournament[i];
+                    break;
+                }
+            }
+        }
+        return tournaments;
     }
 
 }

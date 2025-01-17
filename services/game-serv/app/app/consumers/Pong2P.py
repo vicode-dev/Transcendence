@@ -1,13 +1,7 @@
-import json, time, math
+import json, math
 import asyncio
 from app.models import Game
-from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from channels.db import database_sync_to_async
-from django.utils.timezone import now
-from asgiref.sync import sync_to_async
-import requests
-from . import Pong
 from .Pong import *
 
 class PongConsumer2P(PongConsumer):

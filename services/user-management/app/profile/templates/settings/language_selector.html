@@ -7,7 +7,6 @@
   <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>{{ lang.name_local }} ({{ lang.name }})</option>
 {% endfor %}
 </select>
-<button type="button" onclick="location.reload()" style="color: var(--accent-color); padding-top: .1rem; padding-bottom: .1rem; padding-left: .5rem; padding-right: .5rem;" >🔄</button> 
 {% block javascripts %}
     <script src="{% static 'user-management/settings/language_selector.js' %}"></script>
 {% endblock %}

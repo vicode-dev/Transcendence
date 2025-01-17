@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" href="{% static 'user-management/profil.css' %}">
 
-<div id="user-title" class="mt-4 p-l-5">
+<div id="user-title" class="mt-4 p-l-5 user-management-margin-bottom">
     <div id="profile" class="rounded-4 p-2 mb-4" style="background-color: var(--accent-color); max-width: 350px;">
         <div class="d-flex align-items-center" style="margin: 2px">
             <img id="profil-picture" class="fit-picture" src="/api/player/{{ user.playerId }}/avatar"
@@ -67,7 +67,7 @@
             {% endif %}
 
             {% for game in games %}
-            <li class="one-game m-1 d-flex align-items-center flex-row flex-wrap">
+            <li class="one-game mx-1 d-flex align-items-center flex-row flex-wrap">
                 <div class="game-title d-flex align-items-center">
                     {% if game.gameType %}
                     <i class="game-title-icon fas fa-solid fa-table-cells"></i>
@@ -123,7 +123,7 @@
                         </div>
                     {% endfor %} -->
                 <div class="ennemy-profile rounded-2 d-flex flex-wrap align-items-center mt-1">
-                    <div class="against mb-1" style="color: var(--accent-color)">Against:</div>
+                    <div class="against mb-1" style="color: var(--accent-color)">{% translate "Against:" %}</div>
                     <br\>
                         {% for player, score in game.combined %}
                         {% if player != user.playerId %}
@@ -147,7 +147,16 @@
             <p>{% translate "no tournament played yet!" %}</p>
             {% else %}
                 {% for tournament in tournaments %}
-                <li class="one-game m-1 d-flex align-items-center flex-row flex-wrap"><a href="/tournament/summary/{{ tournament.tournamentId }}/" onclick="loadPageEvent(event, '/tournament/summary/{{ tournament.tournamentId }}/')">#{{ tournament.id }}</a></li>
+                <li class="one-game m-1 d-flex align-items-center flex-row flex-wrap">
+                    <a style="text-decoration: none;" class="d-flex flex-wrap one-tournament rounded-2" href="/tournament/summary/{{ tournament.tournamentId }}/" onclick="loadPageEvent(event, '/tournament/summary/{{ tournament.tournamentId }}/')">
+                        <div class="tournament-div">
+                            {{ tournament.date|date:"SHORT_DATE_FORMAT" }} -
+                        </div>
+                        <div class="tournament-div">
+                            {% translate "Tournament" %} {{ tournament.tournamentId }}
+                        </div>
+                    </a>
+                </li>
                 {% endfor %}
             {% endif %}
         </ul>
@@ -157,6 +166,10 @@
 
 </div>
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'user-management/global.css' %}">
+{% endblock %}
 {% block javascripts %}
 	<script src="{% static 'authentication/logout.js' %}"></script>
+    <script src="{% static 'user-management/global.js' %}"></script>
 {% endblock %}

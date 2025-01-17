@@ -43,5 +43,6 @@ urlpatterns = [
     # BACKEND URLS
     path("api/games/add", views.add),
     path('api/tournament/add', views.addTournament),
+    path('api/tournament/', views.getAllTournaments),
     path('api/player/<int:playerId>/lastConnection/', views.playerLastConnection),
 ]

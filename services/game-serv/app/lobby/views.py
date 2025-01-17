@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from app.models import Game
-from django.core import serializers
+from app.models import Game, ChatMessage
 from django.conf import settings
 from django.http import Http404, HttpResponseBadRequest, HttpResponseNotAllowed
 from channels.layers import get_channel_layer
@@ -112,6 +111,9 @@ def start(request, room_name):
         return HttpResponse("Unautorized", status=401)
     game.state = True
     game.save()
+    messages = ChatMessage.objects.filter(chatId=room_name)
+    for message in messages:
+        message.delete()
     async_to_sync(channel_layer.group_send)(
         f'lobby_{room_name}',
         {

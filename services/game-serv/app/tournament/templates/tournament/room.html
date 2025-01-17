@@ -9,11 +9,11 @@
     {% block javascripts %}
     <script src="{% static 'tournament/room.js' %}"></script>
     {% endblock %}
-    <h1>{% translate "Tournament" %}</h1>
-    <div class="main-content d-flex section">
+    <h2 class="p-3 mb-3 mt-2" style="color: var(--secondary-color);">{% translate "New tournament" %}</h2>
+    <div class="main-content d-flex section mt-0">
         <div id="user" class="section rounded-4">
             <div class="d-flex flex-row justify-content-between">
-                <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Users list:" %}
+                <h3 style="color: var(--accent-color); height: fit-content;" class="section-title rounded-2 px-2 py-1">{% translate "Users list :" %}
                 </h3>
                 <div id="userCount">0/{{ game.maxPlayers }}</div>
             </div>
@@ -23,7 +23,7 @@
     
 
     <div id="properties" class="section rounded-4">
-        <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Properties :" %}
+        <h3 style="color: var(--accent-color); width: max-content;" class="section-title rounded-2 px-2 py-1">{% translate "Properties :" %}
         </h3>
         <ul style="padding: 0; list-style-type: none" class="mt-3">
             <li class="my-2 rounded-2 m-1">

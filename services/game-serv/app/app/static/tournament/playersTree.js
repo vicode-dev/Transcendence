@@ -1,4 +1,4 @@
-class Tree {
+class SummaryTree {
     constructor(players) {
         this.players = players;
         this.length = players.length;
@@ -50,47 +50,40 @@ class Tree {
     }
 }
 
-function addBranch(svg, x1, y1, x2, y2) {
+function addBranchSummary(svg, x1, y1, x2, y2) {
     let branch = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
     branch.setAttribute("x1", x1);
     branch.setAttribute("y1", y1);
     branch.setAttribute("x2", x2);
     branch.setAttribute("y2", y2);
-    branch.setAttribute("stroke", "black");
+    branch.setAttribute("stroke", "var(--accent-color)");
     branch.setAttribute("stroke-width", "2");
-    svg.appendChild(branch);
+    svg.insertBefore(branch, svg.firstChild);
 }
 
-function addPlayer(svg, id, x, y) {
+function addPlayerSummary(svg, id, x, y) {
+    let link = document.createElementNS("http://www.w3.org/2000/svg", "a");
+    link.setAttribute("href", `/profile/${id}/`);
+    link.setAttribute("target", "_blank");
     let player = document.createElementNS("http://www.w3.org/2000/svg", "image");
     if (id == 0) {
-        // player.setAttribute("href", '/static/tournament/question_mark.jpg');
-        player.setAttribute("x", x - 10);
-        player.setAttribute('y', y - 10);
-        player.setAttribute('width', 20);
-        player.setAttribute('height', 20);
-        svg.appendChild(player)
-        return ;
+        player.setAttribute("href", '/static/tournament/ghost.svg');
+    } else {
+        player.setAttribute("href", `/api/player/${id}/avatar/`);
+        player.style.clipPath = "circle(50% at 50% 50%)";
     }
-    fetch("/api/player/" + id + "/avatar/")
-        .then(response => {return response.blob();
-        })
-        .then(blob => {
-            let imgUrl = URL.createObjectURL(blob);
-            player.setAttribute("href", imgUrl);
-            player.setAttribute("x", x - 10);
-            player.setAttribute('y', y - 10);
-            player.setAttribute('width', 20);
-            player.setAttribute('height', 20);
-            svg.appendChild(player)
-
-        })
+    player.setAttribute('preserveAspectRatio', 'none');
+    player.setAttribute("x", x - 10);
+    player.setAttribute('y', y - 10);
+    player.setAttribute('width', 20);
+    player.setAttribute('height', 20);
+    link.appendChild(player);
+    svg.appendChild(link);
 
 }
 
-function createTree(svg, tree, length, depth, oldbot) {
-    console.log(tree.bot);
+function createTreeSummary(svg, tree, length, depth, oldbot) {
     h = 300 / ((length - tree.bot) + 1);
     w = (300 / (tree.height + 1)) * (tree.height - depth);
     for (i = 0; i < length - tree.bot; i++) {
@@ -98,18 +91,18 @@ function createTree(svg, tree, length, depth, oldbot) {
         x = w + (300 / ((tree.height + 1) * 2));
         y = h * (length - tree.bot - i);
         if (id != -1)
-            addPlayer(svg, id, x, y);
+            addPlayerSummary(svg, id, x, y);
         if (length < tree.leaves) {
             oldH = 300 / (2 * length - oldbot + 1)
-            addBranch(svg, x, y, x - (300 / (tree.height + 1)), ((length * 2 - oldbot) - 2 * i) * oldH);
+            addBranchSummary(svg, x, y, x - (300 / (tree.height + 1)), ((length * 2 - oldbot) - 2 * i) * oldH);
             if (((length * 2 - oldbot) % 2 == 0) || ((length * 2 - oldbot) % 2 == 1 && i < length - tree.bot - 1))
-                addBranch(svg, x, y, x - (300 / (tree.height + 1)), (length * 2 - oldbot - 2 * i - 1) * oldH);
+                addBranchSummary(svg, x, y, x - (300 / (tree.height + 1)), (length * 2 - oldbot - 2 * i - 1) * oldH);
         }
     }
     if (length > 1) {
         bot = tree.bot
         tree.bot = Math.floor(tree.bot / 2);
-        createTree(svg, tree, length / 2, depth - 1, bot);
+        createTreeSummary(svg, tree, length / 2, depth - 1, bot);
     }
 }
 
@@ -119,10 +112,9 @@ function mainPlayersTree() {
     let players;
 
     tournament = tournament.replace(/'/g, '"');
-    players = new Tree(JSON.parse(tournament).playersId);
+    players = new SummaryTree(JSON.parse(tournament).playersId);
     tree.innerHTML = '';
-    console.log(players.bot)
-    createTree(tree, players, players.leaves, players.height, 0);
+    createTreeSummary(tree, players, players.leaves, players.height, 0);
     // createTree(tree, players, players.leaves, players.height, 0);
 }
 

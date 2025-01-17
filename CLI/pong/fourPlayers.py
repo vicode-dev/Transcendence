@@ -1,11 +1,6 @@
 from pong.GameClass import Player, Ball, GameData
+from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED
 import math, curses, time
-SIZE = 9
-PADDLE_SIZE = 1.5
-PADDLE_WIDTH = 0.25
-BALL_SIZE = 0.125
-TICK_RATE = 1 / 20
-MAX_SPEED = 10
 
 # def hitPlayer(px, py, x, y):
 #     if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
@@ -349,7 +344,7 @@ def gameLoop4P(win, stdscr, pad, scale):
         stdscr.erase()
         stdscr.border()
         key = stdscr.getch()
-        if key == ord('q'):
+        if key == ord('q') or key == 27:
             break
         elif key == curses.KEY_RESIZE:
             win.erase()

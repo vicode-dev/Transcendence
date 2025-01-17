@@ -128,9 +128,9 @@ function movePaddle(move, buttonId) {
 
 function blockContextMenu() {
     window.oncontextmenu = function(event) {
-        if (event.button !== 2) {
+        // if (event.button !== 2) {
             event.preventDefault();
-        }
+        // }
     };
 }
 
@@ -229,4 +229,16 @@ function showNavbar() {
 
 function hideNavbar() {
     document.getElementById("nav").style.bottom = "-100px";
+}
+
+function showHideNavbar() {
+    let nav = document.getElementById("nav");
+    if (nav.style.bottom == "0px") {
+        nav.style.bottom = "-100px";
+        navBarManualOverride = true;
+    } else if (nav.style.bottom == "-100px") {
+        nav.style.bottom = "0px";
+        navBarManualOverride = false;
+    }
+    clearTimeout(inactivityTimeout);
 }

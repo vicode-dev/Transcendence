@@ -105,7 +105,7 @@ function of3d2p_UpdateScore(scores) {
 function of3d2p_GameEnd(scores) {
     let box = document.getElementById("winner-msg");
     let winner;
-    
+
     winner = scores[0] == 10 ? 1 : 2;
     box.innerText = "Player " + winner + " has won!";
     exitFullScreen();
@@ -127,13 +127,13 @@ async function of3d2p_gameLoop() {
 
     let scores = [0, 0];
     document.getElementById("start-btn").style.visibility = "hidden";
-    document.getElementById("rules").style.visibility = "visible";
+    // document.getElementById("rules").style.visibility = "visible";
     root = document.documentElement;
     style = getComputedStyle(root);
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
     white = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
     yellow = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
-    pink = style.getPropertyValue('--secondary-color').trim();
+    pink = style.getPropertyValue('--accent-color').trim();
     scene = new THREE.Scene();
     renderer = new THREE.WebGLRenderer({ antialias: true });
     container = document.getElementById('center-div');
@@ -146,6 +146,9 @@ async function of3d2p_gameLoop() {
     topWall = createWall({ position: new THREE.Vector3(SIZE / 2, 0.5, - PADDLE_WIDTH / 2) })
     bottomWall = createWall({ position: new THREE.Vector3(SIZE / 2, 0.5, SIZE + PADDLE_WIDTH / 2) })
     pivot = new THREE.Object3D();
+
+    window.addEventListener('resize', of3d2p_resizeEvent);
+
 
     leftPaddle = createPaddle({
         position: new THREE.Vector3(PADDLE_WIDTH / 2, 0.5, SIZE / 2),
@@ -168,7 +171,7 @@ async function of3d2p_gameLoop() {
 	of3d2p_generateScene(scene);
     destructors.push(of3d2p_destructor);
     of3d2p_initPos();
-	
+
 	while (1) {
         const startTime = Date.now();
         of3d2p_ballMovement(ball, scores);
@@ -183,7 +186,7 @@ async function of3d2p_gameLoop() {
             break;
     }
     document.getElementById("start-btn").style.visibility = "visible";
-    document.getElementById("rules").style.visibility = "hidden";
+    // document.getElementById("rules").style.visibility = "hidden";
     of3d2p_GameEnd(scores);
     const canva = renderer.domElement;
     canva.parentNode.removeChild(canva);
@@ -207,7 +210,7 @@ function mainRendu3d2pOffline() {
     // leftArrowUp.addEventListener("pointerdown", move3dPlayer1Up);
 
     document.addEventListener("keydown", of3d2p_keydownEvent);
-    window.addEventListener('resize', of3d2p_resizeEvent);
+    // window.addEventListener('resize', of3d2p_resizeEvent);
 }
 
 function of3d2p_destructor() {

@@ -10,7 +10,7 @@ from django.conf import settings as GlobalSettings
 from profile.models import User
 from profile.utils.token import get_jwt_data
 from profile.eloUpdater import elo
-import requests, json, os
+import requests, json, os, datetime
 import logging
 from django.utils.translation import gettext as _
 from datetime import timedelta
@@ -167,10 +167,13 @@ def playerTheme(request, playerId):
     elif request.method == "GET":
         value = User.objects.filter(pk=playerId).values_list("theme", flat=True).first()
         if value:
-            value = [hex(value[0]), hex(value[1]), hex(value[2])]
-            for i in range(len(value)):
-                if value[i] == "0x0":
-                    value[i] = "0x000000"
+            # value = [hex(value[0]), hex(value[1]), hex(value[2])]
+            # for i in range(len(value)):
+            #     if value[i] == "0x0":
+            #         value[i] = "0x000000"
+            # return JsonResponse({"theme": value})
+            value = [hex(v)[2:].zfill(6) for v in value]
+            value = [f"0x{v}" for v in value]
             return JsonResponse({"theme": value})
         else:
             raise Http404("User not found")
@@ -206,10 +209,6 @@ def playerAvatar(request, playerId):
             return FileResponse(open(f"/static/{playerId}.png", 'rb'))
         else:
             return FileResponse(open("profile/static/default.jpg", 'rb'))
-        if value:
-            return JsonResponse({"avatar": value})
-        else:
-            raise Http404("User not found")
     else:
         if jwtData["id"] != playerId and jwtData["role"] == "D":
             return HttpResponse(jwtData["error"], status=401)
@@ -301,7 +300,9 @@ def profil(request, playerId):
         user = User.objects.get(pk=playerId)
     games = blockchain.getGamesByPlayer(playerId)
     jwtData = get_jwt_data(request)
-    tournaments = None # blockchain.getTournamentByPlayer(jwtData["id"])
+    tournaments = blockchain.getTournamentByPlayer(playerId)
+    for i in range(len(tournaments)):
+        tournaments[i].date = datetime.datetime.fromtimestamp(blockchain.getGameById(tournaments[i].gameIds[0]).endTime)
     for i in range(len(games)):
         games[i].combined = list(zip(games[i].playerIds, games[i].score))
     return render(
@@ -321,7 +322,14 @@ def authProfil(request):
     if User.objects.filter(pk=jwtData["id"]).exists():
         user = User.objects.get(pk=jwtData["id"])
     games = blockchain.getGamesByPlayer(jwtData["id"])
-    tournaments = None #blockchain.getTournamentByPlayer(jwtData["id"])
+    tournaments = blockchain.getTournamentByPlayer(jwtData["id"])
+    for i in range(len(tournaments)):
+        last = tournaments[i].gameIds[0]
+        j = 1
+        while last == 0:
+            last = tournaments[i].gameIds[j]
+            j += 1
+        tournaments[i].date = datetime.datetime.fromtimestamp(blockchain.getGameById(last).endTime)
     for i in range(len(games)):
         games[i].combined = list(zip(games[i].playerIds, games[i].score))
     return render(request, "profil.html", {"user": user, "games": games, "tournaments": tournaments, "id": jwtData["id"]})
@@ -366,3 +374,11 @@ def tournament(request, tournamentId):
     for i in range(len(games)):
         games[i].combined = list(zip(games[i].playerIds, games[i].score))
     return render(request, "tournament.html", {"tournament": blockchain.getTournamentById(tournamentId), "games": games})
+
+@require_http_methods(["GET"])
+def getAllTournaments(request):
+    jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return HttpResponse(jwtData["error"], status=401)
+    tournaments = blockchain.getAllTournaments()
+    return JsonResponse([t.to_dict() for t in tournaments], safe=False)

@@ -83,6 +83,9 @@ class PongConsumer(AsyncWebsocketConsumer):
                 if GGDD[self.room_name].score[i] == 1:
                     winner = i
                     break
+        logger.debug("GAME END")
+        logger.debug(GGDD[self.room_name].score)
+        logger.debug(self.index)
         await self.send(text_data=json.dumps({
             'type':'game_end',
             'score':GGDD[self.room_name].score[self.index],
@@ -143,12 +146,12 @@ async def initGameData(room_name, nb_players):
 
 @database_sync_to_async
 def getPlayersIdsInGame(room_name):
-    logger.debug(Game.objects.filter(pk=room_name).values('players').first())
+    # logger.debug(Game.objects.filter(pk=room_name).values('players').first())
     return Game.objects.filter(pk=room_name).values('players').first()["players"]
 
 @database_sync_to_async
 def game_exists(room_name, nb_players):
-    return Game.objects.filter(pk=room_name, gameType=False, maxPlayers=nb_players).exists()
+    return Game.objects.filter(pk=room_name, gameType=False, maxPlayers=nb_players, endTime=None).exists()
 
 @database_sync_to_async
 def isPlayerIdInGame(gameId, playerId):
@@ -272,7 +275,7 @@ def victory(room_name, nb_players):
                 score[win] = 1
                 newPoint(score, win)
                 GGDD[room_name].score = [(i * -1) + 1 for i in score]
-                logger.debug(score)
+                # logger.debug(score)
                 return True
     return False
 

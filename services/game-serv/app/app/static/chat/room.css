@@ -10,14 +10,19 @@
     border: none;
     padding: 0 0.5rem 0 0.5rem;
     width: 100%;
+    color: var(--accent-color);
+}
+
+#chat-message-input::placeholder {
+    color: var(--background-color);
 }
 
 #chat-message-input:focus {
     background-color: var(--secondary-color);
     outline: 2px solid var(--accent-color);
     width: 100%;
-
 }
+
 #sendButton {
     background-color: var(--accent-color);
     color: var(--fourth-color);

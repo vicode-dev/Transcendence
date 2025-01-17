@@ -1,5 +1,5 @@
 let gameWebSocket;
-
+let state;
 
 function clearPopup() {
     let types = ["typeVictory", "typeDefeat", "typeWait", "typeCrash", "messageWon"];

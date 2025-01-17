@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:56+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,28 +21,36 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:7
-msgid "Create a tournament"
+#: services/game-serv/app/tournament/templates/tournament/dashboard.html:7
+msgid "Tree"
 msgstr ""
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:17
-msgid "Create the tournament"
+#: services/game-serv/app/tournament/templates/tournament/dashboard.html:12
+msgid "Games"
+msgstr ""
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:10
+msgid "Ready to see who's the best?"
 msgstr ""
 
 #: services/game-serv/app/tournament/templates/tournament/index.html:20
+msgid "Create a new tournament"
+msgstr ""
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:25
 msgid "Or join an existing one:"
 msgstr ""
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:22
+#: services/game-serv/app/tournament/templates/tournament/index.html:27
 msgid "Join"
 msgstr ""
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:12
-msgid "Tournament"
+msgid "New tournament"
 msgstr ""
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:16
-msgid "Users list:"
+msgid "Users list :"
 msgstr ""
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:26

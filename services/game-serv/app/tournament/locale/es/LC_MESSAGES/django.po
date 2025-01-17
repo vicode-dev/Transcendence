@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-08 16:57+0000\n"
+"POT-Creation-Date: 2025-01-16 10:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,29 +22,40 @@ msgstr ""
 msgid "Dashboard"
 msgstr "Tablero"
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:7
-msgid "Create a tournament"
-msgstr "Crear un torneo"
+#: services/game-serv/app/tournament/templates/tournament/dashboard.html:7
+msgid "Tree"
+msgstr "Árbol"
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:17
-msgid "Create the tournament"
-msgstr "Crear el torneo"
+#: services/game-serv/app/tournament/templates/tournament/dashboard.html:12
+msgid "Games"
+msgstr "Juegos"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:10
+msgid "Ready to see who's the best?"
+msgstr "¿Listo para ver quién es el mejor?"
 
 #: services/game-serv/app/tournament/templates/tournament/index.html:20
+#| msgid "Create a tournament"
+msgid "Create a new tournament"
+msgstr "Crear un torneo nuevo"
+
+#: services/game-serv/app/tournament/templates/tournament/index.html:25
 msgid "Or join an existing one:"
 msgstr "O únete a un torneo existente:"
 
-#: services/game-serv/app/tournament/templates/tournament/index.html:22
+#: services/game-serv/app/tournament/templates/tournament/index.html:27
 msgid "Join"
 msgstr "Unirse"
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:12
-msgid "Tournament"
-msgstr "Torneo"
+#| msgid "Tournament"
+msgid "New tournament"
+msgstr "Nuevo torneo"
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:16
-msgid "Users list:"
-msgstr "Lista de usuarios:"
+#| msgid "Users list:"
+msgid "Users list :"
+msgstr "Lista de usuarios :"
 
 #: services/game-serv/app/tournament/templates/tournament/room.html:26
 msgid "Properties :"
@@ -57,6 +68,9 @@ msgstr "Privado:"
 #: services/game-serv/app/tournament/templates/tournament/room.html:41
 msgid "Launch"
 msgstr "Iniciar"
+
+#~ msgid "Create the tournament"
+#~ msgstr "Crear el torneo"
 
 #~ msgid "Public"
 #~ msgstr "Público"

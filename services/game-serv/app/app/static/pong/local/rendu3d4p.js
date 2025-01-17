@@ -148,7 +148,7 @@ function of3d4p_ballMovement(ball, scores3dOf) {
         return;
     ball.x = x;
     ball.y = y;
-    
+
 }
 
 function of3d4p_generateScene(scene) {
@@ -160,8 +160,9 @@ function of3d4p_generateScene(scene) {
 	generateWalls(scene);
 }
 
-function clickDown3d4p(move) {
-    timer = setInterval(function() {
+function clickDown3d4p(move, buttonId) {
+    resetClick(buttonId);
+    timers[buttonId] = setInterval(function() {
         if (move === "ArrowUp" && p2.y > PADDLE_WIDTH)
             p2.y -= 0.25;
         else if (move === "ArrowDown" && p2.y < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
@@ -203,7 +204,7 @@ function FourPlayerMovement(key) {
 function of3d4p_GameEnd(scores) {
     let box = document.getElementById("winner-msg");
     let winner;
-    
+
     for (let i = 0; i < scores.length; i++) {
         if (scores[i] > 0) {
             winner = i + 1;
@@ -260,7 +261,7 @@ async function of3d4p_gameLoop() {
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
     white = style.getPropertyValue('--secondary-color').trim(); // Retrieve the CSS variable
     yellow = style.getPropertyValue('--accent-color').trim(); // Retrieve the CSS variable
-    pink = style.getPropertyValue('--secondary-color').trim();
+    pink = style.getPropertyValue('--accent-color').trim();
     scene = new THREE.Scene();
     renderer = new THREE.WebGLRenderer({ antialias: true });
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -305,7 +306,7 @@ async function of3d4p_gameLoop() {
     document.getElementById("start-btn").style.visibility = "hidden";
     destructors.push(of3d4p_destructor);
     of3d4p_initPos()
-	
+
 	while (1) {
         const startTime = Date.now();
         of3d4p_ballMovement(ball, scores3dOf);

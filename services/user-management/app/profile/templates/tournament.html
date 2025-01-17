@@ -1,19 +1,28 @@
 {% load static %}
 {% load i18n %}
 {% load userComponents %}
-<script src="{% static 'tournament/playersTree.js' %}"></script>
+<script src="/static/tournament/playersTree.js"></script>
+<link rel="stylesheet" href="/static/tournament/style.css">
 <input type="hidden" name="tournament" value="{{tournament}}">
 <input type="hidden" name="games" value="{{games}}">
 <input type="hidden" name="pageKey" value="tournamentTree">
 
-<h1>TOURNAMENT RESULT</h1>
+<h1>{% translate "Tournament Result" %}</h1>
+<div class="section rounded-4">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Tree" %}
+    </h3>
 <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" id="tree" viewBox="0 0 300 300"></svg>
-
-{% for game in games %}
-<div>
-	Game
-	{% for player, score in game.combined %}
-		{% userComponent player %} : {{ score }}
-		{% endfor %}
 </div>
+<div class="section rounded-4">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Game History" %}
+    </h3>
+{% for game in games %}
+{% if game.gameId != 0 %}
+<div class="game rounded-2 flex-row d-flex">
+		{% userComponent game.playerIds.0 %} 
+        <div id="score">{{ game.score.0 }} VS {{ game.score.1 }}</div>
+		{% userComponent game.playerIds.1 %}
+</div>
+{% endif %}
 {% endfor %}
+</div>

@@ -81,7 +81,7 @@ def getGamesByPlayer(playerId):
     if Contract is None:
         _getContract()
     gameObject = Contract.functions.getGamesByPlayer(playerId).call()
-    logger.debug(gameObject)
+    # logger.debug(gameObject)
     game = [Game(t[0], t[1], t[2], t[3], t[4], t[5]) for t in gameObject]
     return game
 
@@ -110,9 +110,17 @@ def getTournamentById(id):
     tournament = Contract.functions.getTournamentById(id).call()
     return {"tournamentId": tournament[0], "gamesId": tournament[1], "playersId": tournament[2]}
 
+def getAllTournaments():
+    global Contract
+    if Contract is None:
+        _getContract()
+    tournaments = Contract.functions.getAllTournaments().call()
+    return [Tournament(t[0], t[1], t[2]) for t in tournaments]
+
 def getTournamentByPlayer(id):
     global Contract
     if Contract is None:
         _getContract()
+    # logger.debug(f" {id} ")
     tournaments = Contract.functions.getTournamentByPlayer(id).call()
     return [Tournament(t[0], t[1], t[2]) for t in tournaments]

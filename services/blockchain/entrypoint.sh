@@ -1,3 +1,3 @@
 #!/bin/sh
 npx hardhat compile
-npx hardhat node
+exec npx hardhat node

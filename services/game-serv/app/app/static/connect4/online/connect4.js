@@ -29,11 +29,22 @@ function onc_drawPiece(col) {
         piece.setAttribute("cx", 25 + 50 * col);
         piece.setAttribute("cy", 25 + (boardState[col] + 1) * 50);
         piece.setAttribute("class", "Piece");
-        if (turn % 2 === 0) {
+        if (turn % 2 === 1) {
             piece.setAttribute("stroke", accentColor);
             piece.setAttribute("stroke-width", "5");
         }
         svg.appendChild(piece);
+        onc_updatePlayersBtnColor();
+    }
+}
+
+function onc_updatePlayersBtnColor() {
+    if (turn % 2 == 0) {
+        playerBtn1.style.backgroundColor = accentColor;
+        playerBtn2.style.backgroundColor = "";
+    } else {
+        playerBtn2.style.backgroundColor = accentColor;
+        playerBtn1.style.backgroundColor = "";
     }
 }
 
@@ -47,10 +58,10 @@ function onc_redraw() {
             piece.setAttribute("cx", 25 + 50 * i);
             piece.setAttribute("cy", 25 + (j) * 50);
             piece.setAttribute("class", "Piece");
-            // if (turn % 2 === 0) {
+            if (turn % 2 === 1) {
                 piece.setAttribute("stroke", accentColor);
                 piece.setAttribute("stroke-width", "2");
-            // }
+            }
             svg.appendChild(piece);
         }
     }
@@ -63,7 +74,7 @@ function onc_endGame(msg) {
         let content = document.getElementById("connect-content");
         const newDiv = document.createElement("div");
         newDiv.setAttribute("class", "mt-3");
-        newDiv.innerHTML = "<p>Game has two losers :(</p>";
+        newDiv.innerHTML = "<p>Game has two losers 🙁</p>";
         content.append(newDiv);
     }
     else {
@@ -148,6 +159,8 @@ function mainConnectOnline() {
     boardState = new Array(COLUMNS).fill(ROWS - 1);
     turn = 0;
     gameOver = 0;
+    playerBtn1 = document.getElementById("player-btn-1");
+    playerBtn2 = document.getElementById("player-btn-2");
     let c1 = document.getElementById("c1");
     let c2 = document.getElementById("c2");
     let c3 = document.getElementById("c3");
