@@ -1,6 +1,6 @@
 .game {
     border: solid var(--accent-color) 1.5px;
-    margin-bottom: 1rem;
+    margin-bottom: .7rem;
     padding: 0.5rem;
 }
 .game #score {

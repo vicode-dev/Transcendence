@@ -119,29 +119,29 @@ async def ballMovement(score, ball, players, room_name):
         if hitWall(ball._x):
             if score[0] > 0 and ball._x - BALL_SIZE <= 0:
                 playersAreWall = False
-                ball._angle = resetAngle(0, score)
+                ball._angle = resetAngle(0, score) + randomAngle()
                 newPoint(score, 0)
                 await updateModelScore(room_name, score)
-                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score})
+                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score, "angle": ball._angle})
             elif score[1] > 0 and ball._x + BALL_SIZE >= SIZE:
                 playersAreWall = False
-                ball._angle = resetAngle(1, score)
+                ball._angle = resetAngle(1, score) + randomAngle()
                 newPoint(score, 1)
                 await updateModelScore(room_name, score)
-                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score})
+                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score, "angle": ball._angle})
         else:
             if score[2] > 0 and ball._y - BALL_SIZE <= 0:
                 playersAreWall = False
-                ball._angle = resetAngle(2, score)
+                ball._angle = resetAngle(2, score) + randomAngle()
                 newPoint(score, 2)
                 await updateModelScore(room_name, score)
-                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score})
+                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score, "angle": ball._angle})
             elif score[3] > 0 and ball._y + BALL_SIZE >= SIZE:
                 playersAreWall = False
-                ball._angle = resetAngle(3, score)
+                ball._angle = resetAngle(3, score) + randomAngle()
                 newPoint(score, 3)
                 await updateModelScore(room_name, score)
-                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score})
+                await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score, "angle": ball._angle})
         if playersAreWall == False:
             ball._x = 4.5
             ball._y = 4.5

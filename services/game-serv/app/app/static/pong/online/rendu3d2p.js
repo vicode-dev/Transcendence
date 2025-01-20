@@ -63,6 +63,7 @@ function on3d2p_UpdateGameData(data) {
 function on3d2p_UpdateScore(data) {
     let score1 = document.getElementById("score1");
     let score2 = document.getElementById("score2");
+    ball.angle = data.angle;
     score1.textContent = data.scores[0];
     score2.textContent = data.scores[1];
 }
@@ -111,7 +112,7 @@ function on3d2p_ballReachObstacle(ball, p1, p2, x, y) {
 
 function on3d2p_ballMovement(ball, p1, p2) {
     if (hitWall(ball.x)) {
-        ball.angle = (ball.x - BALL_SIZE <= 0) ? 0 : 180;
+        // ball.angle = (ball.x - BALL_SIZE <= 0) ? 0 : 180;
         ball.x = 4.5;
         ball.y = 4.5;
         ball.speed = INIT_SPEED;
@@ -163,14 +164,7 @@ function on3d2p_init(playersList) {
 
     for (let i = 0; i < players.length; i++) {
         let name = document.getElementById(players[i]);
-        fetch("/api/player/" + playersList[i] + "/username/")
-        .then(data => {
-            return data.text();
-        })
-        .then(user => {
-            let username = JSON.parse(user);
-            name.innerHTML = username.username;
-        })
+        name.src = "/api/player/" + playersList[i] + "/avatar/";
     }
 }
 
@@ -249,7 +243,7 @@ function mainRendu3d2pOnline() {
     })
 
     gameWebSocket = new WebSocket(`wss://${window.location.host}/ws/game/${document.querySelector('[name=gameId]').value}/2pong`);
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     paddleMove = 0;
@@ -260,7 +254,7 @@ function mainRendu3d2pOnline() {
     gameWebSocket.addEventListener("close", on3d2p_closeEvent);
     gameWebSocket.addEventListener("open", on3d2p_openEvent);
     document.addEventListener("keydown", on3d2p_keydownEvent);
-
+    window.addEventListener("resize", resizeHandler);
 }
 
 function on3d2p_destructor() {
@@ -285,6 +279,8 @@ function on3d2p_destructor() {
     gameWebSocket.removeEventListener("close", on3d2p_closeEvent);
     gameWebSocket.removeEventListener("open", on3d2p_openEvent);
     gameWebSocket.removeEventListener("message", on3d2p_messageEvent);
+    enableDoubleTapZoom();
+    window.removeEventListener("resize", resizeHandler);
     gameWebSocket.close();
 }
 

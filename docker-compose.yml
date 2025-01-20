@@ -27,6 +27,7 @@ services:
       CLIENT_42_SECRET: ${CLIENT_42_SECRET}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       SALT : ${SALT}
+      DJANGO_SECRET: ${DJANGO_SECRET}
     volumes:
      - ./services/authentication/app:/app
     ports:

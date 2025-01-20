@@ -8,6 +8,7 @@ from django.utils.timezone import now
 from asgiref.sync import sync_to_async
 import requests
 import logging
+import random
 
 logger = logging.getLogger('app')
 GGDD = {} # Global Game Data Dictionary
@@ -60,6 +61,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type':'score_update',                                                                                                                                                                                                                                
             'scores': event["score"],
+            'angle': event['angle']
         }))
 
     async def init(self, event):
@@ -83,9 +85,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                 if GGDD[self.room_name].score[i] == 1:
                     winner = i
                     break
-        logger.debug("GAME END")
-        logger.debug(GGDD[self.room_name].score)
-        logger.debug(self.index)
         await self.send(text_data=json.dumps({
             'type':'game_end',
             'score':GGDD[self.room_name].score[self.index],
@@ -97,7 +96,7 @@ class Ball:
     def __init__(self, x, y):
         self._x = x
         self._y = y
-        self._angle = 180
+        self._angle = 195
         self._speed = INIT_SPEED
 
     def toJson(self):
@@ -257,6 +256,12 @@ def newPoint(score, idx):
     for i in range(4):
         if i != idx and score[i] <= 0 and score[idx] == 0:
             score[i] -= 1
+
+def randomAngle():
+    ran = random.randint(-30, 30)
+    while (ran == 0):
+        ran = random.randint(-30, 30)
+    return ran
 
 def victory(room_name, nb_players):
     score = GGDD[room_name].score

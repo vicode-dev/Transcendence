@@ -5,7 +5,12 @@
 	user-select: none;
 }
 
-#onlineFullScreen {	
+#winner-msg-content {
+	/* position: absolute;
+	margin-top: 88vw; */
+}
+
+.onlineFullScreen {	
 	/* position: absolute; */
 	background-color: var(--fourth-color);
 	/* color: var(--accent-color); */
@@ -36,8 +41,13 @@
 
 	width: max-content;
 }
-#onlineFullScreen:hover {
+.onlineFullScreen:hover {
 	color: var(--secondary-color);
+}
+.onlineFullScreen {
+	/* right: 0; */
+	margin-top: 8vh;
+	/* margin-left: 96vw; */
 }
 
 #exitFullScreen, #enterFullScreen {
@@ -58,8 +68,21 @@
 	display: none;
 }
 
-.score-online {
-
+.user-img {
+	height: 1.7rem;
+	width: 1.7rem;
+	border-radius: 50%;
+}
+.image-container::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: var(--secondary-color); /* Use your custom property */
+	mix-blend-mode: multiply; /* Or screen, overlay, etc. */
+	pointer-events: none;
 }
 
 #wrapper {
@@ -134,7 +157,11 @@
 .arrows-4p {
 	width: 35px;
 }
-
+.score-local {
+	margin-left: 2rem;
+	margin-right: 2rem;
+	font-size: x-large;
+}
 /* #### RULES #### */
 @media (min-width: 400px) {
 	#rules {
@@ -149,6 +176,7 @@
 }
 .rules-2p {
 	margin-bottom: 3rem;
+	font-size: smaller;
 }
 .rules-4p {
 	font-size: .8rem;
@@ -180,6 +208,9 @@
 	.scores {
 		font-size: .75rem;
 	}
+	.score-local {
+		font-size: large;
+	}
 }
 
 @media (max-width: 450px) and (max-height: 740px) {
@@ -201,6 +232,9 @@
 .pong-main-content {
 	margin-top: 12vh;
 	/* background-color: var(--fourth-color); */
+}
+.pong-main-content-4p {
+	margin-top: 15vh;
 }
 
 .scores {
@@ -225,16 +259,14 @@
 	margin-top: 7rem;
 	margin-bottom: 1.5rem;
 }
-.score-local {
-	margin-left: 2rem;
-	margin-right: 2rem;
-	font-size: x-large;
-}
 .score-4p-up {
 	margin-bottom: .5rem;
 }
 .score-4p-left, .score-4p-right {
 	margin-bottom: 6rem;
+}
+.score-4p-left-online, .score-4p-right-online {
+	margin-bottom: 3.5rem;
 }
 .score-4p-down {
 	margin-top: .5rem;
@@ -265,6 +297,10 @@
 	max-height: 55vh;
 	max-width: 55vh;
 }
+.pong-board-4p {
+	max-height: 35vh;
+}
+
 
 #leftPaddle, #rightPaddle {
     will-change: transform;
@@ -457,6 +493,9 @@
 	.score-4p-left, .score-4p-right {
 		margin-bottom: 7.5rem;
 	}
+	.score-4p-left-online, .score-4p-right-online {
+		margin-bottom: 3rem;
+	}
 	#rules {
 		height: 0;
 		width: 0;
@@ -475,7 +514,7 @@
 		background-color: var(--fourth-color);
 		color: var(--secondary-color);
 		/* font-size: x-large; */
-		font-size: small;
+		font-size: medium;
 		padding: 0;
 		padding-left: .4rem;
 		padding-right: .4rem;
@@ -492,6 +531,10 @@
 		margin-top: 5rem;
 		margin-left: 11.6rem;
 	}
+	#winner-msg-content {
+		position: absolute;
+		margin-top: 88vw;
+	}
 }
 /* 
 #background {
@@ -502,9 +545,9 @@
 	z-index: -999;
 } */
 
-@media (max-width: 255px) {
+/* @media (max-width: 255px) {
 	#player1, #player2 {
 		margin-left: 1rem;
 		margin-right: .5rem;
 	}
-}
+} */

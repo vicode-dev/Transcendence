@@ -21,6 +21,7 @@ const BALL_SIZE = 0.125;
 const TICK_RATE = 1 / 20;
 const MAX_SPEED = 10;
 const INIT_SPEED = 2;
+const preventDefaultHandler = (e) => e.preventDefault();
 
 let ball;
 let p1;
@@ -32,6 +33,13 @@ let loopBreaker;
 let error;
 
 let timers = {};
+
+function randomAngle() {
+    let ang = Math.floor(Math.random() * 60);
+    while (ang == 30)
+        ang = Math.floor(Math.random() * 60);
+    return ang - 30  
+}
 
 function willHitLeftPaddle(ball, px, py, x, y) {
     if ((x - BALL_SIZE < px + PADDLE_WIDTH && py <= y - BALL_SIZE && y - BALL_SIZE <= py + PADDLE_SIZE))
@@ -134,34 +142,60 @@ function blockContextMenu() {
     };
 }
 
+function toggleFullscreenButton() {
+    if (screen.width <= 400) {
+        document.getElementById("enterFullScreen").style.display = "block";
+    } else {
+        document.getElementById("enterFullScreen").style.display = "none";
+        document.getElementById("exitFullScreen").style.display = "none";
+    }
+}
+
+const resizeHandler = () => {
+    toggleFullscreenButton();
+};
+
+function addResizeListener() {
+    window.addEventListener("resize", resizeHandler);
+}
+
+function removeResizeListener() {
+    window.removeEventListener("resize", resizeHandler);
+}
+
 function listenForScreenChange() {
-    function onFullscreenChange() {
-        if (!document.fullscreenElement) {
-            document.getElementById("nav").style.display = "block";
-            document.getElementById("enterFullScreen").style.display = "block";
-            document.getElementById("exitFullScreen").style.display = "none";
-            document.removeEventListener("fullscreenchange", onFullscreenChange);
+    toggleFullscreenButton();
+
+    // addResizeListener();
+    if(screen.width <= 400) {
+        function onFullscreenChange() {
+            if (!document.fullscreenElement) {
+                document.getElementById("nav").style.display = "block";
+                document.getElementById("enterFullScreen").style.display = "block";
+                document.getElementById("exitFullScreen").style.display = "none";
+                document.removeEventListener("fullscreenchange", onFullscreenChange);
+            }
         }
-    }
-    function onWebkitFullscreenChange() {
-        if (!document.webkitFullscreenElement) {
-            document.getElementById("nav").style.display = "block";
-            document.getElementById("enterFullScreen").style.display = "block";
-            document.getElementById("exitFullScreen").style.display = "none";
-            document.removeEventListener("webkitfullscreenchange", onWebkitFullscreenChange);
+        function onWebkitFullscreenChange() {
+            if (!document.webkitFullscreenElement) {
+                document.getElementById("nav").style.display = "block";
+                document.getElementById("enterFullScreen").style.display = "block";
+                document.getElementById("exitFullScreen").style.display = "none";
+                document.removeEventListener("webkitfullscreenchange", onWebkitFullscreenChange);
+            }
         }
-    }
-    function onMSFullscreenChange() {
-        if (!document.msFullscreenElement) {
-            document.getElementById("nav").style.display = "block";
-            document.getElementById("enterFullScreen").style.display = "block";
-            document.getElementById("exitFullScreen").style.display = "none";
-            document.removeEventListener("MSFullscreenChange", onMSFullscreenChange);
+        function onMSFullscreenChange() {
+            if (!document.msFullscreenElement) {
+                document.getElementById("nav").style.display = "block";
+                document.getElementById("enterFullScreen").style.display = "block";
+                document.getElementById("exitFullScreen").style.display = "none";
+                document.removeEventListener("MSFullscreenChange", onMSFullscreenChange);
+            }
         }
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", onWebkitFullscreenChange);
+        document.addEventListener("MSFullscreenChange", onMSFullscreenChange);
     }
-    document.addEventListener("fullscreenchange", onFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", onWebkitFullscreenChange);
-    document.addEventListener("MSFullscreenChange", onMSFullscreenChange);
 }
 
 function enterFullScreen() {
@@ -194,33 +228,47 @@ function enterFullScreen() {
             window.alert("Error full screen");
         }
     }
-    listenForScreenChange();
+    // listenForScreenChange();
 }
 
 function exitFullScreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
+    if(screen.width <= 400) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        document.getElementById("nav").style.display = "block";
+        showNavbar();
+        document.getElementById("exitFullScreen").style.display = "none";
+        document.getElementById("enterFullScreen").style.display = "block";
     }
-    document.getElementById("nav").style.display = "block";
-    showNavbar();
-    document.getElementById("exitFullScreen").style.display = "none";
-    document.getElementById("enterFullScreen").style.display = "block";
 }    
 
-function disableDoubleTapZoom() {
-    let lastTouchTime = 0;
+let lastTouchTime = 0;
 
-    document.addEventListener('touchend', (event) => {
+function disableDoubleTapZoom() {
+    const preventDoubleTapZoom = (event) => {
         const now = Date.now();
         if (now - lastTouchTime <= 300) {
             event.preventDefault(); // Prevent double-tap zoom
         }
         lastTouchTime = now;
-    }, { passive: false });    
+    };
+    document.addEventListener('touchend', preventDoubleTapZoom, { passive: false });
+}
+
+function enableDoubleTapZoom() {
+    const preventDoubleTapZoom = (event) => {
+        const now = Date.now();
+        if (now - lastTouchTime <= 300) {
+            event.preventDefault(); // Prevent double-tap zoom
+        }
+        lastTouchTime = now;
+    };
+    document.removeEventListener('touchend', preventDoubleTapZoom, { passive: false });
 }
 
 function showNavbar() {

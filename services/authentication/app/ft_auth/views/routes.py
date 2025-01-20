@@ -5,3 +5,4 @@ from ft_auth.views.oauth2 import login_with_42
 from ft_auth.views.loading import loading
 from ft_auth.views.otp import otp_page
 from ft_auth.views.password import password
+from ft_auth.views.delete import delete

@@ -57,7 +57,10 @@ body:hover {
 } */
 
 /* html { overflow: hidden; overflow-y: auto;} */
-html { overflow-x: hidden; }
+html {
+    overflow-x: hidden; 
+    touch-action: pan-x pan-y;
+}
 
 /* body::-webkit-scrollbar {
     width: 0.5rem;

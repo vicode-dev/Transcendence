@@ -114,24 +114,24 @@ function of3d4p_ballMovement(ball, scores3dOf) {
             if (scores3dOf[0] > 0 && ball.x - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 of3d4p_newPoint(scores3dOf, 0);
-                ball.angle = resetAngle(0, scores3dOf);
+                ball.angle = resetAngle(0, scores3dOf) + randomAngle();
             }
             else if (scores3dOf[1] > 0 && ball.x + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 of3d4p_newPoint(scores3dOf, 1);
-                ball.angle = resetAngle(1, scores3dOf);
+                ball.angle = resetAngle(1, scores3dOf) + randomAngle();
             }
         }
         else {
             if (scores3dOf[2] > 0 && ball.y - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 of3d4p_newPoint(scores3dOf, 2);
-                ball.angle = resetAngle(2, scores3dOf);
+                ball.angle = resetAngle(2, scores3dOf) + randomAngle();
             }
             else if (scores3dOf[3] > 0 && ball.y + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 of3d4p_newPoint(scores3dOf, 3);
-                ball.angle = resetAngle(3, scores3dOf);
+                ball.angle = resetAngle(3, scores3dOf) + randomAngle();
             }
         }
         if (playersAreWall == false) {
@@ -202,16 +202,16 @@ function FourPlayerMovement(key) {
 }
 
 function of3d4p_GameEnd(scores) {
-    let box = document.getElementById("winner-msg");
-    let winner;
+    // let box = document.getElementById("winner-msg");
+    // let winner;
 
-    for (let i = 0; i < scores.length; i++) {
-        if (scores[i] > 0) {
-            winner = i + 1;
-            break;
-        }
-    }
-    box.innerText = "Player " + winner + " has won!";
+    // for (let i = 0; i < scores.length; i++) {
+    //     if (scores[i] > 0) {
+    //         winner = i + 1;
+    //         break;
+    //     }
+    // }
+    // box.innerText = "Player " + winner + " has won!";
     exitFullScreen();
 }
 
@@ -221,7 +221,7 @@ function of3d4p_initPos() {
     let score3 = document.getElementById("score3");
     let score4 = document.getElementById("score4");
 
-    document.getElementById("winner-msg").innerText = '';
+    // document.getElementById("winner-msg").innerText = '';
     score1.textContent = 5;
     score2.textContent = 5;
     score3.textContent = 5;
@@ -253,6 +253,7 @@ function of3d4p_movePaddle() {
 async function of3d4p_gameLoop() {
     disableDoubleTapZoom();
     enterFullScreen();
+    listenForScreenChange();
     blockContextMenu();
 
     root = document.documentElement;
@@ -294,7 +295,7 @@ async function of3d4p_gameLoop() {
         radius: BALL_SIZE,
         color: pink
     })
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     p3 = new Player(3.75, 0);
@@ -307,6 +308,7 @@ async function of3d4p_gameLoop() {
     destructors.push(of3d4p_destructor);
     of3d4p_initPos()
 
+    window.addEventListener('resize', of3d4p_resizeEvent);
 	while (1) {
         const startTime = Date.now();
         of3d4p_ballMovement(ball, scores3dOf);
@@ -323,12 +325,14 @@ async function of3d4p_gameLoop() {
     document.getElementById("start-btn").style.visibility = "visible";
     const canva = renderer.domElement;
     canva.parentNode.removeChild(canva);
+    enableDoubleTapZoom();
+    removeResizeListener();
 }
 
 function of3d4p_keydownEvent(event) {
     FourPlayerMovement(event.key);
-    if (event.key === "r")
-        console.log(camera.position, printCameraRotationInDegrees(camera), camera.lookAt);
+    // if (event.key === "r")
+    //     console.log(camera.position, printCameraRotationInDegrees(camera), camera.lookAt);
 }
 
 function of3d4p_resizeEvent() {
@@ -339,7 +343,11 @@ function of3d4p_resizeEvent() {
 
 function mainRendu3d4pOffline() {
     document.addEventListener("keydown", of3d4p_keydownEvent);
-    window.addEventListener('resize', of3d4p_resizeEvent);
+    // Disable pinch zoom
+    document.addEventListener('gesturestart', preventDefaultHandler);
+    document.addEventListener('gesturechange', preventDefaultHandler);
+    document.addEventListener('gestureend', preventDefaultHandler);
+    window.addEventListener("resize", resizeHandler);
 }
 
 function of3d4p_destructor() {
@@ -367,7 +375,13 @@ function of3d4p_destructor() {
     sphere = null;
     scores3dOf = null;
     document.removeEventListener("keydown", of3d4p_keydownEvent);
-    document.removeEventListener("resize", of3d4p_resizeEvent);
+    // Pinch Zoom
+    document.removeEventListener('gesturestart', preventDefaultHandler);
+    document.removeEventListener('gesturechange', preventDefaultHandler);
+    document.removeEventListener('gestureend', preventDefaultHandler);
+    window.removeEventListener('resize', of3d4p_resizeEvent);
+    window.removeEventListener("resize", resizeHandler);
+    enableDoubleTapZoom();
 }
 
 addMain(mainRendu3d4pOffline);

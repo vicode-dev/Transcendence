@@ -1,3 +1,0 @@
-APP_ID:
-	générer une APP_ID (qui ne change pas) et une SECRET_APP_KEY (qu'on peut regénérer) qui est en réalité un JWT
-	dans le but d'être connectable au CLI

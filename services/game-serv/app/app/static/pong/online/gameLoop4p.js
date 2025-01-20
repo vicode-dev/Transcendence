@@ -47,6 +47,7 @@ function on4p_UpdateScore(score) {
     let score3 = document.getElementById("score3");
     let score4 = document.getElementById("score4");
     scores2d = score;
+    ball.angle = score.angle;
     if (score[0] >= 0)
         score1.textContent = score[0];
     if (score[1] >= 0)
@@ -118,10 +119,12 @@ function on4p_ballReachObstacle(ball, x, y) {
         }
         else {
             ball.y = SIZE - BALL_SIZE;
-            if (ball.angle % 180 == 0)
-                    ball.angle = (ball.angle + 180) % 360;
-                else
-                    ball.angle = 360 - ball.angle;
+            if (scores2d[3] <= 0) {
+                if (ball.angle % 180 == 0)
+                        ball.angle = (ball.angle + 180) % 360;
+                    else
+                        ball.angle = 360 - ball.angle;
+            }
         }
     }
     else
@@ -136,21 +139,21 @@ function on4p_ballMovement(ball) {
         if (hitWall(ball.x)) {
             if (scores2d[0] > 0 && ball.x - BALL_SIZE <= 0) {
                 playersAreWall = false;
-                ball.angle = 0;
+                // ball.angle = 0;
             }
             else if (scores2d[1] > 0 && ball.x + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
-                ball.angle = 180;
+                // ball.angle = 180;
             }
         }
         else {
             if (scores2d[2] > 0 && ball.y - BALL_SIZE <= 0) {
                 playersAreWall = false;
-                ball.angle = 90;
+                // ball.angle = 90;
             }
             else if (scores2d[3] > 0 && ball.y + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
-                ball.angle = 270;
+                // ball.angle = 270;
             }
         }
         if (playersAreWall == false) {
@@ -288,7 +291,7 @@ function mainGameLoop4pOnline()
         + document.querySelector('[name=gameId]').value
         + '/4pong'
     );
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     p3 = new Player(3.75, 0);
@@ -302,6 +305,7 @@ function mainGameLoop4pOnline()
     gameWebSocket.addEventListener("close", on4p_closeEvent);
     gameWebSocket.addEventListener('open', on4p_openEvent);
     document.addEventListener("keydown", on4p_keydownEvent);
+    window.addEventListener("resize", resizeHandler);
 }
 
 function on4p_destructor() {
@@ -316,6 +320,8 @@ function on4p_destructor() {
     gameWebSocket.removeEventListener('open', on4p_openEvent);
     gameWebSocket.removeEventListener("message", on4p_messageEvent);
     document.removeEventListener("keydown", on4p_keydownEvent);
+    enableDoubleTapZoom();
+    window.removeEventListener("resize", resizeHandler);
 }
 
 addMain(mainGameLoop4pOnline);

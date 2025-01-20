@@ -3,25 +3,28 @@
 {% load userComponents %}
 <script src="/static/tournament/playersTree.js"></script>
 <link rel="stylesheet" href="/static/tournament/style.css">
+<link rel="stylesheet" href="{% static 'user-management/global.css' %}">
 <input type="hidden" name="tournament" value="{{tournament}}">
 <input type="hidden" name="games" value="{{games}}">
 <input type="hidden" name="pageKey" value="tournamentTree">
 
-<h1>{% translate "Tournament Result" %}</h1>
+<h1 class="mt-2 p-3 mb-0 pb-0">{% translate "Tournament Result" %}</h1>
 <div class="section rounded-4">
     <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Tree" %}
     </h3>
-<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" id="tree" viewBox="0 0 300 300"></svg>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" id="tree" viewBox="0 0 300 300" style="width: inherit;"></svg>
 </div>
-<div class="section rounded-4">
-    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Game History" %}
+<div class="section rounded-4 user-management-margin-bottom">
+    <h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1 mb-3">{% translate "Game History" %}
     </h3>
 {% for game in games %}
 {% if game.gameId != 0 %}
 <div class="game rounded-2 flex-row d-flex">
+    <!-- <div class="d-flex align-items-center justify-content-center"> -->
 		{% userComponent game.playerIds.0 %} 
         <div id="score">{{ game.score.0 }} VS {{ game.score.1 }}</div>
 		{% userComponent game.playerIds.1 %}
+    <!-- </div> -->
 </div>
 {% endif %}
 {% endfor %}

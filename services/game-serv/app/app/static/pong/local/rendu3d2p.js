@@ -33,11 +33,11 @@ function of3d2p_ballReachObstacle(ball, x, y) {
 function of3d2p_ballMovement(ball, scores) {
     if (hitWall(ball.x)) {
         if (ball.x - BALL_SIZE <= 0) {
-            ball.angle = 0;
+            ball.angle = 0 + randomAngle();
             scores[1] += 1;
         }
         else {
-            ball.angle = 180;
+            ball.angle = 180 + randomAngle();
             scores[0] += 1;
         }
         of3d2p_UpdateScore(scores);
@@ -84,6 +84,13 @@ function clickDown3d2p(move, buttonId) {
     }, 50);
 }
 
+// function clickDown3d2p(move, buttonId) {
+//     resetClick(buttonId);
+//     timers[buttonId] = setInterval(function() {
+//         TwoPlayerMovement(move);
+//     }, 50);
+// }
+
 function TwoPlayerMovement(key) {
     if (key === "ArrowUp" && p2.y > 0)
         p2.y -= 0.25;
@@ -105,9 +112,11 @@ function of3d2p_UpdateScore(scores) {
 function of3d2p_GameEnd(scores) {
     let box = document.getElementById("winner-msg");
     let winner;
-
+    
     winner = scores[0] == 10 ? 1 : 2;
-    box.innerText = "Player " + winner + " has won!";
+    // box.innerText = "Player " + winner + " has won!";
+    box.innerHTML = winner;
+    document.getElementById("winner-msg-content").style.visibility = "visible";
     exitFullScreen();
 }
 
@@ -123,11 +132,11 @@ function of3d2p_initPos() {
 async function of3d2p_gameLoop() {
     disableDoubleTapZoom();
     enterFullScreen();
+    listenForScreenChange();
     blockContextMenu();
 
     let scores = [0, 0];
     document.getElementById("start-btn").style.visibility = "hidden";
-    // document.getElementById("rules").style.visibility = "visible";
     root = document.documentElement;
     style = getComputedStyle(root);
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
@@ -147,9 +156,6 @@ async function of3d2p_gameLoop() {
     bottomWall = createWall({ position: new THREE.Vector3(SIZE / 2, 0.5, SIZE + PADDLE_WIDTH / 2) })
     pivot = new THREE.Object3D();
 
-    window.addEventListener('resize', of3d2p_resizeEvent);
-
-
     leftPaddle = createPaddle({
         position: new THREE.Vector3(PADDLE_WIDTH / 2, 0.5, SIZE / 2),
         color: yellow
@@ -163,7 +169,7 @@ async function of3d2p_gameLoop() {
         radius: BALL_SIZE,
         color: pink
     })
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     setupScene();
@@ -172,6 +178,7 @@ async function of3d2p_gameLoop() {
     destructors.push(of3d2p_destructor);
     of3d2p_initPos();
 
+    window.addEventListener('resize', of3d2p_resizeEvent);
 	while (1) {
         const startTime = Date.now();
         of3d2p_ballMovement(ball, scores);
@@ -186,7 +193,6 @@ async function of3d2p_gameLoop() {
             break;
     }
     document.getElementById("start-btn").style.visibility = "visible";
-    // document.getElementById("rules").style.visibility = "hidden";
     of3d2p_GameEnd(scores);
     const canva = renderer.domElement;
     canva.parentNode.removeChild(canva);
@@ -194,8 +200,8 @@ async function of3d2p_gameLoop() {
 
 function of3d2p_keydownEvent(event) {
     TwoPlayerMovement(event.key);
-    if (event.key === "r")
-        console.log(camera.position, printCameraRotationInDegrees(camera), camera.lookAt);
+    // if (event.key === "r")
+    //     console.log(camera.position, printCameraRotationInDegrees(camera), camera.lookAt);
 }
 
 function of3d2p_resizeEvent() {
@@ -205,12 +211,13 @@ function of3d2p_resizeEvent() {
 }
 
 function mainRendu3d2pOffline() {
-    //TODO
-    // let leftArrowUp = document.getElementById("left-arrow-up");
-    // leftArrowUp.addEventListener("pointerdown", move3dPlayer1Up);
-
     document.addEventListener("keydown", of3d2p_keydownEvent);
-    // window.addEventListener('resize', of3d2p_resizeEvent);
+    document.getElementById("winner-msg-content").style.visibility = "hidden";
+    // Disable pinch zoom
+    document.addEventListener('gesturestart', preventDefaultHandler);
+    document.addEventListener('gesturechange', preventDefaultHandler);
+    document.addEventListener('gestureend', preventDefaultHandler);
+    window.addEventListener("resize", resizeHandler);
 }
 
 function of3d2p_destructor() {
@@ -232,7 +239,16 @@ function of3d2p_destructor() {
     rightPaddle = null;
     sphere = null;
     document.removeEventListener("keydown", of3d2p_keydownEvent);
-    document.removeEventListener("resize", of3d2p_resizeEvent);
+    // Pinch Zoom
+    document.removeEventListener('gesturestart', preventDefaultHandler);
+    document.removeEventListener('gesturechange', preventDefaultHandler);
+    document.removeEventListener('gestureend', preventDefaultHandler);
+    window.removeEventListener('resize', of3d2p_resizeEvent);
+    window.removeEventListener("resize", resizeHandler);
+
+    // removeResizeListener();
+    enableDoubleTapZoom();
+    console.log('of3d2p_destructor')
 }
 
 addMain(mainRendu3d2pOffline);

@@ -100,24 +100,24 @@ function of4p_ballMovement(ball, scores) {
             if (scores[0] > 0 && ball.x - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 of4p_newPoint(scores, 0);
-                ball.angle = resetAngle(0, scores);
+                ball.angle = resetAngle(0, scores) + randomAngle();
             }
             else if (scores[1] > 0 && ball.x + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 of4p_newPoint(scores, 1);
-                ball.angle = resetAngle(1, scores);
+                ball.angle = resetAngle(1, scores) + randomAngle();
             }
         }
         else {
             if (scores[2] > 0 && ball.y - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 of4p_newPoint(scores, 2);
-                ball.angle = resetAngle(2, scores);
+                ball.angle = resetAngle(2, scores) + randomAngle();
             }
             else if (scores[3] > 0 && ball.y + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 of4p_newPoint(scores, 3);
-                ball.angle = resetAngle(3, scores);
+                ball.angle = resetAngle(3, scores) + randomAngle();
             }
         }
         if (playersAreWall == false) {
@@ -149,28 +149,31 @@ function of4p_victory(scores) {
 }
 
 function of4p_GameEnd(scores) {
-    let box = document.getElementById("winner-msg");
-    let winner;
+    // let box = document.getElementById("winner-msg");
+    // let winner;
     
-    for (let i = 0; i < scores.length; i++) {
-        if (scores[i] > 0) {
-            winner = i + 1;
-            break;
-        }
-    }
-    box.innerText = "Player " + winner + " has won!";
+    // for (let i = 0; i < scores.length; i++) {
+    //     if (scores[i] > 0) {
+    //         winner = i + 1;
+    //         break;
+    //     }
+    // }
+    // box.innerHTML = winner;
+    // document.getElementById("winner-msg-content").style.visibility = "visible";
     exitFullScreen();
 }
 
 async function of4p_gameLoop() {
     disableDoubleTapZoom();
     enterFullScreen();
+    listenForScreenChange();
     blockContextMenu();
     
     let paddles = ["leftPaddle", "rightPaddle", "topPaddle", "bottomPaddle"];
     let scores = [5, 5, 5, 5];
     document.getElementById("start-btn").style.visibility = "hidden";
-    ball = new Ball(4.5, 4.5, 180);
+    // document.getElementById("winner-msg-content").style.visibility = "hidden";
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     p3 = new Player(3.75, 0);
@@ -212,6 +215,12 @@ function of4p_move(event) {
 
 function mainPong4pOffline() {
     document.addEventListener("keydown", of4p_move);
+    // Disable pinch zoom
+    document.addEventListener('gesturestart', preventDefaultHandler);
+    document.addEventListener('gesturechange', preventDefaultHandler);
+    document.addEventListener('gestureend', preventDefaultHandler);
+    // document.getElementById("winner-msg-content").style.visibility = "hidden";
+    window.addEventListener("resize", resizeHandler);
 }
 
 function of4p_destructor() {
@@ -221,6 +230,13 @@ function of4p_destructor() {
     p4 = null;
     ball = null;
     document.removeEventListener("keydown", of4p_move);
+    // Pinch Zoom
+    document.removeEventListener('gesturestart', preventDefaultHandler);
+    document.removeEventListener('gesturechange', preventDefaultHandler);
+    document.removeEventListener('gestureend', preventDefaultHandler);
+    window.removeEventListener("resize", resizeHandler);
+
+    enableDoubleTapZoom();
 }
 
 addMain(mainPong4pOffline);

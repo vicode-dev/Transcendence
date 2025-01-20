@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 {% if online == True %}
 <script src="{% static 'pong/online/onlinePong.js' %}"></script>
 {% if game.maxPlayers == 4 %}
@@ -23,7 +24,7 @@
 <div class="pong-board flex-grow-2 d-flex flex-column justify-content-center align-items-center m-2"
 style="transform: rotate(-90deg);">
 {% else %}
-<div class="pong-board flex-grow-2 d-flex flex-column justify-content-center align-items-center m-2">
+<div class="pong-board  {% if game.maxPlayers == 4 %} pong-board-4p {% endif %} flex-grow-2 d-flex flex-column justify-content-center align-items-center m-2">
 {% endif %}
     <!-- <svg id="gameBoard" viewBox="0 0 9 9"> -->
     <svg id="gameBoard" viewBox="0 0 9 9"
@@ -57,4 +58,11 @@ style="transform: rotate(-90deg);">
         <text id="1" x="4" y="5.20" style="font: bold 2px sans-serif; display: none; fill: var(--fourth-color);" transform="rotate(90 4.5 4.5)">1</text>
     </svg>
 
+    {% if online == False and game.maxPlayers == 2 %}
+    <div id="winner-msg-content" class="d-flex align-items-center justify-content-center" style="font-size: small;">
+        {% translate "Player" %}
+    <div id="winner-msg" style="margin-left: .5rem; margin-right: .5rem;"></div>
+    {% translate "won!"%}
+    </div>
+    {% endif %}
 </div>

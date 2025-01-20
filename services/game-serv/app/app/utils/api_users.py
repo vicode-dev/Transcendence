@@ -40,6 +40,6 @@ def delete_user(user_id):
 		response = requests.delete(url2, headers=headers)
 		response.raise_for_status()
 		return True
-	except:
-	 	return False
+	except  Exception as e:
+	 	return e
  

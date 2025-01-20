@@ -72,15 +72,15 @@ async def ballMovement(score, ball, players, room_name):
     p2 = players[1]
     if hitWall(ball._x):
         if ball._x - BALL_SIZE <= 0:
-            ball._angle = 0
+            ball._angle = 0 + randomAngle()
             score[1] += 1
             await updateModelScore(room_name, score)
-            await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score})
+            await get_channel_layer().group_send(f"game_{room_name}",  {'type': 'score_update', "score": score, "angle": ball._angle})
         else:
-            ball._angle = 180
+            ball._angle = 180 + randomAngle()
             score[0] += 1
             await updateModelScore(room_name, score)
-            await get_channel_layer().group_send (f"game_{room_name}", {'type': 'score_update', "score": score})
+            await get_channel_layer().group_send (f"game_{room_name}", {'type': 'score_update', "score": score, "angle": ball._angle})
         ball._x = 4.5
         ball._y = 4.5
         ball._speed = INIT_SPEED

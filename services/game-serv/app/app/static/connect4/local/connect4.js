@@ -9,6 +9,8 @@ let player2Score;
 // document.addEventListener('DOMContentLoaded', function () {
 
 function ofc_dropPiece(col) {
+    let color = [backgroundColor, accentColor];
+
     if (boardState[col] >= 0 && gameOver == 0) {
         board[boardState[col]][col] = turn + 1;
         if (checkWin(boardState[col], col) == true) {
@@ -19,7 +21,7 @@ function ofc_dropPiece(col) {
         let piece = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
         piece.setAttribute("r", 20);
-        piece.setAttribute("fill", COLOR[turn]);
+        piece.setAttribute("fill", color[turn]);
         piece.setAttribute("cx", 25 + 50 * col);
         piece.setAttribute("cy", 25 + boardState[col] * 50);
         piece.setAttribute("class", "Piece");
@@ -35,8 +37,7 @@ function ofc_dropPiece(col) {
         if (boardFull() == true) {
             gameOver = 1;
             document.getElementById("start-again").style.visibility = "visible";
-            let msg = document.getElementById('end_msg');
-            msg.innerHTML = "<p>Game has two losers 🙁</p>";
+            document.getElementById("draw-msg").style.visibility = "visible";
         }
     }
 }
@@ -58,7 +59,7 @@ function ofc_finishGameUpdate() {
 
     if (turn % 2 == 0)
     {
-        msg.innerHTML = "Player 1 won!";
+        msg.innerHTML = "1";
         document.getElementById("player1-score").remove();
 
         let newScore = document.createElement("div");
@@ -68,7 +69,7 @@ function ofc_finishGameUpdate() {
     }
     else
     {
-        msg.innerHTML = "Player 2 won!";
+        msg.innerHTML = "2";
         document.getElementById("player2-score").remove();
 
         let newScore = document.createElement("div");
@@ -77,9 +78,13 @@ function ofc_finishGameUpdate() {
         playerBtn2.append(newScore);
     }
     document.getElementById("start-again").style.visibility = "visible";
+    document.getElementById("win-msg").style.visibility = "visible";
+
 }
 
 function ofc_newGame() {
+    document.getElementById("win-msg").style.visibility = "hidden";
+    document.getElementById("draw-msg").style.visibility = "hidden";
     document.getElementById("pieces").replaceChildren();
     document.getElementById('end_msg').innerHTML = '';
     document.getElementById("start-again").style.visibility = "hidden";
@@ -91,6 +96,7 @@ function ofc_newGame() {
     }
     turn = 0;
     gameOver = 0;
+    ofc_updatePlayersBtnColor();
 }
 
 function ofc_c1Drop() {
@@ -122,6 +128,8 @@ function ofc_c7Drop() {
 }
 
 function mainConnectOffline() {
+    document.getElementById("win-msg").style.visibility = "hidden";
+    document.getElementById("draw-msg").style.visibility = "hidden";
     board = new Array(ROWS);
     for (let i = 0; i < ROWS; i++) {
         board[i] = new Array(COLUMNS).fill(0);
