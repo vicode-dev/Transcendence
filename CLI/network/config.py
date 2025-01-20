@@ -3,9 +3,9 @@ from menu.Menu import Menu
 from menu.Prompt import Prompt
 
 def configLoad():
-    configFile = open("config.toml", "rb")
-    data = tomllib.load(configFile)
-    return data
+    with open("config.toml", "rb") as configFile:
+        data = tomllib.load(configFile)
+        return data
 
 def configSave(data):
     with open("config.toml", "w") as configFile:

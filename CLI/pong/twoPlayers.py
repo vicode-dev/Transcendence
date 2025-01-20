@@ -1,38 +1,13 @@
 from pong.GameClass import Player, Ball, GameData
 from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED
 from pong.Bot import Bot
-import math, curses, time
+import math, curses, time, random
 
-# def hitPlayer(px, py, x, y):
-#     if (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
-#         or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE) \
-#         or (px <= x + BALL_SIZE <= px + PADDLE_WIDTH and py <= y - BALL_SIZE <= py + PADDLE_SIZE) \
-#         or (px <= x - BALL_SIZE <= px + PADDLE_WIDTH and py <= y + BALL_SIZE <= py + PADDLE_SIZE):
-#         return True
-#     return False
-
-# def willHitPlayer(ball, px, py, x, y):
-#     if ((px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
-#         ball._x = px + PADDLE_WIDTH + BALL_SIZE
-#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE)):
-#         ball._x = px - PADDLE_WIDTH - BALL_SIZE
-#     elif ((px < x + BALL_SIZE and x + BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
-#         ball._x = px - PADDLE_WIDTH - BALL_SIZE
-#     elif (px < x - BALL_SIZE and x - BALL_SIZE < px + PADDLE_WIDTH and py <= y + BALL_SIZE and y + BALL_SIZE <= py + PADDLE_SIZE):
-#         ball._x = px + PADDLE_WIDTH + BALL_SIZE
-#     else:
-#         return False
-#     return True
-
-# def willHitWall(x):
-#     if (x - BALL_SIZE < 0 or x + BALL_SIZE > SIZE):
-#         return True
-#     return False
-
-# def hitWall(x):
-#     if x - BALL_SIZE <= 0 or x + BALL_SIZE >= SIZE:
-#         return True
-#     return False
+def randomAngle():
+    ang = random.randint(-30, 30)
+    while (ang == 0):
+        ang = random.randint(-30, 30)
+    return ang
 
 def willHitLeftPaddle(ball, px, py, x, y):
     if ((x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
@@ -95,10 +70,10 @@ def ballReachObstacle(ball, p1, p2, x, y):
 def ballMovement(score, ball, p1, p2):
     if hitWall(ball._x):
         if ball._x - BALL_SIZE <= 0:
-            ball._angle = 0
+            ball._angle = 0 + randomAngle()
             score[1] += 1
         else:
-            ball._angle = 180
+            ball._angle = 180 + randomAngle()
             score[0] += 1
         ball._x = 4.5
         ball._y = 4.5
@@ -111,77 +86,6 @@ def ballMovement(score, ball, p1, p2):
         return
     ball._x = x
     ball._y = y
-
-# def ballReachObstacle(ball, p1, p2, x, y):
-#     if willHitPlayer(ball, p1._x, p1._y, x, y) == True:
-#         ballHitPlayer(ball, 280, 160, y - p1._y)
-#     elif willHitPlayer(ball, p2._x, p2._y, x, y) == True:
-#         ballHitPlayer(ball, 260, -160, y - p2._y)
-#     elif willHitWall(x) == True:
-#         if ball._x < SIZE / 2:
-#             ball._x = BALL_SIZE
-#         else:
-#             ball._x = SIZE - BALL_SIZE
-#     elif willHitWall(y) == True:
-#         if ball._y < SIZE / 2:
-#             ball._y = BALL_SIZE
-#         else:
-#             ball._y = SIZE - BALL_SIZE
-#         if ball._angle % 180 == 0:
-#             ball._angle = (ball._angle + 180) % 360
-#         else:
-#             ball._angle = 360 - ball._angle
-#     else:
-#         return False
-#     return True
-
-# def ballMovement(gameData, ball, p1, p2):
-#     if hitWall(ball._x):
-#         if ball._x - BALL_SIZE <= 0:
-#             ball._angle = 0
-#             gameData._score[1] += 1
-#         else:
-#             ball._angle = 180
-#             gameData._score[0] += 1
-#         ball._x = 4.25
-#         ball._y = 4.25
-#     x = ball._x + math.cos(math.radians(ball._angle)) / 8
-#     y = ball._y + math.sin(math.radians(ball._angle)) / 8
-
-#     if ballReachObstacle(ball, p1, p2, x, y):
-#         return
-#     ball._x = x
-#     ball._y = y
-#     x = ball._x + math.cos(math.radians(ball._angle)) / 8
-#     y = ball._y + math.sin(math.radians(ball._angle)) / 8
-    
-#     if hitPlayer(p1._x, p1._y, x, y) == True:
-#         ballHitPlayer(ball, 280, 160, y - p1._y)
-
-#     if hitPlayer(p2._x, p2._y, x, y) == True:
-#         ballHitPlayer(ball, 260, -160, y - p2._y)
-
-#     x = ball._x + math.cos(math.radians(ball._angle)) / 8
-#     y = ball._y + math.sin(math.radians(ball._angle)) / 8
-#     if (hitWall(x) == False): 
-#         ball._x = x 
-#     if (hitWall(y) == False):
-#         ball._y = y
-#     if (hitWall(x)):
-#         if (x - BALL_SIZE <= 0):
-#             gameData._score[1] += 1
-#             ball._angle = 0
-#         else:
-#             gameData._score[0] += 1
-#             ball._angle = 180
-#         ball._x = 4.25
-#         ball._y = 4.25
-
-#     elif (hitWall(y)):
-#         if (ball._angle % 90 == 0):
-#             ball._angle = (ball._angle + 180) % 360
-#         else:
-#             ball._angle = 360 - ball._angle
 
 def drawPaddle(stdscr, scale, x, y):
     for i in range(0, math.ceil(1.5 * scale)):
@@ -243,16 +147,6 @@ def gameLoop2P(win, stdscr, pad, scale):
         drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
         drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
-
-        # if (ball._x - BALL_SIZE > 0):
-        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x - BALL_SIZE) * scale) + 1, '.')
-        # if (ball._y - BALL_SIZE > 0):
-        #     stdscr.addch(int((ball._y - BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
-        # if (ball._x + BALL_SIZE < SIZE):
-        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x + BALL_SIZE) * scale) + 1, '.')
-        # if (ball._y + BALL_SIZE < SIZE):
-        #     stdscr.addch(int((ball._y + BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
-
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()
@@ -311,16 +205,6 @@ def gameLoopBot2P(win, stdscr, pad, scale):
         drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
         drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
-
-        # if (ball._x - BALL_SIZE > 0):
-        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x - BALL_SIZE) * scale) + 1, '.')
-        # if (ball._y - BALL_SIZE > 0):
-        #     stdscr.addch(int((ball._y - BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
-        # if (ball._x + BALL_SIZE < SIZE):
-        #     stdscr.addch(int(ball._y * scale) + 1, int((ball._x + BALL_SIZE) * scale) + 1, '.')
-        # if (ball._y + BALL_SIZE < SIZE):
-        #     stdscr.addch(int((ball._y + BALL_SIZE) * scale) + 1, int(ball._x * scale) + 1, '.')
-
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()

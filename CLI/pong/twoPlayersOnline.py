@@ -4,13 +4,13 @@ from pong.Bot import Bot
 from websockets.sync.client import connect
 from network.config import configLoad
 from threading import Thread
-import requests, ssl
-import math, curses, time
+import math, curses, time, json
 
 p1 = Player(0, 3.75)
 p2 = Player(8.75, 3.75)
 ball = Ball(4.25, 4.25)
 gameData = GameData(0)
+state = False
 
 def willHitLeftPaddle(ball, px, py, x, y):
     if ((x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
@@ -120,32 +120,16 @@ def updateData(websocket, gameData):
             gameData._score = message['scores']
 
 
-def gameLoop2P(win, stdscr, pad, scale):
-    websocket = test(jwt, id)
-    thread = Thread(target = updateData, args = (jwt, id))
-    thread.start()
+def gameLoop2P(win, stdscr, pad, scale, websocket):
+    global state
     stdscr.keypad(True)
     stdscr.timeout(100)
     stdscr.nodelay(True)
     stdscr.border()
     while True:
-        if gameData._score[0] == 10 or gameData._score[1] == 10:
-            # pad.clear()
-            if gameData._score[0] == 10:
-                pad.addstr(0, 0, "Player 1 won!")
-            elif gameData._score[1] == 10:
-                pad.addstr(0, 0, "Player 2 won!")
-            pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
-            key = stdscr.getch()
-            if key == ord('q') or key == 27:
-                break
-            continue
-        updateData(websocket, gameData, p1, p2, ball)
-        startTime = time.time()
-        stdscr.erase()
-        stdscr.border()
         key = stdscr.getch()
         if key == ord('q') or key == 27:
+            websocket.close()
             break
         elif key == curses.KEY_RESIZE:
             win.erase()
@@ -161,31 +145,13 @@ def gameLoop2P(win, stdscr, pad, scale):
             websocket.send(json.dumps({"type":"move", "paddleMove": 1}), text=True)
         elif key == ord('s') or key == ord('a'):
             websocket.send(json.dumps({"type":"move", "paddleMove": -1}), text=True)
-        ballMovement(gameData._score, ball, p1, p2)
-        drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
-        drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
-        drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
-        drawScore(pad, gameData)
-        pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
-        stdscr.refresh()
-        elapsedTime = time.time() - startTime
-        curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
-
-def gameLoopBot2P(win, stdscr, pad, scale):
-    # Initialize bot and player
-    p1 = Bot(0, 3.75, PADDLE_SIZE, MAX_SPEED, "left")  # Bot testing
-    p2 = Player(8.75, 3.75)
-    ball = Ball(4.25, 4.25)
-    gameData = GameData(0)
-    stdscr.keypad(True)
-    stdscr.timeout(100)
-    stdscr.nodelay(True)
-    stdscr.border()
-    while True:
+        if state == False:
+            curses.napms(100)
+            continue
         if gameData._score[0] == 10 or gameData._score[1] == 10:
             # pad.clear()
             if gameData._score[0] == 10:
-                pad.addstr(0, 0, "Player 1 won! Congratulations!")
+                pad.addstr(0, 0, "Player 1 won!")
             elif gameData._score[1] == 10:
                 pad.addstr(0, 0, "Player 2 won!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
@@ -193,39 +159,62 @@ def gameLoopBot2P(win, stdscr, pad, scale):
             if key == ord('q') or key == 27:
                 break
             continue
+        updateData(websocket, gameData, p1, p2, ball)
         startTime = time.time()
         stdscr.erase()
         stdscr.border()
-        key = stdscr.getch()
-        if key == ord('q') or key == 27:
-            break
-        elif key == curses.KEY_RESIZE:
-            win.erase()
-            height, width = win.getmaxyx()
-            curses.resize_term(*win.getmaxyx())
-            scale = height - height % SIZE if height < width else width - width % SIZE
-            scale = int(scale / 10)
-            length = (SIZE * scale) + 2
-            stdscr.resize(length, length)
-            stdscr.mvwin(1, int(width / 2 - length / 2))
-            win.refresh()
-        elif key == curses.KEY_UP and p2._y > 0:
-            p2._y -= 0.25
-        elif key == curses.KEY_DOWN and p2._y < SIZE - PADDLE_SIZE:
-            p2._y += 0.25
-        elif isinstance(p1, Bot):
-            bot_move = p1.get_input(ball)
-            if bot_move == -1 and p1._y > 0:
-                p1._y -= 0.25
-            elif bot_move == 1 and p1._y < SIZE - PADDLE_SIZE:
-                p1._y += 0.25
         ballMovement(gameData._score, ball, p1, p2)
         drawPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
         drawPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
-
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
+
+def gameWebsocket(jwt, id, websocket):
+    global state
+    while True:
+        messageStr = websocket.recv()
+        message = json.loads(messageStr)
+        match message["type"]:
+            case "freeze":
+                state = message["state"]
+                break
+            case "tick_data":
+                p1._x = message["P"][0]["x"]
+                p1._y = message["P"][0]["y"]
+                p2._x = message["P"][1]["x"]
+                p2._y = message["P"][1]["y"]
+                ball._x = message["Ball"]["x"]
+                ball._y = message["Ball"]["y"]
+                ball._angle = message["Ball"]["angle"]
+                ball._speed = message["Ball"]["speed"]
+                break
+            case "score_update":
+                ball._angle = message["Ball"]["angle"]
+                gameData._score = message["scores"]
+                break
+            case "init":
+                break
+            case "game_end":
+                break
+    return
+
+def launchGame2P(win, id, jwt):
+    global state
+    height, width = win.getmaxyx()
+    height -= 1
+    scale = height - (height % (SIZE)) if height < width else width - (width % SIZE)
+    scale = int(scale / 10)
+    length = (SIZE * scale) + 2
+    win.erase()
+    win.refresh()
+    gameWin = curses.newwin(length, length, 1, int(width / 2 - length / 2))
+    pad = curses.newpad(1, width)
+    config = configLoad()
+    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/", additional_headers={"Cookie": f"session={jwt}"}, origin=f"https://{config['server']['url']}")
+    thread = Thread(target = gameWebsocket, args = (jwt, id, websocket))
+    thread.start()
+    gameLoop2P(win, gameWin, pad, scale, websocket)

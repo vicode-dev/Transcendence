@@ -7,8 +7,9 @@ from pong.twoPlayers import gameLoop2P, gameLoopBot2P
 from pong.fourPlayers import gameLoop4P, SIZE
 from connect4.connect4 import gameConnectLoop,gameConnectLoopAi
 from network.login import login
-from network.config import settings
+from network.config import settings, configLoad
 from network.lobby import createLobby, lobby
+
 jwt = None
 # Define a handler function that does nothing
 def ignore_sigint(signum, frame):
@@ -136,13 +137,7 @@ def Online(menu):
 def checkGameUrl(input):
     if input == None:
         return False
-    conf = open("config.toml", "r")
-    serv = ""
-    for lines in conf:
-        if (lines.find("url = ") > -1):
-            serv = lines[lines.find("\"") + 1:len(lines) - 1]
-            break
-    conf.close()
+    serv = configLoad()["server"]["url"]
     url_pattern = fr"https://{serv}/lobby/[0-9a-f]{{8}}-[0-9a-f]{{4}}-[0-9a-f]{{4}}-[0-9a-f]{{4}}-[0-9a-f]{{12}}/$"
     res = re.fullmatch(url_pattern, input)
     if res:
@@ -152,11 +147,15 @@ def checkGameUrl(input):
 
 def Join(menu):
     global jwt
-    prompt = Prompt(menu.win, "Enter the game URL", None, checkGameUrl)
+
+    serv = configLoad()["server"]["url"]
+
+    prompt = Prompt(menu.win, "Enter the game URL " + serv + ".", None, checkGameUrl)
     prompt.display()
-    # curses.endwin()
-    # print(prompt.input)
-    # sys.exit(1)
+    url = prompt.input
+    if (url != None):
+        url = (url.split('/'))[4]
+        lobby(menu.win, url, jwt)
     return
 
 def lobbySelector(menu):

@@ -81,30 +81,17 @@ class Prompt:
         curses.curs_set(1)
         curses.setsyx(height, cursor + self.widthBorder)
         curses.doupdate()
-        while (key != 10):
+        while (key != 10 and key != curses.KEY_UP):
             if key ==  curses.KEY_RIGHT:
                 if cursor < len(self.input):
                     cursor += 1
             elif key == curses.KEY_LEFT:
                 if cursor > 0:
                     cursor -= 1
-            elif key == curses.KEY_UP or key == curses.KEY_DOWN:
-                key = win.getch()
-                continue
             if key == 27:
-                # key2 = win.getch()  # Read next byte (part of escape sequence)
-                # if key2 == ord('['):  # The start of an arrow key sequence
-                #     key3 = win.getch()  # Read final byte (part of escape sequence)
-                #     if key3 == ord('D'):  # Left arrow
-                #         if cursor > 0:
-                #             cursor -= 1
-                #     elif key3 == ord('C'):  # Right arrow
-                #         if cursor < len(self.input):
-                #             cursor += 1
-                # else:
                 self.input = self.placeHolder
                 return True
-            elif key == curses.KEY_BACKSPACE:
+            elif key == curses.KEY_BACKSPACE or key == curses.KEY_DOWN:
                 if cursor > 0:
                     self.input = self.input[:cursor - 1] + self.input[cursor:]
                     cursor -= 1
@@ -143,10 +130,6 @@ class Prompt:
             s = "Default value: " + self.placeHolder + " (press any key to edit)"
         else:
             s = "(press any key to edit)"
-        # i = 0
-        # while (i < width - 2 * self.widthBorder - 2 and i < len(s)):
-        #     win.addch(0, i, s[i], curses.color_pair(3))
-        #     i += 1
         curses.raw(True)
         pad.addstr(0, 0, s, curses.color_pair(3))
         pad.refresh(0, 0, newH, self.widthBorder, newH, width - self.widthBorder)
@@ -158,34 +141,3 @@ class Prompt:
                 if self.getInput(win, pad, width, newH) == True:
                     curses.curs_set(0)
                     return
-        # if win.getch() != 27:
-        #     box = Textbox(win)
-        #     curses.echo()
-        #     curses.curs_set(1) #setsyx & getsyx ?
-        #     self.getInput(win, box, newH, width)
-        #     while self.checkFunc != None and self.checkFunc(self.input) == False:
-        #         self.getInput(win, box, newH, width)
-        #         if self.exit == True:
-        #             break
-        #     curses.noecho()
-        #     curses.curs_set(0)
-        # i = 0
-        # # while (i < width - 2 * self.widthBorder - 2 and i < len(s) and i < 3):
-        # #     pad.addch(0, i, s[i], curses.color_pair(3))
-        # #     i += 1
-        # pad.addstr(0, 0, s, curses.color_pair(3))
-        # # pad.addstr(0, 0, "ABCD")
-        # pad.refresh(0, 0, newH, self.widthBorder, newH, width - self.widthBorder)
-        # # win.addstr(0, 0, f"{width}, {height}") # 3 3 4 151
-        # win.refresh()
-        # if win.getch() != 27:
-        #     box = Textbox(pad)
-        #     curses.echo()
-        #     curses.curs_set(1) #setsyx & getsyx ?
-        #     self.getInput(pad, box, newH, width)
-        #     while self.checkFunc != None and self.checkFunc(self.input) == False:
-        #         self.getInput(pad, box, newH, width)
-        #         if self.exit == True:
-        #             break
-        #     curses.noecho()
-        #     curses.curs_set(0)
