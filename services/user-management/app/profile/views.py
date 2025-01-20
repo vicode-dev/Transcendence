@@ -88,15 +88,29 @@ def getGamesNumber(request):
         return HttpResponse(jwtData["error"], status=401)
     return JsonResponse({'GameNumber': blockchain.getGamesNumber()}, status=200)
 
-@require_http_methods(["GET"])
-def addPlayer(request):
+@csrf_exempt
+@require_http_methods(["GET", "DELETE"])
+def Player(request):
     playerId = int(request.GET.get('playerId', 0))
     if playerId == 0:
         return HttpResponseBadRequest()
-    username = request.GET.get('username', "Arthur Dent")
-    newUser = User(playerId=playerId, username=username, role=('D' if playerId != 1 else 'A'))
-    newUser.save()
-    return HttpResponse(status=204)
+    if request.method == "GET":
+        username = request.GET.get('username', "Arthur Dent")
+        newUser = User(playerId=playerId, username=username, role=('D' if playerId != 1 else 'A'))
+        newUser.save()
+        return HttpResponse(status=204)
+    elif request.method == "DELETE":
+        if User.objects.filter(pk=playerId).exists():
+            User.objects.filter(pk=playerId).delete()
+            if os.path.exists(f"/static/{playerId}.jpg"):
+                os.remove(f"/static/{playerId}.jpg")
+            elif os.path.exists(f"/static/{playerId}.jpeg"):
+                os.remove(f"/static/{playerId}.jpeg")
+            elif os.path.exists(f"/static/{playerId}.png"):
+                os.remove(f"/static/{playerId}.png")
+            return HttpResponse(status=204)
+        else:
+            raise Http404("User not found")
 
 @require_http_methods(["GET"])
 def getGameById(request, id):
@@ -265,6 +279,12 @@ def getPlayerFriends(request, playerId):
         raise Http404("User not found")
 
 @csrf_exempt
+@require_http_methods(["GET"])
+def rgpdPlayers(request):
+    players = User.objects.filter(lastConnection=now() - timedelta(days=1095)).values_list("playerId", flat=True)
+    return JsonResponse({"ids": list(players)})
+
+@csrf_exempt
 @require_http_methods(["POST"])
 def addFriend(request):
     jwtData = get_jwt_data(request)
@@ -321,6 +341,8 @@ def authProfil(request):
     jwtData = get_jwt_data(request)
     if User.objects.filter(pk=jwtData["id"]).exists():
         user = User.objects.get(pk=jwtData["id"])
+    else:
+        user = User.objects.get(pk=0)
     games = blockchain.getGamesByPlayer(jwtData["id"])
     tournaments = blockchain.getTournamentByPlayer(jwtData["id"])
     for i in range(len(tournaments)):
@@ -340,6 +362,8 @@ def settings(request):
     if redirect:
         return redirect
     jwtData = get_jwt_data(request)
+    if not User.objects.filter(pk=jwtData["id"]).exists():
+        raise Http404("User not found")
     user = User.objects.get(pk=jwtData["id"])
     try:
         otp_enabled = requests.get(

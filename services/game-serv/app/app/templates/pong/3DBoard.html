@@ -1,6 +1,7 @@
 {% load static %}
+{% load i18n %}
 <script src="{% static 'pong/online/rendu3d.js' %}"></script>
-<div class="rounded-3 m-2" style="overflow: visible; width: 100%; max-width: 55vh;">
+<div class="rounded-3 m-2 d-flex flex-column justify-content-between align-items-center" style="overflow: visible; width: 100%; max-width: 35vh;">
     <div class="rounded-2" id="center-div" style="width: 100%; display: block; height: auto; aspect-ratio: 1 / 1; background-color: var(--fourth-color);"
         data-max-players="{{ game.maxPlayers }}">
         {% if online == False %}
@@ -22,6 +23,13 @@
         {% endif %}
         {% endif %}
     </div>
+    {% if online == False and game.maxPlayers == 2 %}
+    <div id="winner-msg-content" class="d-flex align-items-center justify-content-center" style="font-size: small;">
+        {% translate "Player" %}
+    <div id="winner-msg" style="margin-left: .5rem; margin-right: .5rem;"></div>
+    {% translate "won!"%}
+    </div>
+    {% endif %}
 </div>
 
 <script>

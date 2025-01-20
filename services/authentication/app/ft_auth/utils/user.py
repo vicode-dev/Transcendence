@@ -22,18 +22,17 @@ def update_password(user, password):
 ########################################################
 
 def user_login(login, password, by_id=False):
-    try:
-        if not by_id:
-            login = login.lower()
-        if by_id:
-            user = User.objects.filter(
-                    id=login, password=hash_password(password)).first()
-        else:
-            user = User.objects.filter(
-                login=login, password=hash_password(password)).first()
-        return user
-    except User.DoesNotExist:
-        return None
+	try:
+		if by_id:
+			user = User.objects.filter(
+	  			id=login, password=hash_password(password)).first()
+		else:
+			login = login.lower()
+			user = User.objects.filter(
+	  			login=login, password=hash_password(password)).first()
+		return user
+	except User.DoesNotExist:
+		return None
 
 ########################################################
 ###                    Gettors                       ###
@@ -160,7 +159,7 @@ def check_user_login(login, password):
 		"user": user
 	}
 
-def check_user_password(id, oldpassword, newpassword):
+def check_user_password(id, oldpassword, newpassword = False):
 	if id is None == 0:
 		return {
 			"error": _("You forgot to specify your login name.")
@@ -173,22 +172,31 @@ def check_user_password(id, oldpassword, newpassword):
 		}
 	if user.password is not None:
 		if oldpassword is None or len(oldpassword) == 0:
+			if newpassword is False:
+				return {
+					"error": _("You forgot to specify your password."),
+				}
 			return {
 				"error": _("You forgot to specify your old password."),
 			}
 
 		user = user_login(id, oldpassword, True)
 		if user is None:
+			if newpassword is False:
+				return {
+					"error": _("Password does not match."),
+				}
 			return {
 				"error": _("Old password does not match."),
 			}
-	if newpassword is None or len(newpassword) == 0:
-		return {
-			"error": _("You forgot to specify your new password."),
-		}
-	length = len(newpassword)
-	if length < 8 or length > 32:
-		return _("Password size must be between 8 and 32 characters.")
+	if newpassword is not False:
+		if newpassword is None or len(newpassword) == 0:
+			return {
+				"error": _("You forgot to specify your new password."),
+			}
+		length = len(newpassword)
+		if length < 8 or length > 32:
+			return _("Password size must be between 8 and 32 characters.")
 	return {
 		"user": user
 	}

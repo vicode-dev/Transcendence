@@ -131,7 +131,7 @@ def theme(request):
         return redirect
     return render(request, "partials/settings.html")
     # return render_redirect(request)
-
+@csrf_exempt
 def game_api(request, gameId):
     jwtData = get_jwt_data(request)
     if "error" in jwtData:

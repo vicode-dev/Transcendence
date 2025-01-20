@@ -19,12 +19,13 @@ from django.urls import path
 
 from api.views.routes import generate_token, \
 	request_qr_code, validate_otp_code, check_otp_state, \
-    disable_otp
+    disable_otp, request_user
 
 urlpatterns = [
 	path('api/cli/token/', generate_token),
 	path('api/otp/qr-code/', request_qr_code),
 	path('api/otp/validate/', validate_otp_code),
 	path('api/otp/enabled/', check_otp_state),
-	path('api/otp/disable/', disable_otp)
+	path('api/otp/disable/', disable_otp),
+	path('api/user/<int:userId>/', request_user)
 ]

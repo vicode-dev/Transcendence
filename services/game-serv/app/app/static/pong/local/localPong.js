@@ -19,6 +19,20 @@ function clickDown(move, buttonId) {
     }, 50);
 }
 
+// function clickDown(move) {
+//     resetClick(move);
+//     timers[move] = setInterval(function() {
+//         if (move === "w" || move === "s")
+//             moveLeftPaddle(move);
+//         if (move === "ArrowUp" || move === "ArrowDown")
+//             moveRightPaddle(move);
+//         if (move === "ArrowLeft" || move === "ArrowRight")
+//             moveTopPaddle(move);
+//         if (move === "a" || move === "d")
+//             moveBottomPaddle(move);
+//     }, 50);
+// }
+
 function moveLeftPaddle(move) {
     let leftPaddle = document.getElementById("leftPaddle");
     let wall = 0; 
@@ -79,7 +93,7 @@ function initPos() {
     let score1 = document.getElementById("score1");
     let score2 = document.getElementById("score2");
 
-    document.getElementById("winner-msg").innerText = '';
+    // document.getElementById("winner-msg").innerText = '';
     leftPaddle.setAttribute("x", 0);
     leftPaddle.setAttribute("y", 3.75);
     rightPaddle.setAttribute("x", 8.75);

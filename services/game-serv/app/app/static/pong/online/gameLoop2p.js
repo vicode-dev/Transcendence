@@ -1,3 +1,5 @@
+let score2p2d;
+
 async function on2p_freeze(msg, gameWebSocket) {
     showNavbar();
     navBarManualOverride = false;
@@ -39,6 +41,8 @@ function on2p_UpdateGameData(data) {
 function on2p_UpdateScore(data) {
     let score1 = document.getElementById("score1");
     let score2 = document.getElementById("score2");
+    ball.angle = data.angle;
+    score2p2d = data.scores;
     score1.textContent = data.scores[0];
     score2.textContent = data.scores[1];
 }
@@ -149,14 +153,7 @@ function on2p_init(playersList) {
 
     for (let i = 0; i < players.length; i++) {
         let name = document.getElementById(players[i]);
-        fetch("/api/player/" + playersList[i] + "/username/")
-        .then(data => {
-            return data.text();
-        })
-        .then(user => {
-            let username = JSON.parse(user);
-            name.innerHTML = username.username;
-        })
+        name.src = "/api/player/" + playersList[i] + "/avatar/";
     }
 }
 
@@ -212,9 +209,10 @@ function on2p_messageEvent(event) {
 function mainGameLoop2pOnline() {
     state = false;
     gameWebSocket = new WebSocket(`wss://${window.location.host}/ws/game/${document.querySelector('[name=gameId]').value}/2pong`);
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
+    score2p2d = [0, 0]
     paddleMove = 0;
     loopBreaker = false;
     error = true;
@@ -223,6 +221,7 @@ function mainGameLoop2pOnline() {
     gameWebSocket.addEventListener("close", on2p_closeEvent);
     document.addEventListener("keydown", on2p_keydownEvent);
     gameWebSocket.addEventListener('open', on2p_openEvent);
+    window.addEventListener("resize", resizeHandler);
 }
 
 function on2p_destructor() {
@@ -233,6 +232,8 @@ function on2p_destructor() {
     gameWebSocket.removeEventListener("close", on2p_closeEvent);
     gameWebSocket.removeEventListener('open', on2p_openEvent);
     gameWebSocket.removeEventListener("message", on2p_messageEvent);
+    enableDoubleTapZoom();
+    window.removeEventListener("resize", resizeHandler);
     gameWebSocket.close();
 }
 

@@ -1,5 +1,0 @@
-[token]
-jsonwebtoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM2NjM0MDE5LCJleHAiOjE3Mzc5MzAwMTksInR5cGUiOiJwZXJzaXN0ZW50In0.Olo1rlXlfXhl89lSCwSQR8j9UtrrWDzLFz62JDNQzPA"
-
-[server]
-url = "transcendence.vicode.dev"

@@ -33,11 +33,11 @@ function of2p_ballReachObstacle(ball, x, y) {
 function of2p_ballMovement(ball, scores) {
     if (hitWall(ball.x)) {
         if (ball.x - BALL_SIZE <= 0) {
-            ball.angle = 0;
+            ball.angle = 0 + randomAngle();
             scores[1] += 1;
         }
         else {
-            ball.angle = 180;
+            ball.angle = 180 + randomAngle();
             scores[0] += 1;
         }
         of2p_UpdateScore(scores);
@@ -67,7 +67,9 @@ function of2p_GameEnd(scores) {
     let winner;
     
     winner = scores[0] == 10 ? 1 : 2;
-    box.innerText = "Player " + winner + " has won!";
+    // box.innerText = "Player " + winner + " has won!";
+    box.innerHTML = winner;
+    document.getElementById("winner-msg-content").style.visibility = "visible";
     exitFullScreen();
 }
 
@@ -83,14 +85,13 @@ function blockContextMenu() {
 async function of2p_gameLoop() {
     disableDoubleTapZoom();
     enterFullScreen();
+    listenForScreenChange();
     blockContextMenu();
     
     let scores = [0, 0];
-
     document.getElementById("start-btn").style.visibility = "hidden";
-    // document.getElementById("rules").style.visibility = "visible";
-    
-    ball = new Ball(4.5, 4.5, 180);
+    document.getElementById("winner-msg-content").style.visibility = "hidden";
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     initPos();
@@ -103,7 +104,6 @@ async function of2p_gameLoop() {
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
     }
-    document.getElementById("rules").style.visibility = "hidden";
     document.getElementById("start-btn").style.visibility = "visible";
     of2p_GameEnd(scores);
 }
@@ -118,7 +118,14 @@ function of2p_move(event) {
 }
 
 function mainPong2pOffline() {
+    // Disable pinch zoom
+    document.addEventListener('gesturestart', preventDefaultHandler);
+    document.addEventListener('gesturechange', preventDefaultHandler);
+    document.addEventListener('gestureend', preventDefaultHandler);
+
     document.addEventListener("keydown", of2p_move);
+    document.getElementById("winner-msg-content").style.visibility = "hidden";
+    window.addEventListener("resize", resizeHandler);
 }
 
 function of2p_destructor() {
@@ -126,6 +133,13 @@ function of2p_destructor() {
     p2 = null;
     ball = null;
     document.removeEventListener("keydown", of2p_move);
+
+    document.removeEventListener('gesturestart', preventDefaultHandler);
+    document.removeEventListener('gesturechange', preventDefaultHandler);
+    document.removeEventListener('gestureend', preventDefaultHandler);
+    window.removeEventListener("resize", resizeHandler);
+
+    enableDoubleTapZoom();
 }
 
 addMain(mainPong2pOffline);

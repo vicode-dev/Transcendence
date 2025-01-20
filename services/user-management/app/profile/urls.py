@@ -20,7 +20,6 @@ from . import views
 urlpatterns = [
     # path("api/games/setup/", views.setupContract),
     path("api/games/", views.getGamesNumber),
-    path("api/", views.addPlayer),
 	path('api/games/<int:id>/', views.getGameById),
     path('api/tournament/<int:id>/', views.getTournamentById),
     path('api/player/<int:playerId>/', views.getPlayerById),
@@ -33,7 +32,6 @@ urlpatterns = [
     path('api/player/<int:playerId>/elo/', views.playerElo),
     path('api/player/<int:playerId>/theme/', views.playerTheme),
     path('api/players/elo/', views.playersElo),
-    path('api/player', views.addPlayer),
     path('api/friends/add', views.addFriend),
     path('api/friends/remove', views.removeFriend),
     path('tournament/summary/<int:tournamentId>/', views.tournament),
@@ -41,6 +39,8 @@ urlpatterns = [
     path('home/', views.authProfil),
     path('settings/', views.settings, name="settings"),
     # BACKEND URLS
+    path('api/player', views.Player),
+    path('api/players/rgpd/', views.rgpdPlayers),
     path("api/games/add", views.add),
     path('api/tournament/add', views.addTournament),
     path('api/tournament/', views.getAllTournaments),

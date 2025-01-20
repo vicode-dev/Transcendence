@@ -2,7 +2,7 @@ const COLUMNS = 7
 const ROWS = 6
 const RED = 1
 const YELLOW = 2
-const COLOR = [backgroundColor, accentColor]
+// const COLOR = [backgroundColor, accentColor]
 
 let board;
 let boardState;

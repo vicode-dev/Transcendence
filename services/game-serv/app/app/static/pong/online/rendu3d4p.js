@@ -52,6 +52,7 @@ function on3d4p_UpdateScore(score) {
     let score3 = document.getElementById("score3");
     let score4 = document.getElementById("score4");
     scores3d = score;
+    ball.angle = score.angle;
     if (score[0] >= 0)
         score1.textContent = score[0];
     if (score[1] >= 0)
@@ -154,24 +155,24 @@ function on3d4p_ballMovement(ball, scores3d) {
             if (scores3d[0] > 0 && ball.x - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 on3d4p_newPoint(scores3d, 0);
-                ball.angle = resetAngle(0, scores3d);
+                // ball.angle = resetAngle(0, scores3d);
             }
             else if (scores3d[1] > 0 && ball.x + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 on3d4p_newPoint(scores3d, 1);
-                ball.angle = 180;
+                // ball.angle = 180;
             }
         }
         else {
             if (scores3d[2] > 0 && ball.y - BALL_SIZE <= 0) {
                 playersAreWall = false;
                 on3d4p_newPoint(scores3d, 2);
-                ball.angle = 90;
+                // ball.angle = 90;
             }
             else if (scores3d[3] > 0 && ball.y + BALL_SIZE >= SIZE) {
                 playersAreWall = false;
                 on3d4p_newPoint(scores3d, 3);
-                ball.angle = 270;
+                // ball.angle = 270;
             }
         }
         if (playersAreWall == false) {
@@ -224,6 +225,8 @@ async function on3d4p_gameLoop() {
     }
     loopBreaker = false;
     navBarManualOverride = false;
+
+
 	// window.addEventListener('resize', () => {
 	// 	camera.aspect = container.clientWidth / container.clientHeight;
 	// 	camera.updateProjectionMatrix();
@@ -331,7 +334,7 @@ function mainRendu3d4pOnline() {
         radius: BALL_SIZE,
         color: pink
     })
-    ball = new Ball(4.5, 4.5, 180);
+    ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     p3 = new Player(3.75, 0);
@@ -346,6 +349,7 @@ function mainRendu3d4pOnline() {
     gameWebSocket.addEventListener("close", on3d4p_closeEvent);
     gameWebSocket.addEventListener("open", on3d4p_openEvent);
     document.addEventListener("keydown", on3d4p_keydownEvent);
+    window.addEventListener("resize", resizeHandler);
 }
 
 function on3d4p_destructor() {
@@ -375,6 +379,8 @@ function on3d4p_destructor() {
     gameWebSocket.removeEventListener("close", on3d4p_closeEvent);
     gameWebSocket.removeEventListener("open", on3d4p_openEvent);
     gameWebSocket.removeEventListener("message", on3d4p_messageEvent);
+    enableDoubleTapZoom();
+    window.removeEventListener("resize", resizeHandler);
     gameWebSocket.close();
 }
 

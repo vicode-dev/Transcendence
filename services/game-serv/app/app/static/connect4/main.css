@@ -8,13 +8,26 @@
     }
 }
 
+.end-msg {
+    padding: 0;
+    margin: auto;
+    margin-bottom: 0;
+    width: fit-content;
+    /* visibility: hidden; */
+}
+#end_msg {
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
 #players {
-    margin-top: 3rem;
+    /* margin-top: 3rem; */
+    margin-top: 15vh;
 }
 
 #connect4-main-content {
     margin: 1.5rem;
-    padding: 1.5rem;
+    padding: 1rem;
+    padding-top: 0;
 }
 
 .player-btn {
@@ -50,7 +63,7 @@
     }
     #connect4-main-content {
         margin: 0rem;
-        padding-top: .8rem;
+        /* padding-top: .8rem; */
         padding-bottom: 0rem;
     }
 }

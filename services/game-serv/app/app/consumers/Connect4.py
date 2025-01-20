@@ -32,6 +32,8 @@ class ConnectConsumer(AsyncWebsocketConsumer):
                 GGDD[self.room_name].playersId.append(self.scope["token_check"]["id"])
         if len(GGDD[self.room_name].playersId) == 2:
             await self.channel_layer.group_send(self.room_group_name, {'type': 'freeze', "state": False})
+            await self.channel_layer.group_send(self.room_group_name, {'type': 'start_game', "players": GGDD[self.room_name].playersOrder})
+
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -52,7 +54,7 @@ class ConnectConsumer(AsyncWebsocketConsumer):
                 if (self.index == GGDD[self.room_name].turn):
                     await self.dropPiece(msg['dropPiece'])
             if msg["type"] == "reconnect":
-                await self.send(text_data=json.dumps({'type': 'board', 'board':GGDD[self.room_name].board, 'board_state': GGDD[self.room_name].board_state}))
+                await self.send(text_data=json.dumps({'type': 'board', 'board':GGDD[self.room_name].board, 'board_state': GGDD[self.room_name].board_state, 'players': GGDD[self.room_name].playersOrder}))
         except:
             pass
 
@@ -77,10 +79,16 @@ class ConnectConsumer(AsyncWebsocketConsumer):
             'err': event['err']
         }))
 
+    async def start_game(self, event):
+       await self.send(text_data=json.dumps({
+           'type':'start_game',
+           'players':event['players']
+       })) 
     async def end_game(self, event):
         await self.send(text_data=json.dumps({
             'type':'end_game',
             'score': event["score"],
+            'winner':event['winner']
         }))
 
     async def get_index(self):
@@ -107,7 +115,7 @@ class ConnectConsumer(AsyncWebsocketConsumer):
             GGDD[self.room_name].playersMove = [-1, -1]
             await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'data', "col": col, 'board_state': GGDD[self.room_name].board_state, 'turn': GGDD[self.room_name].turn})
         if (gameEnded == True):
-            await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'end_game', 'score':GGDD[self.room_name].score})
+            await get_channel_layer().group_send(f"game_{self.room_name}",  {'type': 'end_game', 'score':GGDD[self.room_name].score, 'winner':GGDD[self.room_name].playersOrder[self.index]})
             game = await getGameById(self.room_name)
             game.score = GGDD[self.room_name].score
             game.endTime = now()
