@@ -8,5 +8,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=app ./app* .
 USER app
+RUN mkdir -p /app/profile/migrations
 
 CMD ["./entrypoint.sh"]

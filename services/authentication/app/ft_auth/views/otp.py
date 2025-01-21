@@ -24,7 +24,7 @@ def otp_page(request):
 	data = get_jwt_data(request)
 	if "error" not in data:
 		return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
-	if data["error"] is not "OTP required":
+	if data["error"] != "OTP required":
 		return HttpResponseRedirect(f"/login/?{request.GET.urlencode()}")
 	if request.method == "GET":
 		return get_otp_page(request)

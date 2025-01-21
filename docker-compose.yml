@@ -28,8 +28,8 @@ services:
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       SALT : ${SALT}
       DJANGO_SECRET: ${DJANGO_SECRET}
-    volumes:
-      - authentication-migrations:/app/ft_auth/migrations
+    # volumes:
+      # - authentication-migrations:/app/ft_auth/migrations
     depends_on:
     - postgres
     - user-management
@@ -51,7 +51,7 @@ services:
           target: /app/
           action: sync
     volumes:
-     - user-management-migrations:/app/profile/migrations
+    #  - user-management-migrations:/app/profile/migrations
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     depends_on:
@@ -90,27 +90,14 @@ services:
       DJANGO_SECRET: ${DJANGO_SECRET}
     depends_on:
     - game-serv
-    volumes:
-      - game-serv-migrations:/app/app/migrations
+    # volumes:
+    #   - game-serv-migrations:/app/app/migrations
   adminer:
     build: ./services/adminer
     container_name:  adminer
     volumes:
       - adminer_data:/home/container/adminer
     restart: always
-# AI
-  # ai-bot:
-  #   build:
-  #     context: ./services/ai-bot
-  #     restart: unless-stopped
-  #     image: ai-bot
-  #     volumes:
-  #      - ./services/ai-bot/app:/app
-  #     ports:
-  #     - 8003:8000
-  #     depends-on:
-  #     - game-serv
-  #     - authentication
 #Ethereum Blockchain emulator
   hardhat:
     build:

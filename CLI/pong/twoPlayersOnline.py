@@ -108,6 +108,9 @@ def test(jwt, id):
     return websocket
 
 def updateData(websocket, gameData):
+    global p1
+    global p2
+    global ball
     messageStr = websocket.recv()
     message = json.loads(messageStr)
     match message["type"]:

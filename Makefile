@@ -22,6 +22,7 @@ DOCKER_STOP		= $(DOCKER_COMPOSE) down
 
 all: check-env webhook images
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}${NAME} ${DEFAULT}..."
+	@chmod 777 -R ./services/elasticsearch
 	@$(DOCKER_RUN)
 
 clean:
