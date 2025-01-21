@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 10:08+0000\n"
+"POT-Creation-Date: 2025-01-21 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,155 +17,155 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: services/user-management/app/profile/settings.py:116
+#: app/profile/settings.py:116
 msgid "English"
 msgstr "Engels"
 
-#: services/user-management/app/profile/settings.py:117
+#: app/profile/settings.py:117
 msgid "Spanish"
 msgstr "Spaans"
 
-#: services/user-management/app/profile/settings.py:118
+#: app/profile/settings.py:118
 msgid "French"
 msgstr "Frans"
 
-#: services/user-management/app/profile/settings.py:119
+#: app/profile/settings.py:119
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: services/user-management/app/profile/templates/friendButton.html:8
+#: app/profile/templates/friendButton.html:8
 msgid "add as friend"
 msgstr "toevoegen als vriend"
 
-#: services/user-management/app/profile/templates/friendButton.html:11
+#: app/profile/templates/friendButton.html:11
 msgid "remove as friend"
 msgstr "verwijderen van vrienden"
 
-#: services/user-management/app/profile/templates/profil.html:31
+#: app/profile/templates/profil.html:31
 msgid "logout"
 msgstr "Uitloggen"
 
-#: services/user-management/app/profile/templates/profil.html:46
+#: app/profile/templates/profil.html:46
 msgid "Friends"
 msgstr "Vrienden"
 
-#: services/user-management/app/profile/templates/profil.html:50
+#: app/profile/templates/profil.html:50
 msgid "no friends 😢"
 msgstr "geen vrienden 😢"
 
-#: services/user-management/app/profile/templates/profil.html:62
-#: services/user-management/app/profile/templates/tournament.html:17
+#: app/profile/templates/profil.html:62
+#: app/profile/templates/tournament.html:18
 msgid "Game History"
 msgstr "Spelgeschiedenis"
 
-#: services/user-management/app/profile/templates/profil.html:66
+#: app/profile/templates/profil.html:66
 msgid "no game played yet!"
 msgstr "nog geen spel gespeeld!"
 
-#: services/user-management/app/profile/templates/profil.html:74
+#: app/profile/templates/profil.html:74
 msgid "Connect4"
 msgstr "4 op een rij"
 
-#: services/user-management/app/profile/templates/profil.html:77
+#: app/profile/templates/profil.html:77
 msgid "Pong"
 msgstr "Pong"
 
-#: services/user-management/app/profile/templates/profil.html:83
+#: app/profile/templates/profil.html:83
 msgid "draw"
 msgstr "gelijkspel"
 
-#: services/user-management/app/profile/templates/profil.html:87
-#: services/user-management/app/profile/templates/profil.html:93
+#: app/profile/templates/profil.html:87 app/profile/templates/profil.html:93
 msgid "won"
 msgstr "gewonnen"
 
-#: services/user-management/app/profile/templates/profil.html:89
-#: services/user-management/app/profile/templates/profil.html:95
+#: app/profile/templates/profil.html:89 app/profile/templates/profil.html:95
 msgid "lost"
 msgstr "verloren"
 
-#: services/user-management/app/profile/templates/profil.html:126
+#: app/profile/templates/profil.html:126
 msgid "Against:"
 msgstr "Tegen:"
 
-#: services/user-management/app/profile/templates/profil.html:144
+#: app/profile/templates/profil.html:144
 msgid "Tournament History"
 msgstr "Toernooigeschiedenis"
 
-#: services/user-management/app/profile/templates/profil.html:147
+#: app/profile/templates/profil.html:147
 msgid "no tournament played yet!"
 msgstr "nog geen toernooi gespeeld!"
 
-#: services/user-management/app/profile/templates/profil.html:156
-#| msgid "Tournament History"
+#: app/profile/templates/profil.html:156
 msgid "Tournament"
 msgstr "Toernooi"
 
-#: services/user-management/app/profile/templates/settings/cli.html:4
+#: app/profile/templates/settings/cli.html:4
 msgid "Generate token"
 msgstr "Token genereren"
 
-#: services/user-management/app/profile/templates/settings/index.html:6
+#: app/profile/templates/settings/index.html:7
 msgid "User Settings"
 msgstr "Gebruikersinstellingen"
 
-#: services/user-management/app/profile/templates/settings/index.html:9
+#: app/profile/templates/settings/index.html:10
 msgid "Profile :"
 msgstr "Profiel:"
 
-#: services/user-management/app/profile/templates/settings/language_selector.html:4
+#: app/profile/templates/settings/language_selector.html:4
 msgid "Select your language:"
 msgstr "Selecteer je taal:"
 
-#: services/user-management/app/profile/templates/settings/otp.html:6
+#: app/profile/templates/settings/otp.html:6
 msgid "Disable Double Authentication"
 msgstr "Dubbele authenticatie uitschakelen"
 
-#: services/user-management/app/profile/templates/settings/otp.html:10
+#: app/profile/templates/settings/otp.html:10
 msgid "Add Double Authentication"
 msgstr "Dubbele authenticatie toevoegen"
 
-#: services/user-management/app/profile/templates/settings/security.html:5
+#: app/profile/templates/settings/security.html:5
 msgid "Security"
 msgstr "Beveiliging"
 
-#: services/user-management/app/profile/templates/settings/security.html:10
+#: app/profile/templates/settings/security.html:11
 msgid "Change password"
 msgstr "Wachtwoord wijzigen"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:9
+#: app/profile/templates/settings/security.html:17
+msgid "Delete this account"
+msgstr "Verwijder dit account"
+
+#: app/profile/templates/settings/theme_picker.html:9
 msgid "Theme Picker:"
 msgstr "Themakiezer:"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:10
+#: app/profile/templates/settings/theme_picker.html:10
 msgid "Theme Picker"
 msgstr "Themakiezer"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:11
+#: app/profile/templates/settings/theme_picker.html:11
 msgid "Select a default theme:"
 msgstr "Selecteer een standaardthema:"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:227
+#: app/profile/templates/settings/theme_picker.html:227
 msgid "Or choose three colors for your theme:"
 msgstr "Of kies drie kleuren voor je thema:"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:245
+#: app/profile/templates/settings/theme_picker.html:245
 msgid "Test the theme"
 msgstr "Test het thema"
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:263
+#: app/profile/templates/settings/theme_picker.html:263
 msgid "Please choose three different colors 😉"
 msgstr "Kies alstublieft drie verschillende kleuren 😉"
 
-#: services/user-management/app/profile/templates/settings/username.html:9
+#: app/profile/templates/settings/username.html:9
 msgid "Username:"
 msgstr "Gebruikersnaam:"
 
-#: services/user-management/app/profile/templates/tournament.html:10
-#| msgid "Tournament History"
+#: app/profile/templates/tournament.html:11
 msgid "Tournament Result"
 msgstr "Resultaat van Toernooi"
 
-#: services/user-management/app/profile/templates/tournament.html:12
+#: app/profile/templates/tournament.html:13
 msgid "Tree"
 msgstr "Boom"

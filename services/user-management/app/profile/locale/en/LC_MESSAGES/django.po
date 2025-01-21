@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 10:09+0000\n"
+"POT-Creation-Date: 2025-01-21 11:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,154 +17,156 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: services/user-management/app/profile/settings.py:116
+#: app/profile/settings.py:116
 msgid "English"
 msgstr ""
 
-#: services/user-management/app/profile/settings.py:117
+#: app/profile/settings.py:117
 msgid "Spanish"
 msgstr ""
 
-#: services/user-management/app/profile/settings.py:118
+#: app/profile/settings.py:118
 msgid "French"
 msgstr ""
 
-#: services/user-management/app/profile/settings.py:119
+#: app/profile/settings.py:119
 msgid "Dutch"
 msgstr ""
 
-#: services/user-management/app/profile/templates/friendButton.html:8
+#: app/profile/templates/friendButton.html:8
 msgid "add as friend"
 msgstr "add as friend"
 
-#: services/user-management/app/profile/templates/friendButton.html:11
+#: app/profile/templates/friendButton.html:11
 msgid "remove as friend"
 msgstr "remove as friend"
 
-#: services/user-management/app/profile/templates/profil.html:31
+#: app/profile/templates/profil.html:31
 msgid "logout"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:46
+#: app/profile/templates/profil.html:46
 msgid "Friends"
 msgstr "Friends"
 
-#: services/user-management/app/profile/templates/profil.html:50
+#: app/profile/templates/profil.html:50
 msgid "no friends 😢"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:62
-#: services/user-management/app/profile/templates/tournament.html:17
+#: app/profile/templates/profil.html:62
+#: app/profile/templates/tournament.html:18
 msgid "Game History"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:66
+#: app/profile/templates/profil.html:66
 msgid "no game played yet!"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:74
+#: app/profile/templates/profil.html:74
 msgid "Connect4"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:77
+#: app/profile/templates/profil.html:77
 msgid "Pong"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:83
+#: app/profile/templates/profil.html:83
 msgid "draw"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:87
-#: services/user-management/app/profile/templates/profil.html:93
+#: app/profile/templates/profil.html:87 app/profile/templates/profil.html:93
 msgid "won"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:89
-#: services/user-management/app/profile/templates/profil.html:95
+#: app/profile/templates/profil.html:89 app/profile/templates/profil.html:95
 msgid "lost"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:126
+#: app/profile/templates/profil.html:126
 msgid "Against:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:144
+#: app/profile/templates/profil.html:144
 msgid "Tournament History"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:147
+#: app/profile/templates/profil.html:147
 msgid "no tournament played yet!"
 msgstr ""
 
-#: services/user-management/app/profile/templates/profil.html:156
+#: app/profile/templates/profil.html:156
 msgid "Tournament"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/cli.html:4
+#: app/profile/templates/settings/cli.html:4
 msgid "Generate token"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/index.html:6
+#: app/profile/templates/settings/index.html:7
 msgid "User Settings"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/index.html:9
+#: app/profile/templates/settings/index.html:10
 msgid "Profile :"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/language_selector.html:4
+#: app/profile/templates/settings/language_selector.html:4
 msgid "Select your language:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/otp.html:6
+#: app/profile/templates/settings/otp.html:6
 msgid "Disable Double Authentication"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/otp.html:10
+#: app/profile/templates/settings/otp.html:10
 msgid "Add Double Authentication"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/security.html:5
+#: app/profile/templates/settings/security.html:5
 msgid "Security"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/security.html:10
+#: app/profile/templates/settings/security.html:11
 msgid "Change password"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:9
+#: app/profile/templates/settings/security.html:17
+msgid "Delete this account"
+msgstr ""
+
+#: app/profile/templates/settings/theme_picker.html:9
 msgid "Theme Picker:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:10
+#: app/profile/templates/settings/theme_picker.html:10
 msgid "Theme Picker"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:11
+#: app/profile/templates/settings/theme_picker.html:11
 msgid "Select a default theme:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:227
+#: app/profile/templates/settings/theme_picker.html:227
 msgid "Or choose three colors for your theme:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:245
+#: app/profile/templates/settings/theme_picker.html:245
 msgid "Test the theme"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/theme_picker.html:263
+#: app/profile/templates/settings/theme_picker.html:263
 msgid "Please choose three different colors 😉"
 msgstr ""
 
-#: services/user-management/app/profile/templates/settings/username.html:9
+#: app/profile/templates/settings/username.html:9
 msgid "Username:"
 msgstr ""
 
-#: services/user-management/app/profile/templates/tournament.html:10
+#: app/profile/templates/tournament.html:11
 msgid "Tournament Result"
 msgstr ""
 
-#: services/user-management/app/profile/templates/tournament.html:12
+#: app/profile/templates/tournament.html:13
 msgid "Tree"
 msgstr ""
 
