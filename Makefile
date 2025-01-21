@@ -28,10 +28,9 @@ clean:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Shutting down ${YELLOW}${NAME} ${DEFAULT}..."
 	$(DOCKER_STOP)
 
-fclean: clean
+fclean:
 	@echo "${BLUE} [MAKE] ${DEFAULT}Cleaning ${YELLOW}${NAME} ${DEFAULT}..."
-	@docker system prune -af
-	@docker volume prune -f
+	@docker compose down -v --rmi all
 
 re: fclean all
 

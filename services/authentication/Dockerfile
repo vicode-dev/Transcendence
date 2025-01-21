@@ -1,11 +1,12 @@
 FROM python:3.12-alpine
 
+RUN adduser -D -h /app -s /bin/sh -u 1001 app
 WORKDIR /app
-
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
-
-RUN mkdir -p /app/ft_auth/migrations
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+# USER app
+COPY --chown=app ./app* .
+RUN mkdir -p /app/app/migrations
 
 CMD ["./entrypoint.sh"]

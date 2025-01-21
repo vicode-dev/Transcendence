@@ -129,6 +129,7 @@ services:
     - 3000:3000
     depends_on:
       - prometheus
+    user: root
 #Prometheus (monitoring toolkit)
   prometheus:
     image: prom/prometheus:v2.53.2
@@ -240,8 +241,8 @@ services:
       args:
          KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
-        - 1080:80
-        - 1443:443
+        - 80:80
+        - 443:443
     volumes:
         # - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
         - ./services/nginx/certificates/:/etc/certificates/
