@@ -177,6 +177,11 @@
             proxy_set_header Host $host;
             proxy_cache                     off;
         }
+        location /link {
+            proxy_pass http://authentication:8000/link;
+            proxy_set_header Host $host;
+            proxy_cache                     off;
+        }
         location /otp {
             proxy_pass http://authentication:8000/otp;
             proxy_set_header Host $host;

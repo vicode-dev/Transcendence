@@ -214,11 +214,8 @@ services:
     container_name: kibana
     restart: unless-stopped
     environment:
-      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
-      xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
-      # KBN_PATH_CONF: "/usr/share/kibana/config"
+      XPACK_SECURITY_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY}
       SERVER_BASEPATH: "/kibana"
-      #elasticsearch.password: ${ELASTIC_PASSWORD}
     networks:
       - elk
   filebeat:
