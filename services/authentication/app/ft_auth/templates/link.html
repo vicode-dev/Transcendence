@@ -1,26 +1,19 @@
 {% load static %}
 {% load i18n %}
 
-
 <div class="container" id="paper">
 	<div class="d-flex justify-content-center">
 		<div class="col-md-6 col-md-offset-3">
-			<h2>{% translate "Password" %}</h2>
-			<form action="/password/" method="post" class="form-horizontal" id="password">
+			<h2>{% translate "Link this account with 42"%}</h2>
+			<form action="/link/" method="post" class="form-horizontal" id="link">
 				{% if has_password %}
 				<div class="form-group">
-					<label for="oldpassword" class="control-label">{% translate "Old Password" %}</label>
+					<label for="password" class="control-label">{% translate "Password" %}</label>
 					<input
                         type="password" class="col-sm-9 form-control"
-						placeholder="{% translate 'Enter old password' %}" name="oldpassword" required>
+						placeholder="{% translate 'Enter your password' %}" name="password" required>
 				</div>
 				{% endif %}
-				<div class="form-group">
-					<label for="password" class="control-label">{% translate "New password" %}</label>
-					<input
-						type="password" class="col-sm-9 form-control"
-						placeholder="{% translate 'Enter new password' %}" name="newpassword" required>
-				</div>
 				{% if otp_required %}
 				<div class="form-group">
 					<label for="otp" class="control-label">{% translate 'Double Authentication Code' %}</label>
@@ -37,9 +30,9 @@
 					<button
 						type="submit"
 						class="col-sm-offset-3 col-sm-5 btn btn-primary btn-block"
-						onclick="fetchForm(event, 'password', true);"
+						onclick="fetchForm(event, 'delete', true);"
 					>
-							{% translate "Update" %}
+							{% translate "Link" %}
 					</button>
 				</div>
 

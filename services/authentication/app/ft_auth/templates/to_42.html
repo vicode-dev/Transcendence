@@ -1,0 +1,23 @@
+{% load static %}
+{% load i18n %}
+
+<div class="container" id="paper">
+	<div class="d-flex justify-content-center">
+		<div class="col-md-6 col-md-offset-3">
+			<p>
+                <a
+                    target="_blank"
+                    onclick="checkSession();"
+                    href="{{ domain_name }}"
+                >
+                    {% translate "login with 42" %}
+                </a>
+            </p>
+		</div>
+	</div>
+</div>
+
+{% block javascripts %}
+	<script src="{% static 'authentication/utils.js' %}"></script>
+	<script src="{% static 'authentication/cookies.js' %}"></script>
+{% endblock %}

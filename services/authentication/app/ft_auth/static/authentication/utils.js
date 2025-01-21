@@ -69,6 +69,12 @@ function checkSession(first = true, wait_for_otp = false)
 		else
 			loadPage(`/home/${getQuery(params)}`).then();
 	}
+	else if (update == "link")
+	{
+		const	params = new URLSearchParams(window.location.search);
+
+		loadPage(`/link/${getQuery(params)}`).then();
+	}
 	else // if (session.check)
 		setTimeout(checkSession, 3000, false, wait_for_otp)
 }

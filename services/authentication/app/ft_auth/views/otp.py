@@ -22,11 +22,10 @@ from ft_auth.models import OTP, User
 @require_http_methods(["GET", "POST"])
 def otp_page(request):
 	data = get_jwt_data(request)
-	# return JsonResponse(data)
-	# if "error" not in data:
-	# 	return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
-	# if data["error"] is not "OTP required":
-	# 	return HttpResponseRedirect(f"/login/?{request.GET.urlencode()}")
+	if "error" not in data:
+		return HttpResponseRedirect(f"/?{request.GET.urlencode()}")
+	if data["error"] is not "OTP required":
+		return HttpResponseRedirect(f"/login/?{request.GET.urlencode()}")
 	if request.method == "GET":
 		return get_otp_page(request)
 	if request.method == "POST":

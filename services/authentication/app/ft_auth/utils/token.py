@@ -44,13 +44,34 @@ def encode_jwt(user_info, otp_required = False):
 	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
 	return jwt_token
 
-def decode_jwt(token):
+def encode_link_jwt(user_info):
+	header = {
+		"alg": "HS256",
+  		"typ": "JWT"
+	}
+	payload = {
+		"42_id": user_info["id"],
+		"iat":
+			datetime.now(timezone.utc),
+		"exp":
+			(datetime.now(timezone.utc)
+			+ timedelta(days=1)),
+		"login": user_info["login"],
+  		"first_name": user_info["first_name"],
+    	"last_name": user_info["last_name"]
+	}
+	jwt_token = encode(payload, environ['JWT_SECRET_KEY'], algorithm="HS256", headers=header)
+	return jwt_token
+
+def decode_jwt(token, session = True):
 	try:
 		payload = decode(token, environ['JWT_SECRET_KEY'], algorithms=["HS256"])
-		
-		user = get_user_by_id(payload["id"])
-		if user is None:
-			return {"error": _("Unknow user")}
+
+		if session:
+			user = get_user_by_id(payload["id"])
+			if user is None:
+				return {"error": _("Unknow user")}
+
 		# if user.token_date.replace(tzinfo=timezone.utc) > datetime.fromtimestamp(payload["iat"]).replace(tzinfo=timezone.utc):
 		# 	return {"error": _("Token expired")}
 		return payload
@@ -73,23 +94,36 @@ def save_jwt(response, token, otp_required=False, login_with_42=False):
 		response.set_cookie("otp", "required", samesite='Strict')
 	else:	
 		response.delete_cookie("otp")
+	response.delete_cookie("link")
+
+def save_link_jwt(response, token):
+	response.set_cookie("link", token, samesite='Strict', max_age=86400, httponly=True, secure=True)
+	response.set_cookie("update", "link", samesite='Strict', httponly=False, secure=True)
 
 def delete_jwt(response):
 	response.delete_cookie("session")
 	response.delete_cookie("otp")
 	response.delete_cookie("update")
- 
-
-def get_jwt(request):
-	return request.COOKIES.get("session")
+	response.delete_cookie("link")
 
 def get_jwt_data(request):
-	token = get_jwt(request)
+	token = request.COOKIES.get("session")
 	return decode_jwt(token)
+
+def get_link_jwt_data(request):
+	token = request.COOKIES.get("link")
+	return decode_jwt(token, session=False)
 
 def generate_jwt(response, user_info, otp_required=False, login_with_42=False):
 	token = encode_jwt(user_info, otp_required)
 	if token is None:
 		return None
 	save_jwt(response, token, otp_required, login_with_42)
+	return (token)
+
+def generate_link_jwt(response, user_info):
+	token = encode_link_jwt(user_info)
+	if token is None:
+		return None
+	save_link_jwt(response, token)
 	return (token)
