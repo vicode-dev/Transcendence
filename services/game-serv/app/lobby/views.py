@@ -99,6 +99,7 @@ def create(request):
     return JsonResponse({"id": NewGame.gameId})
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def start(request, room_name):
     if "error" in get_jwt_data(request):
         return HttpResponse("Unautorized", status=401)

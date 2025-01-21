@@ -1,5 +1,5 @@
 from pong.GameClass import Player, Ball, GameData
-from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED
+from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED, INIT_SPEED
 from pong.Bot import Bot
 import math, curses, time, random
 
@@ -77,7 +77,7 @@ def ballMovement(score, ball, p1, p2):
             score[0] += 1
         ball._x = 4.5
         ball._y = 4.5
-        ball._speed = 1
+        ball._speed = INIT_SPEED
 
     x = ball._x + math.cos(math.radians(ball._angle)) / 8 * ball._speed
     y = ball._y + math.sin(math.radians(ball._angle)) / 8 * ball._speed
@@ -165,12 +165,13 @@ def gameLoopBot2P(win, stdscr, pad, scale):
     stdscr.border()
     while True:
         if gameData._score[0] == 10 or gameData._score[1] == 10:
-            # pad.clear()
+            pad.clear()
             if gameData._score[0] == 10:
                 pad.addstr(0, 0, "Player 1 won! Congratulations!")
             elif gameData._score[1] == 10:
                 pad.addstr(0, 0, "Player 2 won!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            stdscr.nodelay(False)
             key = stdscr.getch()
             if key == ord('q') or key == 27:
                 break

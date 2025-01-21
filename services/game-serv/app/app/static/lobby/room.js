@@ -54,16 +54,12 @@ function lobby_refresh(data) {
     playersList = document.getElementById('playersList');
     playersList.innerHTML = '';
     data.players.forEach((player) => addPlayerToList(player, playersList));
-    if (data.players.length == data.maxPlayers)
-    document.getElementById('launchButton').disabled = false;
-    else {
-        // const newDiv = document.createElement("div");
-        // newDiv.setAttribute("id", "error-msg");
-        // newDiv.setAttribute("class", "mt-3");
-        // newDiv.innerHTML = "<p>Waiting for more players</p>";
-        // document.getElementById('main').append(newDiv);
-        
-        document.getElementById('launchButton').disabled = true;
+    if (document.getElementById('launchButton') != null) {
+        if (data.players.length == data.maxPlayers)
+            document.getElementById('launchButton').disabled = false;
+        else {
+            document.getElementById('launchButton').disabled = true;
+        }
     }
     
 }

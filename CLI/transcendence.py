@@ -153,7 +153,7 @@ def Join(menu):
     prompt = Prompt(menu.win, "Enter the game URL " + serv + ".", None, checkGameUrl)
     prompt.display()
     url = prompt.input
-    if (url != None):
+    if (url != None and url != ""):
         url = (url.split('/'))[4]
         lobby(menu.win, url, jwt)
     return
