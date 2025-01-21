@@ -20,7 +20,7 @@ DOCKER_STOP		= $(DOCKER_COMPOSE) down
 
 # Main Rules
 
-all: check-env webhook images migrations
+all: check-env webhook images
 	@echo "${BLUE} [MAKE] ${DEFAULT}Building ${YELLOW}${NAME} ${DEFAULT}..."
 	@$(DOCKER_RUN)
 
@@ -37,7 +37,9 @@ re: fclean all
 webhook: # put webhook uri for alertmanager
 	@sed "s|{{DISCORD_WEBHOOK_URL}}|$(shell grep '^DISCORD_WEBHOOK_URL=' .env | cut -d '=' -f2-)|g" ./services/alertmanager/config.yml.default > ./services/alertmanager/config.yml
 
-certificate: clean
+certificate:
+	@echo "[🔄] Generating certificate..."
+	@docker compose down nginx
 	@docker run -it -p 80:80 -v ./services/nginx/certificates:/etc/letsencrypt/archive --rm --name certbot certbot/certbot certonly --standalone -d $(shell grep '^DOMAIN_NAME=' .env | cut -d '=' -f2-)
 
 check-env:
@@ -104,9 +106,9 @@ images:
 	docker build -t game-serv ./services/game-serv/.
 
 migrations:
-	mkdir -p ./services/authentication/app/ft_auth/migrations
-	mkdir -p ./services/user-management/app/profile/migrations
-	mkdir -p ./services/game-serv/app/app/migrations
+	# mkdir -p ./services/authentication/app/ft_auth/migrations
+	# mkdir -p ./services/user-management/app/profile/migrations
+	# mkdir -p ./services/game-serv/app/app/migrations
 
 .PHONY: all clean fclean re certificate webhook \
 	ai-bot alertmanager authentication blockchain \

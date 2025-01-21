@@ -1,6 +1,6 @@
 from web3 import Web3
 from profile.models import User
-import json
+import json, time
 import logging
 logger = logging.getLogger('profile')
 Contract = None
@@ -32,6 +32,9 @@ def setup():
     abi = compiled["abi"]
     bytecode = compiled["bytecode"]
     w3 = Web3(Web3.HTTPProvider('http://hardhat:8545'))
+    while not w3.is_connected():
+        print("Waiting for connection...")
+        time.sleep(0.5)
     w3.eth.default_account = w3.eth.accounts[0]
     Contract = w3.eth.contract(abi=abi, bytecode=bytecode)
     tx_hash = Contract.constructor().transact()

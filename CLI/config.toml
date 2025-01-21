@@ -1,5 +1,5 @@
 [token]
-jsonwebtoken = ""
+jsonwebtoken = "d"
 
 [server]
 url = "transcendence.vicode.dev"

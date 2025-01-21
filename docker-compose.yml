@@ -28,6 +28,8 @@ services:
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       SALT : ${SALT}
       DJANGO_SECRET: ${DJANGO_SECRET}
+    volumes:
+      - authentication-migrations:/app/ft_auth/migrations
     depends_on:
     - postgres
     - user-management
@@ -49,7 +51,7 @@ services:
           target: /app/
           action: sync
     volumes:
-     - ./services/user-management/app/profile/migrations:/app/profile/migrations:rw
+     - user-management-migrations:/app/profile/migrations
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     depends_on:
@@ -68,7 +70,7 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
       DJANGO_SECRET: ${DJANGO_SECRET}
     volumes:
-      - ./services/game-serv/app/app/migrations:/app/app/migrations:rw
+      - game-serv-migrations:/app/app/migrations
     develop:
       watch:
         - path: ./services/game-serv/app/
@@ -88,6 +90,8 @@ services:
       DJANGO_SECRET: ${DJANGO_SECRET}
     depends_on:
     - game-serv
+    volumes:
+      - game-serv-migrations:/app/app/migrations
   adminer:
     build: ./services/adminer
     container_name:  adminer
@@ -254,5 +258,9 @@ volumes:
   postgres_data:
   prometheus_data:
   adminer_data:
+  user-management-migrations:
+  game-serv-migrations:
+  authentication-migrations:
+
 networks:
   elk:
