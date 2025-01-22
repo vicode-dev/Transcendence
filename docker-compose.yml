@@ -227,8 +227,8 @@ services:
       args:
          KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
-        - 80:80
-        - 443:443
+        - 1080:80
+        - 1443:443
     volumes:
         # - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
         - ./services/nginx/certificates/:/etc/certificates/
