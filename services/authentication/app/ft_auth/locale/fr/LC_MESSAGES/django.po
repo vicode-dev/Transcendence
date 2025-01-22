@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:56+0000\n"
+"POT-Creation-Date: 2025-01-22 23:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,23 +36,31 @@ msgstr "Néerlandais"
 msgid "Delete this account"
 msgstr "Supprimer ce compte"
 
-#: app/ft_auth/templates/delete.html:11 app/ft_auth/templates/login.html:20
-#: app/ft_auth/templates/password.html:8 app/ft_auth/templates/register.html:41
+#: app/ft_auth/templates/delete.html:11 app/ft_auth/templates/link.html:12
+#: app/ft_auth/templates/login.html:20 app/ft_auth/templates/password.html:8
+#: app/ft_auth/templates/register.html:41
 msgid "Password"
 msgstr "Mot de passe"
 
-#: app/ft_auth/templates/delete.html:14
+#: app/ft_auth/templates/delete.html:14 app/ft_auth/templates/link.html:15
 #, fuzzy
 #| msgid "Enter old password"
 msgid "Enter your password"
 msgstr "Entrez l'ancien mot de passe"
 
+#: app/ft_auth/templates/delete.html:19 app/ft_auth/templates/link.html:20
+#: app/ft_auth/templates/otp.html:12 app/ft_auth/templates/password.html:26
+#, fuzzy
+#| msgid "Doublefactor Authentication"
+msgid "Double Authentication Code"
+msgstr "Authentification à deux facteurs"
+
 #: app/ft_auth/templates/delete.html:35
 msgid "Delete"
 msgstr "Supprimer"
 
-#: app/ft_auth/templates/delete.html:40 app/ft_auth/templates/otp.html:49
-#: app/ft_auth/templates/password.html:47
+#: app/ft_auth/templates/delete.html:40 app/ft_auth/templates/link.html:41
+#: app/ft_auth/templates/otp.html:49 app/ft_auth/templates/password.html:47
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -63,6 +71,31 @@ msgstr "Compte supprimé !"
 #: app/ft_auth/templates/deleted.html:10
 msgid "OK"
 msgstr "D'accord"
+
+#: app/ft_auth/templates/link.html:7
+msgid "Link this account with 42"
+msgstr "Lier ce compte avec 42"
+
+#: app/ft_auth/templates/link.html:8
+#, fuzzy
+#| msgid "Account deleted!"
+msgid "Account: "
+msgstr "Compte supprimé !"
+
+#: app/ft_auth/templates/link.html:36
+msgid "Link"
+msgstr "Lier"
+
+#: app/ft_auth/templates/linked.html:8
+#, fuzzy
+#| msgid "Account deleted!"
+msgid "Account linked!"
+msgstr "Compte supprimé !"
+
+#: app/ft_auth/templates/linked.html:10
+#: app/ft_auth/templates/password_updated.html:11
+msgid "Back"
+msgstr "Retour"
 
 #: app/ft_auth/templates/login.html:8 app/ft_auth/templates/login.html:34
 #: app/ft_auth/templates/register.html:61
@@ -94,6 +127,7 @@ msgid "Or"
 msgstr "Ou"
 
 #: app/ft_auth/templates/login.html:47 app/ft_auth/templates/register.html:69
+#: app/ft_auth/templates/to_42.html:13
 msgid "login with 42"
 msgstr "se connecter avec 42"
 
@@ -145,10 +179,6 @@ msgstr "Mettre à jour"
 msgid "Password updated!"
 msgstr "Mot de passe mis à jour !"
 
-#: app/ft_auth/templates/password_updated.html:11
-msgid "Back"
-msgstr "Retour"
-
 #: app/ft_auth/templates/register.html:6 app/ft_auth/templates/register.html:54
 msgid "Register"
 msgstr "Inscription"
@@ -177,15 +207,15 @@ msgstr "Vous avez déjà un compte ?"
 msgid "Or maybe"
 msgstr "Ou peut-être"
 
-#: app/ft_auth/utils/token.py:53 app/ft_auth/utils/user.py:171
+#: app/ft_auth/utils/token.py:73 app/ft_auth/utils/user.py:171
 msgid "Unknow user"
 msgstr "Utilisateur inconnu"
 
-#: app/ft_auth/utils/token.py:58
+#: app/ft_auth/utils/token.py:79
 msgid "Token expired"
 msgstr "Le jeton a expiré"
 
-#: app/ft_auth/utils/token.py:60
+#: app/ft_auth/utils/token.py:81
 msgid "Invalid token"
 msgstr "Jeton invalide"
 
@@ -267,18 +297,19 @@ msgstr "L'ancien mot de passe ne correspond pas."
 msgid "You forgot to specify your new password."
 msgstr "Vous avez oublié de spécifier votre nouveau mot de passe."
 
-#: app/ft_auth/views/delete.py:79 app/ft_auth/views/password.py:79
+#: app/ft_auth/views/delete.py:79 app/ft_auth/views/link.py:92
+#: app/ft_auth/views/password.py:79
 msgid "Invalid A2F code"
 msgstr "Code A2F invalide"
 
-#: app/ft_auth/views/oauth2.py:36
+#: app/ft_auth/views/oauth2.py:45
 msgid "User creation failed, try later."
 msgstr "La création de l'utilisateur a échoué, réessayez plus tard."
 
-#: app/ft_auth/views/oauth2.py:42
+#: app/ft_auth/views/oauth2.py:51
 msgid "User login failed, try later."
 msgstr "La connexion de l'utilisateur a échoué, réessayez plus tard."
 
-#: app/ft_auth/views/otp.py:61
+#: app/ft_auth/views/otp.py:60
 msgid "Invalid code"
 msgstr "Code invalide"

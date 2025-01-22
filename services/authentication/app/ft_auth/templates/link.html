@@ -5,6 +5,7 @@
 	<div class="d-flex justify-content-center">
 		<div class="col-md-6 col-md-offset-3">
 			<h2>{% translate "Link this account with 42"%}</h2>
+			<h3>{% translate "Account: "%} {{ login }}</h3>
 			<form action="/link/" method="post" class="form-horizontal" id="link">
 				{% if has_password %}
 				<div class="form-group">
@@ -30,7 +31,7 @@
 					<button
 						type="submit"
 						class="col-sm-offset-3 col-sm-5 btn btn-primary btn-block"
-						onclick="fetchForm(event, 'delete', true);"
+						onclick="fetchForm(event, 'link', true);"
 					>
 							{% translate "Link" %}
 					</button>

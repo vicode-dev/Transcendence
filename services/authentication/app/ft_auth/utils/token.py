@@ -50,7 +50,7 @@ def encode_link_jwt(user_info):
   		"typ": "JWT"
 	}
 	payload = {
-		"42_id": user_info["id"],
+		"ft_id": user_info["id"],
 		"iat":
 			datetime.now(timezone.utc),
 		"exp":

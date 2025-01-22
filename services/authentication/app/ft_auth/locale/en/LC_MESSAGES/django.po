@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 10:56+0000\n"
+"POT-Creation-Date: 2025-01-22 23:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,21 +38,27 @@ msgstr ""
 msgid "Delete this account"
 msgstr ""
 
-#: app/ft_auth/templates/delete.html:11 app/ft_auth/templates/login.html:20
-#: app/ft_auth/templates/password.html:8 app/ft_auth/templates/register.html:41
+#: app/ft_auth/templates/delete.html:11 app/ft_auth/templates/link.html:12
+#: app/ft_auth/templates/login.html:20 app/ft_auth/templates/password.html:8
+#: app/ft_auth/templates/register.html:41
 msgid "Password"
 msgstr ""
 
-#: app/ft_auth/templates/delete.html:14
+#: app/ft_auth/templates/delete.html:14 app/ft_auth/templates/link.html:15
 msgid "Enter your password"
+msgstr ""
+
+#: app/ft_auth/templates/delete.html:19 app/ft_auth/templates/link.html:20
+#: app/ft_auth/templates/otp.html:12 app/ft_auth/templates/password.html:26
+msgid "Double Authentication Code"
 msgstr ""
 
 #: app/ft_auth/templates/delete.html:35
 msgid "Delete"
 msgstr ""
 
-#: app/ft_auth/templates/delete.html:40 app/ft_auth/templates/otp.html:49
-#: app/ft_auth/templates/password.html:47
+#: app/ft_auth/templates/delete.html:40 app/ft_auth/templates/link.html:41
+#: app/ft_auth/templates/otp.html:49 app/ft_auth/templates/password.html:47
 msgid "Cancel"
 msgstr ""
 
@@ -62,6 +68,27 @@ msgstr ""
 
 #: app/ft_auth/templates/deleted.html:10
 msgid "OK"
+msgstr ""
+
+#: app/ft_auth/templates/link.html:7
+msgid "Link this account with 42"
+msgstr ""
+
+#: app/ft_auth/templates/link.html:8
+msgid "Account: "
+msgstr ""
+
+#: app/ft_auth/templates/link.html:36
+msgid "Link"
+msgstr ""
+
+#: app/ft_auth/templates/linked.html:8
+msgid "Account linked!"
+msgstr ""
+
+#: app/ft_auth/templates/linked.html:10
+#: app/ft_auth/templates/password_updated.html:11
+msgid "Back"
 msgstr ""
 
 #: app/ft_auth/templates/login.html:8 app/ft_auth/templates/login.html:34
@@ -94,6 +121,7 @@ msgid "Or"
 msgstr ""
 
 #: app/ft_auth/templates/login.html:47 app/ft_auth/templates/register.html:69
+#: app/ft_auth/templates/to_42.html:13
 msgid "login with 42"
 msgstr ""
 
@@ -145,10 +173,6 @@ msgstr ""
 msgid "Password updated!"
 msgstr ""
 
-#: app/ft_auth/templates/password_updated.html:11
-msgid "Back"
-msgstr ""
-
 #: app/ft_auth/templates/register.html:6 app/ft_auth/templates/register.html:54
 msgid "Register"
 msgstr ""
@@ -177,15 +201,15 @@ msgstr ""
 msgid "Or maybe"
 msgstr ""
 
-#: app/ft_auth/utils/token.py:53 app/ft_auth/utils/user.py:171
+#: app/ft_auth/utils/token.py:73 app/ft_auth/utils/user.py:171
 msgid "Unknow user"
 msgstr ""
 
-#: app/ft_auth/utils/token.py:58
+#: app/ft_auth/utils/token.py:79
 msgid "Token expired"
 msgstr ""
 
-#: app/ft_auth/utils/token.py:60
+#: app/ft_auth/utils/token.py:81
 msgid "Invalid token"
 msgstr ""
 
@@ -259,18 +283,19 @@ msgstr ""
 msgid "You forgot to specify your new password."
 msgstr ""
 
-#: app/ft_auth/views/delete.py:79 app/ft_auth/views/password.py:79
+#: app/ft_auth/views/delete.py:79 app/ft_auth/views/link.py:92
+#: app/ft_auth/views/password.py:79
 msgid "Invalid A2F code"
 msgstr ""
 
-#: app/ft_auth/views/oauth2.py:36
+#: app/ft_auth/views/oauth2.py:45
 msgid "User creation failed, try later."
 msgstr ""
 
-#: app/ft_auth/views/oauth2.py:42
+#: app/ft_auth/views/oauth2.py:51
 msgid "User login failed, try later."
 msgstr ""
 
-#: app/ft_auth/views/otp.py:61
+#: app/ft_auth/views/otp.py:60
 msgid "Invalid code"
 msgstr ""

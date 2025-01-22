@@ -41,12 +41,6 @@ def login_with_42(request):
 				)
 				generate_link_jwt(response, user_42_data)
 				return response
-				return render(request,
-					"/app/ft_auth/templates/link.html",
-					context={
-						"has_password": user.password is not None,
-						"otp_required": otp_is_required(user.id)
-					})
 		if user is None:
 			return JsonResponse({"error": _("User creation failed, try later.")}, status=500)
 		response = HttpResponse(
