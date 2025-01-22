@@ -18,7 +18,7 @@ function chat_main() {
         messageComponent.classList.add('messageComponent', 'd-flex', 'align-items-start', 'mb-2');
         const avatar = document.createElement('img');
         avatar.classList.add('usr-img', 'mr-2');
-        avatar.src = `/api/player/${data.playerId}/avatar`;
+        avatar.src = `/api/player/${data.playerId}/avatar/`;
         avatar.style.height = '2rem';
         avatar.style.width = '2rem';
         avatar.style.borderRadius = '50%';
