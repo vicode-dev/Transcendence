@@ -4,13 +4,14 @@ from pong.Bot import Bot
 from websockets.sync.client import connect
 from network.config import configLoad
 from threading import Thread
-import math, curses, time, json
+import math, curses, time, json, requests
 
 p1 = Player(0, 3.75)
 p2 = Player(8.75, 3.75)
 ball = Ball(4.25, 4.25)
 gameData = GameData(0)
 state = True
+players = [0, 0]
 
 def willHitLeftPaddle(ball, px, py, x, y):
     if ((x - BALL_SIZE < px + PADDLE_WIDTH and py <= y - BALL_SIZE and y - BALL_SIZE <= py + PADDLE_SIZE)):
@@ -98,7 +99,8 @@ def drawBall(stdscr, ball_x, ball_y):
     stdscr.addch(ball_y, ball_x, '੦') #curses.color_pair(1)
 
 def drawScore(pad, gameData):
-    s1 = "Player 1: " + str(gameData._score[0]) + " | Player 2: " + str(gameData._score[1])
+    global players
+    s1 = str(players[0]) + ": " + str(gameData._score[0]) + " | " + str(players[1]) + ": " + str(gameData._score[1])
     pad.addstr(0, 0, s1)
 
 def test(jwt, id):
@@ -113,13 +115,15 @@ def gameLoop2P(win, stdscr, pad, scale, websocket):
     global p1
     global p2
     global ball
+    global players
     stdscr.keypad(True)
     stdscr.timeout(100)
     stdscr.nodelay(True)
     stdscr.border()
     while True:
+        startTime = time.time()
         key = stdscr.getch()
-        if key == ord('q') or key == 27:
+        if key == 27:
             websocket.close()
             break
         elif key == curses.KEY_RESIZE:
@@ -132,26 +136,25 @@ def gameLoop2P(win, stdscr, pad, scale, websocket):
             stdscr.resize(length, length)
             stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
-        elif key == ord('w') or key == ord('d') or key == curses.KEY_RIGHT:
-            websocket.send(json.dumps({"type":"move", "paddleMove": 1}), text=True)
-        elif key == ord('s') or key == ord('a') or key == curses.KEY_LEFT:
-            websocket.send(json.dumps({"type":"move", "paddleMove": -1}), text=True)
+        elif key == ord('s') or key == ord('d') or key == curses.KEY_DOWN:
+            websocket.send(json.dumps({"type":"move", "paddleMove": 1}))
+        elif key == ord('w') or key == ord('a') or key == curses.KEY_UP:
+            websocket.send(json.dumps({"type":"move", "paddleMove": -1}))
         if state == True:
             curses.napms(100)
             continue
         if gameData._score[0] == 10 or gameData._score[1] == 10:
             pad.clear()
             if gameData._score[0] == 10:
-                pad.addstr(0, 0, "Player 1 won!")
+                pad.addstr(0, 0, players[0] + " won!")
             elif gameData._score[1] == 10:
-                pad.addstr(0, 0, "Player 2 won!")
+                pad.addstr(0, 0, players[1] + " won!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
             stdscr.nodelay(False)
             key = stdscr.getch()
             if key == ord('q') or key == 27:
                 break
             continue
-        startTime = time.time()
         stdscr.erase()
         stdscr.border()
         ballMovement(gameData._score, ball, p1, p2)
@@ -164,13 +167,19 @@ def gameLoop2P(win, stdscr, pad, scale, websocket):
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
 
+def initPlayers(pList, jwt):
+    global players
+    config = configLoad()
+    for i in range(len(pList)):
+        response = requests.get(f"https://{config['server']['url']}/api/player/{pList[i]}/username/", headers={'Cookie': f"session={jwt}"}).json()
+        players[i] = response["username"]
+
 def gameWebsocket(jwt, id, websocket):
     global state
     global p1
     global p2
     global ball
     global gameData
-    logger = open("ha.txt", "a")
     while True:
         messageStr = websocket.recv()
         message = json.loads(messageStr)
@@ -189,12 +198,10 @@ def gameWebsocket(jwt, id, websocket):
             case "score_update":
                 ball._angle = message["angle"]
                 gameData._score = message["scores"]
-            # case "init":
-                # break
+            case "init":
+                initPlayers(message["playersList"], jwt)
             case "game_end":
                 break
-    logger.write("End of loop\n")
-    logger.close()
     return
 
 def launchGame2P(win, id, jwt):
@@ -209,7 +216,8 @@ def launchGame2P(win, id, jwt):
     gameWin = curses.newwin(length, length, 1, int(width / 2 - length / 2))
     pad = curses.newpad(1, width)
     config = configLoad()
-    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/2pong", additional_headers={"Cookie": f"session={jwt}"}, origin=f"https://{config['server']['url']}")
+    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/2pong", open_timeout=30, additional_headers={"Cookie": f"session={jwt}"}, origin=f"https://{config['server']['url']}")
     thread = Thread(target = gameWebsocket, args = (jwt, id, websocket))
     thread.start()
     gameLoop2P(win, gameWin, pad, scale, websocket)
+    thread.join()

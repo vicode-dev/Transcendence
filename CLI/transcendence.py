@@ -181,11 +181,11 @@ def createLobbyConnect4(menu):
     menu.skip = True
     try:
         lobbyId = createLobby(jwt, 1)
-        lobby(menu.win, lobbyId)
     except Exception as e:
         curses.endwin()
         print(e)
         sys.exit(1)   
+    lobby(menu.win, lobbyId, jwt)
     return
 
 

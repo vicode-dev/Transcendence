@@ -1,10 +1,10 @@
-import tomllib, toml
+import toml
 from menu.Menu import Menu
 from menu.Prompt import Prompt
 
 def configLoad():
-    with open("config.toml", "rb") as configFile:
-        data = tomllib.load(configFile)
+    with open("config.toml", "r") as configFile:
+        data = toml.load(configFile)
         return data
 
 def configSave(data):

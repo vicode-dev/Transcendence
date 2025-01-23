@@ -109,12 +109,13 @@ def gameLoop2P(win, stdscr, pad, scale):
     stdscr.border()
     while True:
         if gameData._score[0] == 10 or gameData._score[1] == 10:
-            # pad.clear()
+            pad.clear()
             if gameData._score[0] == 10:
                 pad.addstr(0, 0, "Player 1 won! Congratulations!")
             elif gameData._score[1] == 10:
                 pad.addstr(0, 0, "Player 2 won!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            stdscr.nodelay(False)
             key = stdscr.getch()
             if key == ord('q') or key == 27:
                 break

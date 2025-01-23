@@ -1,15 +1,15 @@
-import curses, time
+import curses, json, requests
 from connect4.utils import checkWin, boardFull, COLUMNS, ROWS, COLOR, RED, YELLOW
 from connect4.Bot import Connect4Bot
+from websockets.sync.client import connect
+from network.config import configLoad
+from threading import Thread
 
-def debug(j):
-    alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
-    if (0 <= j <= 9):
-        return str(j)
-    if (9 < j <= 24):
-        return alpha[j - 10]
-    else:
-        return "+"
+state = True
+board = [[-1] * COLUMNS for _ in range(ROWS)]
+turn = 0
+players = [0, 0, 0]
+gameEnd = 0
 
 def drawBoard(stdscr, rows, columns):
     grid = ["─", "│", "┌", "┐", "┬", "└", "├", "┘", "┴", "┤", "┼"]
@@ -39,30 +39,74 @@ def drawBoard(stdscr, rows, columns):
             elif j % 3 == 0 and i % 2 == 0:
                 stdscr.addch(i + 1, j, grid[10])
 
-def writePad(pad, turn):
-    pad.addstr(0, 0, "Player " + str(turn + 1) + " " + COLOR[turn] + " makes a selection (1 - 7)")
+def writePad(pad, s, width):
+    global players
+    pad.clear()
+    if (s):
+        pad.addstr(0, 0, s)
+    else:
+        pad.addstr(0, 0, str(players[turn]) + " " + COLOR[(turn + 1) % 2] + " makes a selection (1 - 7)")
+    pad.refresh(0, 0, 0, 0, 2, width)
 
-def dropPiece(stdscr, key, board, turn):
-    col = int(key - ord('1'))
-    for i in range(5, -1, -1):
-        if (board[i][col] == 0):
-            board[i][col] = turn + 1
-            stdscr.addch(i * 2 + 2, col * 3 + 1, COLOR[turn])
-            stdscr.refresh()
-            if checkWin(board, i, col):
-                return turn + 2
-            turn = (turn + 1) % 2
-            break
-    return turn
+def dropPiece(stdscr, board):
+    for j in range(ROWS):
+        for i in range(COLUMNS):
+            if (board[j][i] == 0 or board[j][i] == 1):
+                stdscr.addch(j * 2 + 2, i * 3 + 1, COLOR[board[j][i]])
+    stdscr.refresh()
 
-def gameConnectLoop(win, stdscr, pad):
-    board = [[0 for i in range(COLUMNS)] for j in range(ROWS)]
-    turn = 0
+
+def initPlayers(pList, jwt):
+    global players
+    config = configLoad()
+    for i in range(len(pList)):
+        response = requests.get(f"https://{config['server']['url']}/api/player/{pList[i]}/username/", headers={'Cookie': f"session={jwt}"}).json()
+        players[i] = response["username"]
+
+def gameWebsocket(jwt, id, websocket):
+    global state
+    global board
+    global turn
+    global gameEnd
+    while True:
+        messageStr = websocket.recv()
+        message = json.loads(messageStr)
+        match message["type"]:
+            case "freeze":
+                state = message["state"]
+            case "data":
+                turn = message["turn"]
+                boardState = message["board_state"]
+                if boardState[message["col"]] + 1 >= 0:
+                    board[boardState[message["col"]] + 1][message["col"]] = turn
+            case "start_game":
+                initPlayers(message["players"], jwt)
+            case "end_game":
+                score = message["score"]
+                config = configLoad()
+                response = requests.get(f"https://{config['server']['url']}/api/player/{message['winner']}/username/", headers={'Cookie': f"session={jwt}"}).json()
+                players[2] = response["username"]
+                if score[0] == 0 and score[1] == 0:
+                    gameEnd = 2
+                else:
+                    gameEnd = 1
+                break
+    return
+
+
+
+def gameConnectLoop(win, stdscr, pad, websocket):
+    global board
+    global players
+    global turn
+    global stdscreen
+    stdscreen = stdscr
     stdscr.keypad(True)
     stdscr.nodelay(True)
     height, width = win.getmaxyx()
     drawBoard(stdscr, ROWS * 2 + 1, COLUMNS * 3 + 1)
     while True:
+        dropPiece(stdscr, board)
         key = stdscr.getch()
         if key == curses.KEY_RESIZE:
             height, width = win.getmaxyx()
@@ -71,63 +115,31 @@ def gameConnectLoop(win, stdscr, pad):
         elif key == ord('q') or key == 27:
             break
         elif ord('1') <= key <= ord('7'):  # Human move
-            turn = dropPiece(stdscr, key, board, turn)
+            websocket.send(json.dumps({"type":"move", "dropPiece":int(key - ord('1'))}))
+        if gameEnd != 0:
+            if gameEnd == 1:
+                writePad(pad,  str(players[2]) + " won! (press (q) or (esc) to exit)", width)
+            if gameEnd == 2:
+                writePad(pad, "Board full, it's a draw (press (q) or (esc) to exit)", width)
+            stdscr.nodelay(False)
+            key = stdscr.getch()
+            if key == ord('q') or key == 27:
+                break
+        writePad(pad, None, width)
+        curses.napms(100)
 
-        if turn > 1:
-            pad.addstr(0, 0, "Player " + str(turn - 1) + " won! (Press any key to exit)")
-            pad.refresh(0, 0, 0, 0, 2, width)
-            # stdscr.getch()
-            while stdscr.getch() == -1:
-                continue
-            break
-        if boardFull(board) == True:
-            pad.addstr(0, 0, "Board full, it's a draw (press any key to exit)")
-            pad.refresh(0, 0, 0, 0, 2, width)
-            while stdscr.getch() == -1:
-                continue
-            break
-        writePad(pad, turn)
-        pad.refresh(0, 0, 0, 0, 2, width)
 
-def gameConnectLoopAi(win, stdscr, pad):
-    board = [[0 for i in range(COLUMNS)] for j in range(ROWS)]
-    bot_player = 1  # Change to the player number you want the bot to be (1 or 2)
-    bot = Connect4Bot(depth=7)
-    turn = 0
-    stdscr.keypad(True)
-    stdscr.nodelay(True)
+def launchConnectGame(win, id, jwt):
+    global pad
     height, width = win.getmaxyx()
-    drawBoard(stdscr, ROWS * 2 + 1, COLUMNS * 3 + 1)
-    while True:
-        key = stdscr.getch()
-        if key == curses.KEY_RESIZE:
-            height, width = win.getmaxyx()
-            curses.resize_term(*win.getmaxyx())
-            win.refresh()
-        elif key == ord('q') or key == 27:
-            break
-        elif ord('1') <= key <= ord('7') and turn != bot_player:  # Human move
-            turn = dropPiece(stdscr, key, board, turn)
-
-        # Bot's turn
-        if turn == bot_player:
-            bot_move = bot.get_move(board, bot_player)
-            if bot_move is not None:  # Check if the bot found a valid move
-                bot_key = ord(str(bot_move + 1))
-                turn = dropPiece(stdscr, bot_key, board, turn)
-
-        if turn > 1:
-            pad.addstr(0, 0, "Player " + str(turn - 1) + " won! (Press any key to exit)")
-            pad.refresh(0, 0, 0, 0, 2, width)
-            # stdscr.getch()
-            while stdscr.getch() == -1:
-                continue
-            break
-        if boardFull(board) == True:
-            pad.addstr(0, 0, "Board full, it's a draw (press any key to exit)")
-            pad.refresh(0, 0, 0, 0, 2, width)
-            while stdscr.getch() == -1:
-                continue
-            break
-        writePad(pad, turn)
-        pad.refresh(0, 0, 0, 0, 2, width)
+    win.erase()
+    win.refresh()
+    gameWin = curses.newwin(14, 23, 2, int(width / 2 - 23 / 2))
+    pad = curses.newpad(1, width)
+    config = configLoad()
+    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/connect4", open_timeout=30, additional_headers={"Cookie": f"session={jwt}"}, origin=f"https://{config['server']['url']}")
+    thread = Thread(target = gameWebsocket, args = (jwt, id, websocket))
+    thread.start()
+    gameConnectLoop(win, gameWin, pad, websocket)
+    thread.join()
+    return

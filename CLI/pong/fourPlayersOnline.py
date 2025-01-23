@@ -1,6 +1,19 @@
 from pong.GameClass import Player, Ball, GameData
 from pong.utils import SIZE, PADDLE_SIZE, PADDLE_WIDTH, BALL_SIZE, TICK_RATE, MAX_SPEED
-import math, curses, time, random
+from network.config import configLoad
+from threading import Thread
+from websockets.sync.client import connect
+import math, curses, time, random, requests, json
+
+
+players = [0, 0, 0, 0]
+p1 = Player(0, 3.75)
+p2 = Player(8.75, 3.75)
+p3 = Player(3.75, 0)
+p4 = Player(3.75, 8.75)
+ball = Ball(4.25, 4.25)
+gameData = GameData(5)
+state = True
 
 def randomAngle():
     ang = random.randint(-30, 30)
@@ -186,38 +199,24 @@ def defeat(score):
             score = [i * -1 for i in score]
             return True
 
-def gameLoop4P(win, stdscr, pad, scale):
-    p1 = Player(0, 3.75)
-    p2 = Player(8.75, 3.75)
-    p3 = Player(3.75, 0)
-    p4 = Player(3.75, 8.75)
-    ball = Ball(4.25, 4.25)
-    gameData = GameData(5)
+def gameLoop4P(win, stdscr, pad, scale, websocket):
+    global state
+    global gameData
+    global p1
+    global p2
+    global p3
+    global p4
+    global ball
+    global players
     stdscr.keypad(True)
     stdscr.timeout(100)
     stdscr.nodelay(True)
     stdscr.border()
     while True:
-        if defeat(gameData._score) == True:
-            pad.clear()
-            if gameData._score[0] > 0:
-                pad.addstr(0, 0, "Player 1 won! Congratulations!")
-            elif gameData._score[1] > 0:
-                pad.addstr(0, 0, "Player 2 won! Congratulations!")
-            elif gameData._score[2] > 0:
-                pad.addstr(0, 0, "Player 3 won! Congratulations!")
-            else:
-                pad.addstr(0, 0, "Player 4 won!")
-            pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
-            key = stdscr.getch()
-            # while key != ord('q') and key != 27:
-            #     continue
-            break
         startTime = time.time()
-        stdscr.erase()
-        stdscr.border()
         key = stdscr.getch()
-        if key == ord('q') or key == 27:
+        if key == 27:
+            websocket.close()
             break
         elif key == curses.KEY_RESIZE:
             win.erase()
@@ -229,30 +228,105 @@ def gameLoop4P(win, stdscr, pad, scale):
             stdscr.resize(length, length)
             stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
-        elif key == ord('w') and p1._y > PADDLE_WIDTH:
-            p1._y -= 0.25
-        elif key == ord('s') and p1._y < SIZE - PADDLE_SIZE - PADDLE_WIDTH:
-            p1._y += 0.25
-        elif key == curses.KEY_UP and p2._y > PADDLE_WIDTH:
-            p2._y -= 0.25
-        elif key == curses.KEY_DOWN and p2._y < SIZE - PADDLE_SIZE - PADDLE_WIDTH:
-            p2._y += 0.25
-        elif key == ord('a') and p3._x > PADDLE_WIDTH:
-            p3._x -= 0.25
-        elif key == ord('d') and p3._x < SIZE - PADDLE_WIDTH - PADDLE_SIZE:
-            p3._x += 0.25
-        elif key == curses.KEY_LEFT and p4._x > PADDLE_WIDTH:
-            p4._x -= 0.25
-        elif key == curses.KEY_RIGHT and p4._x < SIZE - PADDLE_WIDTH - PADDLE_SIZE:
-            p4._x += 0.25
+        elif key == ord('w') or key == ord('a') or key == curses.KEY_UP or key == curses.KEY_LEFT:
+            websocket.send(json.dumps({"type":"move", "paddleMove": -1}))
+        elif key == ord('s') or key == ord('d') or key == curses.KEY_DOWN or key == curses.KEY_RIGHT:
+            websocket.send(json.dumps({"type":"move", "paddleMove": 1}))
+        if state == True:
+            curses.napms(100)
+            continue
+        if defeat(gameData._score) == True:
+            pad.clear()
+            if gameData._score[0] > 0:
+                pad.addstr(0, 0, players[0] + " won! Congratulations!")
+            elif gameData._score[1] > 0:
+                pad.addstr(0, 0,  players[1] + " won! Congratulations!")
+            elif gameData._score[2] > 0:
+                pad.addstr(0, 0,  players[2] + " won! Congratulations!")
+            else:
+                pad.addstr(0, 0,  players[3] + " won! Congratulations!")
+            pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            stdscr.nodelay(False)
+            key = stdscr.getch()
+            if key == ord('q') or key == 27:
+                break
+            continue
+        stdscr.erase()
+        stdscr.border()
         ballMovement(gameData._score, ball, p1, p2, p3, p4)
-        drawVerticalPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
-        drawVerticalPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
-        drawHorizontalPaddle(stdscr, scale, int((p3._x) * scale) + 1, int((p3._y) * scale) + 1)
-        drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
+        if gameData._score[0] > 0 :
+            drawVerticalPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
+        if gameData._score[1] > 0:
+            drawVerticalPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
+        if gameData._score[2] > 0:
+            drawHorizontalPaddle(stdscr, scale, int((p3._x) * scale) + 1, int((p3._y) * scale) + 1)
+        if gameData._score[3] > 0:
+            drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
         stdscr.refresh()
         elapsedTime = time.time() - startTime
         curses.napms(int(max(0, TICK_RATE - elapsedTime) * 1000))
+
+def initPlayers(pList, jwt):
+    global players
+    config = configLoad()
+    for i in range(len(pList)):
+        response = requests.get(f"https://{config['server']['url']}/api/player/{pList[i]}/username/", headers={'Cookie': f"session={jwt}"}).json()
+        players[i] = response["username"]
+
+def gameWebsocket(jwt, id, websocket):
+    global state
+    global p1
+    global p2
+    global p3
+    global p4
+    global ball
+    global gameData
+    while True:
+        messageStr = websocket.recv()
+        message = json.loads(messageStr)
+        match message["type"]:
+            case "freeze":
+                state = message["state"]
+            case "tick_data":
+                p1._x = message["P"][0]["x"]
+                p1._y = message["P"][0]["y"]
+                p2._x = message["P"][1]["x"]
+                p2._y = message["P"][1]["y"]
+                p3._x = message["P"][2]["x"]
+                p3._y = message["P"][2]["y"]
+                p4._x = message["P"][3]["x"]
+                p4._y = message["P"][3]["y"]
+                ball._x = message["Ball"]["x"]
+                ball._y = message["Ball"]["y"]
+                ball._angle = message["Ball"]["angle"]
+                ball._speed = message["Ball"]["speed"]
+            case "score_update":
+                ball._angle = message["angle"]
+                gameData._score = message["scores"]
+            case "init":
+                initPlayers(message["playersList"], jwt)
+            case "game_end":
+                break
+    return
+
+
+def launchGame4P(win, id, jwt):
+    global state
+    height, width = win.getmaxyx()
+    height -= 1
+    scale = height - (height % (SIZE)) if height < width else width - (width % SIZE)
+    scale = int(scale / 10)
+    length = (SIZE * scale) + 2
+    win.erase()
+    win.refresh()
+    gameWin = curses.newwin(length, length, 1, int(width / 2 - length / 2))
+    pad = curses.newpad(1, width)
+    config = configLoad()
+    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/4pong", open_timeout=30, additional_headers={"Cookie": f"session={jwt}"}, origin=f"https://{config['server']['url']}")
+    thread = Thread(target = gameWebsocket, args = (jwt, id, websocket))
+    thread.start()
+    gameLoop4P(win, gameWin, pad, scale, websocket)
+    thread.join()

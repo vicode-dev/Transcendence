@@ -2,15 +2,6 @@ import curses, time
 from connect4.utils import checkWin, boardFull, COLUMNS, ROWS, COLOR, RED, YELLOW
 from connect4.Bot import Connect4Bot
 
-def debug(j):
-    alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
-    if (0 <= j <= 9):
-        return str(j)
-    if (9 < j <= 24):
-        return alpha[j - 10]
-    else:
-        return "+"
-
 def drawBoard(stdscr, rows, columns):
     grid = ["─", "│", "┌", "┐", "┬", "└", "├", "┘", "┴", "┤", "┼"]
     stdscr.addstr(0, 0, " 1  2  3  4  5  6  7")

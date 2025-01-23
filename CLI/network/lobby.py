@@ -2,8 +2,8 @@ from network.config import configLoad
 from websockets.sync.client import connect
 from threading import Thread
 from pong.twoPlayersOnline import launchGame2P
-from pong.fourPlayersOnline import gameLoop4P
-from connect4.connect4Online import gameConnectLoop
+from pong.fourPlayersOnline import launchGame4P
+from connect4.connect4Online import launchConnectGame
 import requests, json, curses, sys
 
 playersList = []
@@ -22,15 +22,19 @@ def lobby_websocket(jwt, id, websocket):
     global maxPlayers
     global start
     while True:
-        messageStr = websocket.recv()
-        message = json.loads(messageStr)
-        match message["type"]:
-            case "lobby_game":
-                playersList = getPlayersList(jwt, message["players"])
-                maxPlayers = message["maxPlayers"]
-            case "lobby_redirect":
-                start = True
-                break
+        try:
+            messageStr = websocket.recv()
+            message = json.loads(messageStr)
+            match message["type"]:
+                case "lobby_game":
+                    playersList = getPlayersList(jwt, message["players"])
+                    maxPlayers = message["maxPlayers"]
+                case "lobby_redirect":
+                    start = True
+                    websocket.close()
+                    break
+        except Exception as e:
+            break
     return
 
 def lobby(win, id, jwt):
@@ -51,7 +55,7 @@ def lobby(win, id, jwt):
             win.addstr(i + 2, 0, playersList[i])    
         win.refresh()
         key = win.getch()
-        if(key == ord('q')):
+        if(key == 27 or key == curses.KEY_LEFT):
             websocket.close()
             break
         if(key == ord('2') and maxPlayers != 2):
@@ -65,14 +69,15 @@ def lobby(win, id, jwt):
             requests.post(f"https://{config['server']['url']}/lobby/{id}/?private=1", headers={'Cookie': f"session={jwt}"})
         if start == True:
             response = requests.get(f"https://{config['server']['url']}/game/{id}/api/", headers={'Cookie': f"session={jwt}"}).json()
+            thread.join()
             if response["gameType"] == False:
                 if response["maxPlayers"] == 2:
                     launchGame2P(win, id, jwt)
                 else:
-                    gameLoop4P(win, id, jwt)
+                    launchGame4P(win, id, jwt)
             else:
-                gameConnectLoop(win, id, jwt)
-    thread.join()
+                launchConnectGame(win, id, jwt)
+            break
     win.nodelay(False)
     return
 

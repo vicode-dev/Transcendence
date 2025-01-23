@@ -207,12 +207,13 @@ def gameLoop4P(win, stdscr, pad, scale):
             elif gameData._score[2] > 0:
                 pad.addstr(0, 0, "Player 3 won! Congratulations!")
             else:
-                pad.addstr(0, 0, "Player 4 won!")
+                pad.addstr(0, 0, "Player 4 won! Congratulations!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
+            stdscr.nodelay(False)
             key = stdscr.getch()
-            # while key != ord('q') and key != 27:
-            #     continue
-            break
+            if key == ord('q') or key == 27:
+                break
+            continue
         startTime = time.time()
         stdscr.erase()
         stdscr.border()
@@ -246,10 +247,14 @@ def gameLoop4P(win, stdscr, pad, scale):
         elif key == curses.KEY_RIGHT and p4._x < SIZE - PADDLE_WIDTH - PADDLE_SIZE:
             p4._x += 0.25
         ballMovement(gameData._score, ball, p1, p2, p3, p4)
-        drawVerticalPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
-        drawVerticalPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
-        drawHorizontalPaddle(stdscr, scale, int((p3._x) * scale) + 1, int((p3._y) * scale) + 1)
-        drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
+        if gameData._score[0] > 0 :
+            drawVerticalPaddle(stdscr, scale, int((p1._x) * scale) + 1, int((p1._y) * scale) + 1)
+        if gameData._score[1] > 0:
+            drawVerticalPaddle(stdscr, scale, int((p2._x) * scale) + 1, int(p2._y * scale) + 1)
+        if gameData._score[2] > 0:
+            drawHorizontalPaddle(stdscr, scale, int((p3._x) * scale) + 1, int((p3._y) * scale) + 1)
+        if gameData._score[3] > 0:
+            drawHorizontalPaddle(stdscr, scale, int((p4._x) * scale) + 1, int((p4._y) * scale) + 1)
         drawBall(stdscr, int(ball._x * scale) + 1, int(ball._y * scale) + 1)
         drawScore(pad, gameData)
         pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
