@@ -103,11 +103,6 @@ def drawScore(pad, gameData):
     s1 = str(players[0]) + ": " + str(gameData._score[0]) + " | " + str(players[1]) + ": " + str(gameData._score[1])
     pad.addstr(0, 0, s1)
 
-def test(jwt, id):
-    config = configLoad()
-    ssl_context = ssl.create_default_context()
-    websocket = connect(f"wss://{config['server']['url']}/ws/game/{id}/2pong", additional_headers={"Cookie": f"session={jwt}"}, ssl=ssl_context, origin=f"https://{config['server']['url']}")
-    return websocket
 
 def gameLoop2P(win, stdscr, pad, scale, websocket):
     global state
@@ -136,13 +131,10 @@ def gameLoop2P(win, stdscr, pad, scale, websocket):
             stdscr.resize(length, length)
             stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
-        elif key == ord('s') or key == ord('d') or key == curses.KEY_DOWN:
+        elif (key == ord('s') or key == ord('d') or key == curses.KEY_DOWN) and state == False:
             websocket.send(json.dumps({"type":"move", "paddleMove": 1}))
-        elif key == ord('w') or key == ord('a') or key == curses.KEY_UP:
+        elif (key == ord('w') or key == ord('a') or key == curses.KEY_UP) and state == False:
             websocket.send(json.dumps({"type":"move", "paddleMove": -1}))
-        if state == True:
-            curses.napms(100)
-            continue
         if gameData._score[0] == 10 or gameData._score[1] == 10:
             pad.clear()
             if gameData._score[0] == 10:
@@ -154,6 +146,9 @@ def gameLoop2P(win, stdscr, pad, scale, websocket):
             key = stdscr.getch()
             if key == ord('q') or key == 27:
                 break
+            continue
+        if state == True:
+            curses.napms(100)
             continue
         stdscr.erase()
         stdscr.border()
@@ -202,6 +197,7 @@ def gameWebsocket(jwt, id, websocket):
                 case "init":
                     initPlayers(message["playersList"], jwt)
                 case "game_end":
+                    state = True
                     break
         except:
             break

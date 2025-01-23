@@ -194,7 +194,7 @@ def defeat(score):
         else:
             win = i
     if (count == 3):
-        score[win] -= score[win] - 1
+        score[win] = 1
         newPoint(score, win)
         score = [i * -1 for i in score]
         return True
@@ -229,13 +229,10 @@ def gameLoop4P(win, stdscr, pad, scale, websocket):
             stdscr.resize(length, length)
             stdscr.mvwin(1, int(width / 2 - length / 2))
             win.refresh()
-        elif key == ord('w') or key == ord('a') or key == curses.KEY_UP or key == curses.KEY_LEFT:
+        elif (key == ord('w') or key == ord('a') or key == curses.KEY_UP or key == curses.KEY_LEFT) and state == False:
             websocket.send(json.dumps({"type":"move", "paddleMove": -1}))
-        elif key == ord('s') or key == ord('d') or key == curses.KEY_DOWN or key == curses.KEY_RIGHT:
+        elif (key == ord('s') or key == ord('d') or key == curses.KEY_DOWN or key == curses.KEY_RIGHT) and state == False:
             websocket.send(json.dumps({"type":"move", "paddleMove": 1}))
-        if state == True:
-            curses.napms(100)
-            continue
         if defeat(gameData._score) == True:
             pad.clear()
             if gameData._score[0] == 1:
@@ -251,6 +248,9 @@ def gameLoop4P(win, stdscr, pad, scale, websocket):
             key = stdscr.getch()
             if key == ord('q') or key == 27:
                 break
+            continue
+        if state == True:
+            curses.napms(100)
             continue
         stdscr.erase()
         stdscr.border()
@@ -311,6 +311,7 @@ def gameWebsocket(jwt, id, websocket):
                 case "init":
                     initPlayers(message["playersList"], jwt)
                 case "game_end":
+                    state = True
                     break
         except:
             break
