@@ -285,31 +285,34 @@ def gameWebsocket(jwt, id, websocket):
     global ball
     global gameData
     while True:
-        messageStr = websocket.recv()
-        message = json.loads(messageStr)
-        match message["type"]:
-            case "freeze":
-                state = message["state"]
-            case "tick_data":
-                p1._x = message["P"][0]["x"]
-                p1._y = message["P"][0]["y"]
-                p2._x = message["P"][1]["x"]
-                p2._y = message["P"][1]["y"]
-                p3._x = message["P"][2]["x"]
-                p3._y = message["P"][2]["y"]
-                p4._x = message["P"][3]["x"]
-                p4._y = message["P"][3]["y"]
-                ball._x = message["Ball"]["x"]
-                ball._y = message["Ball"]["y"]
-                ball._angle = message["Ball"]["angle"]
-                ball._speed = message["Ball"]["speed"]
-            case "score_update":
-                ball._angle = message["angle"]
-                gameData._score = message["scores"]
-            case "init":
-                initPlayers(message["playersList"], jwt)
-            case "game_end":
-                break
+        try:
+            messageStr = websocket.recv()
+            message = json.loads(messageStr)
+            match message["type"]:
+                case "freeze":
+                    state = message["state"]
+                case "tick_data":
+                    p1._x = message["P"][0]["x"]
+                    p1._y = message["P"][0]["y"]
+                    p2._x = message["P"][1]["x"]
+                    p2._y = message["P"][1]["y"]
+                    p3._x = message["P"][2]["x"]
+                    p3._y = message["P"][2]["y"]
+                    p4._x = message["P"][3]["x"]
+                    p4._y = message["P"][3]["y"]
+                    ball._x = message["Ball"]["x"]
+                    ball._y = message["Ball"]["y"]
+                    ball._angle = message["Ball"]["angle"]
+                    ball._speed = message["Ball"]["speed"]
+                case "score_update":
+                    ball._angle = message["angle"]
+                    gameData._score = message["scores"]
+                case "init":
+                    initPlayers(message["playersList"], jwt)
+                case "game_end":
+                    break
+        except Exception as e:
+            break
     return
 
 
