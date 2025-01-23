@@ -197,7 +197,7 @@ def defeat(gameData):
     if (count == 3):
         score[win] = 1
         newPoint(score, win)
-        score = [-i + 1 for i in score]
+        gameData._score = [-i + 1 for i in score]
         return True
     return False
 
