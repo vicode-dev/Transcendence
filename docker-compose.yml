@@ -242,9 +242,6 @@ volumes:
   postgres_data:
   prometheus_data:
   adminer_data:
-  user-management-migrations:
-  game-serv-migrations:
-  authentication-migrations:
 
 networks:
   elk:
