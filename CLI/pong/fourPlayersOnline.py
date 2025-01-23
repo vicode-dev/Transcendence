@@ -234,7 +234,7 @@ def gameLoop4P(win, stdscr, pad, scale, websocket):
             websocket.send(json.dumps({"type":"move", "paddleMove": -1}))
         elif (key == ord('s') or key == ord('d') or key == curses.KEY_DOWN or key == curses.KEY_RIGHT) and state == False:
             websocket.send(json.dumps({"type":"move", "paddleMove": 1}))
-        if defeat(gameData._score) == True:
+        if defeat(gameData) == True:
             pad.clear()
             if gameData._score[0] == 1:
                 pad.addstr(0, 0, players[0] + " won! Congratulations!")
