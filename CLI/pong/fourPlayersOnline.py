@@ -311,7 +311,7 @@ def gameWebsocket(jwt, id, websocket):
                     initPlayers(message["playersList"], jwt)
                 case "game_end":
                     break
-        except Exception as e:
+        except:
             break
     return
 
