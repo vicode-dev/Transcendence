@@ -153,7 +153,6 @@ h2,
 
 button {
     background-color: var(--secondary-color);
-    color: white;
     border: none;
     padding: 10px 20px;
     margin-top: 20px;
@@ -163,7 +162,34 @@ button {
 
 button:hover {
     background-color: var(--accent-color);
-    color: var(--secondary-color);
+}
+
+#animated-button {
+    background: radial-gradient(ellipse at bottom left, transparent 50%, var(--accent-color) 50%);
+    /* background-size: 200% 200%; */
+    background-size: 180% 300%;
+    background-position: 100% 0%;
+
+    /* background: linear-gradient(225deg, transparent 50%, var(--accent-color) 50%); */
+    /* background: radial-gradient(ellipse at bottom left, transparent 50%, var(--accent-color) 50%); */
+    /* background-size: 200% 200%; */
+    /* background-size: 200% 200%; */
+    /* background-position: 100% 0%; */
+    border-radius: 15px;
+
+    background-color: var(--secondary-color);
+    /* transition: background-position 0.3s ease-in-out; */
+    transition: background-position 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    /* transition: background-position 0.25s ease-in-out; */
+    /* transition: background-position 0.3s ease-in-out; */
+    /* position: relative; */
+}
+
+#animated-button:hover {
+    background-position: 0% 100%;
+    border-radius: 50%;
+
+    /* transform: scale(1.1); */
 }
 
 #home-title {

@@ -9,6 +9,8 @@ logger = logging.getLogger('app')
 class TournamentConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
+        if not sync_to_async(Tournament.objects.filter(pk=self.scope["url_route"]["kwargs"]["tournamentId"]).exists)():
+            await self.close()
         self.room_name = self.scope["url_route"]["kwargs"]["tournamentId"]
         self.room_group_name = f"tournament_{self.room_name}"
         # Join room group
@@ -54,21 +56,22 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     
     async def disconnect(self, close_code):
         # Leave room group
-        data = await sync_to_async(Tournament.objects.get)(pk=self.room_name)
-        if data.state == True:
-            data.disconnectedPlayersId.append(self.scope["token_check"]["id"])
-        else:
-            data.playersId.remove(self.scope["token_check"]["id"])
-            await self.channel_layer.group_send(
-            f'tournament_{self.room_name}',
-            {
-                'type': 'stats',
-                "players": data.playersId,
-                "games": data.gamesUUID,
-                "gamesArchive": data.gamesId
-            }
-            )
-        await sync_to_async(data.save)()
+        if await sync_to_async(Tournament.objects.filter(pk=self.room_name).exists)():
+            data = await sync_to_async(Tournament.objects.get)(pk=self.room_name)
+            if data.state == True:
+                data.disconnectedPlayersId.append(self.scope["token_check"]["id"])
+            else:
+                data.playersId.remove(self.scope["token_check"]["id"])
+                await self.channel_layer.group_send(
+                f'tournament_{self.room_name}',
+                {
+                    'type': 'stats',
+                    "players": data.playersId,
+                    "games": data.gamesUUID,
+                    "gamesArchive": data.gamesId
+                }
+                )
+            await sync_to_async(data.save)()
 
         await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name

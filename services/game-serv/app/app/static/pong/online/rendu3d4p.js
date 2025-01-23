@@ -67,10 +67,13 @@ function on3d4p_GameEnd(score, winner) {
     showNavbar();
     navBarManualOverride = false;
     loopBreaker = true;
-    if (score == 1)
+    if (on_index == null)
+        endPopup("typeVictory", winner);
+    else if (score == 1)
         endPopup("typeVictory", winner);
     else
         endPopup("typeDefeat", winner);
+    showNavbar();
 }
 
 function on3d4p_ballReachObstacle(ball, scores3d, x, y) {
@@ -349,10 +352,10 @@ function mainRendu3d4pOnline() {
     gameWebSocket.addEventListener("close", on3d4p_closeEvent);
     gameWebSocket.addEventListener("open", on3d4p_openEvent);
     document.addEventListener("keydown", on3d4p_keydownEvent);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function on3d4p_destructor() {
+    loopBreaker = true;
     p1 = null;
     p2 = null;
     p3 = null;
@@ -380,7 +383,7 @@ function on3d4p_destructor() {
     gameWebSocket.removeEventListener("open", on3d4p_openEvent);
     gameWebSocket.removeEventListener("message", on3d4p_messageEvent);
     enableDoubleTapZoom();
-    window.removeEventListener("resize", resizeHandler);
+    unblockContextMenu();
     gameWebSocket.close();
 }
 

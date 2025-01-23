@@ -64,10 +64,11 @@ function loadLocalGame(event, localgameUrl) {
     let maxPlayers = 0;
 
     event.preventDefault();
-    const url = new URL(localgameUrl, window.location.href);
+    const url = new URL(localgameUrl, window.location.origin);
 
     const gameType = document.querySelector('input[type=radio][name=gameType]:checked').value;
     url.searchParams.append('gameType', gameType);
+    
     if (gameType === "false") //Pong
     {
         maxPlayers = document.querySelector('input[type=radio][name=maxPlayers]:checked').value;
@@ -82,7 +83,8 @@ function loadLocalGame(event, localgameUrl) {
         return matchmaking(gameType, maxPlayers, render);
 
     document.getElementById('pong-content').style.display ='none';
-    loadPageEvent(event, url.toString());
+    const cleanUrl = url.pathname + url.search;
+    loadPageEvent(event, cleanUrl);
 }
 
 // function gameSelectMain() {

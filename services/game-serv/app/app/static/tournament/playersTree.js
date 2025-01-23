@@ -10,8 +10,8 @@ class SummaryTree {
 
     find_bot() {
         let count = 0;
-        for (let i = 0; i < this.leaves; i++) {
-            if (this.players[i + (this.length - this.leaves)] == -1)
+        for (let i = 1; i < this.leaves; i++) {
+            if (this.players[i + (this.length - this.leaves)] == 0)
                 count++;
         }
         return count;
@@ -115,7 +115,6 @@ function mainPlayersTree() {
     players = new SummaryTree(JSON.parse(tournament).playersId);
     tree.innerHTML = '';
     createTreeSummary(tree, players, players.leaves, players.height, 0);
-    // createTree(tree, players, players.leaves, players.height, 0);
 }
 
 addMain(mainPlayersTree);

@@ -48,3 +48,11 @@ function checkWin(x, y) {
     }
     return false;
 }
+
+function updateThemeColors() {
+    const root = document.documentElement;
+
+    backgroundColor = getComputedStyle(root).getPropertyValue('--background-color').trim();
+    secondaryColor = getComputedStyle(root).getPropertyValue('--secondary-color').trim();
+    accentColor = getComputedStyle(root).getPropertyValue('--accent-color').trim();
+}

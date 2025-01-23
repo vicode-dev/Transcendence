@@ -43,6 +43,8 @@ class PongConsumer4P(PongConsumer):
                 if GGDD[self.room_name].score[self.index] <= 0:
                     pass
                 GGDD[self.room_name].playersMove[self.index] = msg["paddleMove"]
+            elif msg["type"] == "index":
+                await self.send_index({})
             if msg["type"] == 'refresh':
                 await self.channel_layer.group_send(self.room_group_name, {'type':'init', 'playersList':GGDD[self.room_name].playersOrder})
         except:

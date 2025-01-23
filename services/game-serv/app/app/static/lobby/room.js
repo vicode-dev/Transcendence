@@ -90,6 +90,8 @@ function lobby_handleRender() {
 }
 
 function addPlayerToList(playerId, ul) {
+    if (playerId == null)
+        return;
     fetch("/api/player/" + playerId + "/html/")
     .then(data => {
         return data.text();

@@ -5,23 +5,9 @@
 //     }
 // }
 
-function clickDown(move, buttonId) {
-    resetClick(buttonId);
-    timers[buttonId] = setInterval(function() {
-        if (move === "w" || move === "s")
-            moveLeftPaddle(move);
-        if (move === "ArrowUp" || move === "ArrowDown")
-            moveRightPaddle(move);
-        if (move === "ArrowLeft" || move === "ArrowRight")
-            moveTopPaddle(move);
-        if (move === "a" || move === "d")
-            moveBottomPaddle(move);
-    }, 50);
-}
-
-// function clickDown(move) {
-//     resetClick(move);
-//     timers[move] = setInterval(function() {
+// function clickDown(move, buttonId) {
+//     resetClick(buttonId);
+//     timers[buttonId] = setInterval(function() {
 //         if (move === "w" || move === "s")
 //             moveLeftPaddle(move);
 //         if (move === "ArrowUp" || move === "ArrowDown")
@@ -32,6 +18,20 @@ function clickDown(move, buttonId) {
 //             moveBottomPaddle(move);
 //     }, 50);
 // }
+
+function clickDown(move) {
+    resetClick(move);
+    timers[move] = setInterval(function() {
+        if (move === "w" || move === "s")
+            moveLeftPaddle(move);
+        if (move === "ArrowUp" || move === "ArrowDown")
+            moveRightPaddle(move);
+        if (move === "ArrowLeft" || move === "ArrowRight")
+            moveTopPaddle(move);
+        if (move === "a" || move === "d")
+            moveBottomPaddle(move);
+    }, 50);
+}
 
 function moveLeftPaddle(move) {
     let leftPaddle = document.getElementById("leftPaddle");

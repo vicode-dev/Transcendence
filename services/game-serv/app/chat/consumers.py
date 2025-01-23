@@ -28,8 +28,11 @@ class ChatConsumer(WebsocketConsumer):
         msg = json.loads(text_data)
         if msg["type"] == "message":
             message = msg["message"]
+            message = message.strip()
             if len(message) > 500:
                 message = message[:500]
+            elif len(message) == 0:
+                return
             dbmessage = ChatMessage(chatId=self.room_name, playerId=self.scope["token_check"]["id"], content=message)
             dbmessage.save()
             async_to_sync(self.channel_layer.group_send)(

@@ -160,26 +160,28 @@ function of3d4p_generateScene(scene) {
 	generateWalls(scene);
 }
 
-function clickDown3d4p(move, buttonId) {
-    resetClick(buttonId);
-    timers[buttonId] = setInterval(function() {
-        if (move === "ArrowUp" && p2.y > PADDLE_WIDTH)
-            p2.y -= 0.25;
-        else if (move === "ArrowDown" && p2.y < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
-            p2.y += 0.25;
-        else if (move === "w" && p1.y > PADDLE_WIDTH)
-            p1.y -= 0.25;
-        else if (move === "s" && p1.y < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
-            p1.y += 0.25;
-        else if (move === "ArrowLeft" && p3.x > PADDLE_WIDTH)
-            p3.x -= 0.25;
-        else if (move === "ArrowRight" && p3.x < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
-            p3.x += 0.25;
-        else if (move === "a" && p4.x > PADDLE_WIDTH)
-            p4.x -= 0.25;
-        else if (move === "d" && p4.x < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
-            p4.x += 0.25;
-    }, 50);
+function clickDown3d4p(move) {
+    if (p1 && p2 && p3 && p4) {
+        resetClick(move);
+        timers[move] = setInterval(function() {
+            if (move === "ArrowUp" && p2.y > PADDLE_WIDTH)
+                p2.y -= 0.25;
+            else if (move === "ArrowDown" && p2.y < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
+                p2.y += 0.25;
+            else if (move === "w" && p1.y > PADDLE_WIDTH)
+                p1.y -= 0.25;
+            else if (move === "s" && p1.y < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
+                p1.y += 0.25;
+            else if (move === "ArrowLeft" && p3.x > PADDLE_WIDTH)
+                p3.x -= 0.25;
+            else if (move === "ArrowRight" && p3.x < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
+                p3.x += 0.25;
+            else if (move === "a" && p4.x > PADDLE_WIDTH)
+                p4.x -= 0.25;
+            else if (move === "d" && p4.x < SIZE - PADDLE_SIZE - PADDLE_WIDTH)
+                p4.x += 0.25;
+        }, 50);
+    }
 }
 
 function FourPlayerMovement(key) {
@@ -213,6 +215,10 @@ function of3d4p_GameEnd(scores) {
     // }
     // box.innerText = "Player " + winner + " has won!";
     exitFullScreen();
+    if (renderer) {
+        const canva = renderer.domElement;
+        canva.parentNode.removeChild(canva);
+    }
 }
 
 function of3d4p_initPos() {
@@ -248,6 +254,53 @@ function of3d4p_movePaddle() {
         topPaddle.position.x = p3.x + PADDLE_SIZE / 2;
     if (bottomPaddle)
         bottomPaddle.position.x = p4.x + PADDLE_SIZE / 2;
+}
+
+function of3d4p_checkNullity() {
+    switch (null) {
+        case p1:
+            return true;
+        case p2:
+            return true;
+        case p3:
+            return true;
+        case p4:
+            return true;
+        case ball:
+            return true;
+        case scene:
+            return true;
+        case renderer:
+            return true;
+        case camera:
+            return true;
+        case ambientLight:
+            return true;
+        case directionalLight:
+            return true;
+        case leftWall:
+            return true;
+        case rightWall:
+            return true;
+        case topWall:
+            return true;
+        case bottomWall:
+            return true;
+        case pivot:
+            return true;
+        case leftPaddle:
+            return true;
+        case rightPaddle:
+            return true;
+        case topPaddle:
+            return true;
+        case bottomPaddle:
+            return true;
+        case sphere:
+            return true;
+        default:
+            return false;
+    }
 }
 
 async function of3d4p_gameLoop() {
@@ -305,6 +358,7 @@ async function of3d4p_gameLoop() {
 	setupLight(scene);
 	of3d4p_generateScene(scene);
     document.getElementById("start-btn").style.visibility = "hidden";
+    window.addEventListener("resize", resizeHandler);
     destructors.push(of3d4p_destructor);
     of3d4p_initPos()
 
@@ -318,15 +372,13 @@ async function of3d4p_gameLoop() {
         const EndTime = Date.now();
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
-        if (of3d4p_victory(scores3dOf) == true)
+        if (of3d4p_victory(scores3dOf) == true || of3d4p_checkNullity() == true)
             break;
     }
     of3d4p_GameEnd(scores3dOf);
     document.getElementById("start-btn").style.visibility = "visible";
-    const canva = renderer.domElement;
-    canva.parentNode.removeChild(canva);
     enableDoubleTapZoom();
-    removeResizeListener();
+    // removeResizeListener();
 }
 
 function of3d4p_keydownEvent(event) {
@@ -347,11 +399,14 @@ function mainRendu3d4pOffline() {
     document.addEventListener('gesturestart', preventDefaultHandler);
     document.addEventListener('gesturechange', preventDefaultHandler);
     document.addEventListener('gestureend', preventDefaultHandler);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function of3d4p_destructor() {
     // renderer.dispose(); //?
+    if (renderer) {
+        const canva = renderer.domElement;
+        canva.parentNode.removeChild(canva);
+    }
     p1 = null;
     p2 = null;
     p3 = null;
@@ -373,7 +428,7 @@ function of3d4p_destructor() {
     topPaddle = null;
     bottomPaddle = null;
     sphere = null;
-    scores3dOf = null;
+    // scores3dOf = null;
     document.removeEventListener("keydown", of3d4p_keydownEvent);
     // Pinch Zoom
     document.removeEventListener('gesturestart', preventDefaultHandler);
@@ -381,6 +436,7 @@ function of3d4p_destructor() {
     document.removeEventListener('gestureend', preventDefaultHandler);
     window.removeEventListener('resize', of3d4p_resizeEvent);
     window.removeEventListener("resize", resizeHandler);
+    unblockContextMenu();
     enableDoubleTapZoom();
 }
 

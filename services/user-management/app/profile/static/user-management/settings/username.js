@@ -42,10 +42,11 @@ function sendUsername() {
             });
         }
         else {
+            document.getElementById("username-error").innerHTML = "";
             username = document.getElementById("username")
             username.placeholder = username.value;
             username.value = "";
-            editButton.style.display = "block";
+            editButton.style.display = "inline-block";
             saveButton.style.display = "none";
             username.disabled = true;
             
@@ -58,7 +59,7 @@ function editUsername() {
     editButton = document.getElementById("edit-username");
     saveButton = document.getElementById("save-username");
     editButton.style.display = "none";
-    saveButton.style.display = "block";
+    saveButton.style.display = "inline-block";
     username.disabled = false;
 
 }

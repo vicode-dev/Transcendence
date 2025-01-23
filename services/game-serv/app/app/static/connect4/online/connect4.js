@@ -6,12 +6,12 @@ let connectWebSocket;
 
 
 function onc_UpdateGameData(msg) {
-    boardState = msg["board_state"];
-    turn = msg["turn"];
+    boardState = msg.board_state;
+    turn = msg.turn;
 }
 
 function onc_freeze(msg, connectWebSocket) {
-    freezeState = msg["state"];
+    freezeState = msg.state;
 }
 
 function onc_dropPiece(connectWebSocket, col) {
@@ -112,13 +112,13 @@ function onc_messageEvent(event) {
     switch (msg.type) {
         case "data":
             onc_UpdateGameData(msg);
-            onc_drawPiece(msg["col"]);
+            onc_drawPiece(msg.col);
             break;
         case "error":
             console.log(msg);
             break;
         case "start_game":
-            onc_players(msg['players']);
+            onc_players(msg.players);
             break;
         case "end_game":
             onc_endGame(msg);
@@ -127,9 +127,9 @@ function onc_messageEvent(event) {
             onc_freeze(msg, connectWebSocket);
             break;
         case "board":
-            board = msg["board"];
-            boardState = msg["board_state"];
-            onc_redraw(msg["players"]);
+            board = msg.board;
+            boardState = msg.board_state;
+            onc_redraw(msg.players);
             break;
     }
 }
@@ -167,6 +167,7 @@ function onc_c7Drop() {
 }
 
 function mainConnectOnline() {
+    updateThemeColors();
     let c1 = document.getElementById("c1");
     let c2 = document.getElementById("c2");
     let c3 = document.getElementById("c3");

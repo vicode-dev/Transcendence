@@ -1,7 +1,6 @@
 {% load static %}
 {% load i18n %}
 {% load userComponents %}
-<script src="/static/tournament/playersTree.js"></script>
 <link rel="stylesheet" href="/static/tournament/style.css">
 <link rel="stylesheet" href="{% static 'user-management/global.css' %}">
 <input type="hidden" name="tournament" value="{{tournament}}">
@@ -29,3 +28,6 @@
 {% endif %}
 {% endfor %}
 </div>
+{% block javascripts %}
+	<script src="/static/tournament/playersTree.js"></script>
+{% endblock %}

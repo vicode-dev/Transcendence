@@ -12,7 +12,6 @@
 // 	color: pink
 // })
 
-
 async function on3d2p_freeze(msg, gameWebSocket) {
     showNavbar();
     navBarManualOverride = false;
@@ -72,10 +71,13 @@ function on3d2p_GameEnd(score, winner) {
     showNavbar();
     navBarManualOverride = false;
     loopBreaker = true;
-    if (score == 10)
+    if(on_index == null)
+        endPopup("typeVictory", winner);
+    else if (score[on_index] == 10)
         endPopup("typeVictory", winner);
     else
         endPopup("typeDefeat", winner);
+    showNavbar();
 }
 
 function on3d2p_ballReachObstacle(ball, p1, p2, x, y) {
@@ -185,6 +187,7 @@ function on3d2p_closeEvent() {
 
 function on3d2p_openEvent() {
     gameWebSocket.send(JSON.stringify({'type':'refresh'}))
+    gameWebSocket.send(JSON.stringify({'type':'index'}));
 }
 
 function on3d2p_messageEvent(event) {
@@ -200,11 +203,15 @@ function on3d2p_messageEvent(event) {
             on3d2p_UpdateScore(msg);
             break;
         case "game_end":
-            on3d2p_GameEnd(msg['score'], msg['winner']);
+            on3d2p_GameEnd(msg.score, msg.winner);
             error = false;
             break;
         case "freeze":
             on3d2p_freeze(msg, gameWebSocket);
+            break;
+        case "index":
+            on_index = msg.index;
+            break;
     }
 }
 
@@ -242,22 +249,22 @@ function mainRendu3d2pOnline() {
         color: pink
     })
 
+    loopBreaker = false;
     gameWebSocket = new WebSocket(`wss://${window.location.host}/ws/game/${document.querySelector('[name=gameId]').value}/2pong`);
     ball = new Ball(4.5, 4.5, 195);
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     paddleMove = 0;
-    loopBreaker = false;
     error = true;
     destructors.push(on3d2p_destructor);
     gameWebSocket.addEventListener("message", on3d2p_messageEvent);
     gameWebSocket.addEventListener("close", on3d2p_closeEvent);
     gameWebSocket.addEventListener("open", on3d2p_openEvent);
     document.addEventListener("keydown", on3d2p_keydownEvent);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function on3d2p_destructor() {
+    loopBreaker = true;
     p1 = null;
     p2 = null;
     ball = null;
@@ -280,7 +287,7 @@ function on3d2p_destructor() {
     gameWebSocket.removeEventListener("open", on3d2p_openEvent);
     gameWebSocket.removeEventListener("message", on3d2p_messageEvent);
     enableDoubleTapZoom();
-    window.removeEventListener("resize", resizeHandler);
+    unblockContextMenu();
     gameWebSocket.close();
 }
 

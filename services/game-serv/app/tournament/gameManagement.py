@@ -118,6 +118,8 @@ async def death(tournament):
         await sync_to_async(messages.delete)()
         for game in tournament.gamesUUID:
             if game:
+                if await sync_to_async(Game.objects.filter(pk=game).exists)():
+                    continue
                 gameObject = await sync_to_async(Game.objects.get)(pk=game)
                 await sync_to_async(gameObject.delete)()
         logger.debug("Tournament redirected")

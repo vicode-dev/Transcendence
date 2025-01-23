@@ -13,7 +13,7 @@ let mains = new Map();
 
 redirect();
 function redirect() {
-    searchUrl = new URLSearchParams(window.location.search);
+    let searchUrl = new URLSearchParams(window.location.search);
     if(searchUrl.has("redirect_url") && !window.history.state?.fromBack)
     {
         new_url = searchUrl.get("redirect_url")
@@ -138,6 +138,9 @@ function setTitleBasedOnURL(url) {
     else if (url.includes("/password/")) {
         document.title = getTranslation(language, 'password');
     }
+    else if (url.includes("/game/")) {
+        document.title = getTranslation(language, 'game');
+    }
     else {
         document.title = getTranslation(language, 'default');
     }
@@ -160,6 +163,8 @@ const translations = {
         pong3D: "Pong 3D",
         connect4: "Connect 4",
         password: "Password",
+        game: "Game",
+		link: "Link",
         default: "Default"
     },
     fr: {
@@ -177,6 +182,8 @@ const translations = {
         pong3D: "Pong 3D",
         connect4: "Puissance 4",
         password: "Mot de passe",
+        game: "Jeu",
+		link: "Lier",
         default: "Défaut"
     },
     nl: {
@@ -194,6 +201,8 @@ const translations = {
         pong3D: "Pong 3D",
         connect4: "4 op een rij",
         password: "Wachtwoord",
+        game: "Spel",
+		link: "Koppelen",
         default: "Standaard"
     },
     es: {
@@ -211,6 +220,8 @@ const translations = {
         pong3D: "Pong 3D",
         connect4: "Línea 4",
         password: "Contraseña",
+        game: "Juego",
+		link: "Enlace",
         default: "Predeterminado"
     }
 };
@@ -222,6 +233,7 @@ function getTranslation(language, key) {
 
 window.addEventListener('popstate', (event) => {
     event.preventDefault();
+
     let path;
     if (event.state && event.state.path) {
         if (event.state.path[0] != "/")
@@ -231,6 +243,8 @@ window.addEventListener('popstate', (event) => {
     } else {
         path = window.location.pathname;
     }
+    console.log("Event state:", event.state);
+    console.log("Resolved path:", path);
 
     // if (event.state && path) {
         // loadPage(path, false);

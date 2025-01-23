@@ -1,5 +1,21 @@
 let gameWebSocket;
 let state;
+let on_index;
+
+function on_rotate(index) {
+    let gameBoard = document.getElementById("gameBoard");
+    if (gameBoard == null || index == null) {
+        return;
+    }
+    let nb1 = document.getElementById("1");
+    let nb2 = document.getElementById("2");
+    let nb3 = document.getElementById("3");
+    let angles = [-90, 90, 180, 0];
+    gameBoard.style.transform = `rotate(${angles[index]}deg)`;
+    nb1.setAttribute("transform", `rotate(${-angles[index]} 4.5 4.5)`);
+    nb2.setAttribute("transform", `rotate(${-angles[index]} 4.5 4.5)`);
+    nb3.setAttribute("transform", `rotate(${-angles[index]} 4.5 4.5)`);
+}
 
 function clearPopup() {
     let types = ["typeVictory", "typeDefeat", "typeWait", "typeCrash", "messageWon"];
@@ -56,6 +72,8 @@ function crashPopup() {
 }
 
 function addPlayerToList(playerId, ul) {
+    if (playerId == null)
+        return;
     const element =  fetch("/api/player/" + playerId + "/html/")
     .then(data => {
         return data.text();

@@ -34,7 +34,9 @@ class PongConsumer2P(PongConsumer):
             msg = json.loads(text_data)
             if msg["type"] == "move":
                 GGDD[self.room_name].playersMove[self.index] = msg["paddleMove"]
-            if msg["type"] == "refresh":
+            elif msg["type"] == "index":
+                await self.send_index({})
+            elif msg["type"] == "refresh":
                 await self.channel_layer.group_send(self.room_group_name, {'type':'init', 'playersList':GGDD[self.room_name].playersOrder})
         except:
             pass

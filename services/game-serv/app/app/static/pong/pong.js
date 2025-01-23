@@ -116,52 +116,66 @@ function sleep(ms) {
 
 function drawBall() {
     let SVGBall = document.getElementById("ball");
+    if (SVGBall == null)
+        return;
     SVGBall.style.transition = '';
     SVGBall.style.transform = `translate(${ball.x}px, ${ball.y}px)`;
 }
 
 function resetClick(buttonId) {
+    if (typeof on_index != "undefined" && (on_index == 1 || on_index == 2))
+        buttonId = -buttonId;
     if (timers[buttonId]) {
         clearInterval(timers[buttonId]);
         delete timers[buttonId];
     }
-}
+}   
 
-function movePaddle(move, buttonId) {
-    resetClick(buttonId);
-    timers[buttonId] = setInterval(function() {
+function movePaddle(move) {
+    if(on_index == 1 || on_index == 2)
+        move = -move;
+    resetClick(move);
+    timers[move] = setInterval(function() {
         paddleMove = move;
     }, 50);
 }
 
 function blockContextMenu() {
-    window.oncontextmenu = function(event) {
-        // if (event.button !== 2) {
-            event.preventDefault();
-        // }
-    };
+    if (screen.width <= 400) {
+        window.oncontextmenu = function(event) {
+            // if (event.button !== 2) {
+                event.preventDefault();
+            // }
+        };
+    }
+}
+
+function unblockContextMenu() {
+    window.oncontextmenu = null;    
 }
 
 function toggleFullscreenButton() {
-    if (screen.width <= 400) {
-        document.getElementById("enterFullScreen").style.display = "block";
-    } else {
-        document.getElementById("enterFullScreen").style.display = "none";
-        document.getElementById("exitFullScreen").style.display = "none";
+    let enterFullScreen = document.getElementById("enterFullScreen");
+    let exitFullScreen = document.getElementById("exitFullScreen");
+    if (enterFullScreen || exitFullScreen) {
+        if (screen.width <= 400) {
+            if (!window.screenTop && !window.screenY) {
+                enterFullScreen.style.display = "none";
+                exitFullScreen.style.display = "block";
+            } else {
+                enterFullScreen.style.display = "block";
+                exitFullScreen.style.display = "none";
+            }
+        } else {
+            enterFullScreen.style.display = "none";
+            exitFullScreen.style.display = "none";
+        }
     }
 }
 
 const resizeHandler = () => {
     toggleFullscreenButton();
 };
-
-function addResizeListener() {
-    window.addEventListener("resize", resizeHandler);
-}
-
-function removeResizeListener() {
-    window.removeEventListener("resize", resizeHandler);
-}
 
 function listenForScreenChange() {
     toggleFullscreenButton();
@@ -171,6 +185,7 @@ function listenForScreenChange() {
         function onFullscreenChange() {
             if (!document.fullscreenElement) {
                 document.getElementById("nav").style.display = "block";
+                document.getElementById("nav").style.bottom = "0";
                 document.getElementById("enterFullScreen").style.display = "block";
                 document.getElementById("exitFullScreen").style.display = "none";
                 document.removeEventListener("fullscreenchange", onFullscreenChange);
@@ -179,6 +194,7 @@ function listenForScreenChange() {
         function onWebkitFullscreenChange() {
             if (!document.webkitFullscreenElement) {
                 document.getElementById("nav").style.display = "block";
+                document.getElementById("nav").style.bottom = "0";
                 document.getElementById("enterFullScreen").style.display = "block";
                 document.getElementById("exitFullScreen").style.display = "none";
                 document.removeEventListener("webkitfullscreenchange", onWebkitFullscreenChange);
@@ -187,6 +203,7 @@ function listenForScreenChange() {
         function onMSFullscreenChange() {
             if (!document.msFullscreenElement) {
                 document.getElementById("nav").style.display = "block";
+                document.getElementById("nav").style.bottom = "0";
                 document.getElementById("enterFullScreen").style.display = "block";
                 document.getElementById("exitFullScreen").style.display = "none";
                 document.removeEventListener("MSFullscreenChange", onMSFullscreenChange);
@@ -228,22 +245,24 @@ function enterFullScreen() {
             window.alert("Error full screen");
         }
     }
-    // listenForScreenChange();
+    listenForScreenChange();
 }
 
 function exitFullScreen() {
-    if(screen.width <= 400) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
+    if (!window.screenTop && !window.screenY) {
+        if(screen.width <= 400) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            document.getElementById("nav").style.display = "block";
+            document.getElementById("nav").style.bottom = "0";
+            document.getElementById("exitFullScreen").style.display = "none";
+            document.getElementById("enterFullScreen").style.display = "block";
         }
-        document.getElementById("nav").style.display = "block";
-        showNavbar();
-        document.getElementById("exitFullScreen").style.display = "none";
-        document.getElementById("enterFullScreen").style.display = "block";
     }
 }    
 

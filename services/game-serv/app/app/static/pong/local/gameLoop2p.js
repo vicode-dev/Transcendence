@@ -67,7 +67,6 @@ function of2p_GameEnd(scores) {
     let winner;
     
     winner = scores[0] == 10 ? 1 : 2;
-    // box.innerText = "Player " + winner + " has won!";
     box.innerHTML = winner;
     document.getElementById("winner-msg-content").style.visibility = "visible";
     exitFullScreen();
@@ -95,6 +94,7 @@ async function of2p_gameLoop() {
     p1 = new Player(0, 3.75);
     p2 = new Player(8.75, 3.75);
     initPos();
+    window.addEventListener("resize", resizeHandler);
     destructors.push(of2p_destructor);
     while(scores[0] < 10 && scores[1] < 10) {
         const startTime = Date.now();
@@ -103,6 +103,8 @@ async function of2p_gameLoop() {
         const EndTime = Date.now();
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
+        if (ball == null || p1 == null || p2 == null)
+            break;
     }
     document.getElementById("start-btn").style.visibility = "visible";
     of2p_GameEnd(scores);
@@ -125,7 +127,6 @@ function mainPong2pOffline() {
 
     document.addEventListener("keydown", of2p_move);
     document.getElementById("winner-msg-content").style.visibility = "hidden";
-    window.addEventListener("resize", resizeHandler);
 }
 
 function of2p_destructor() {
@@ -139,6 +140,7 @@ function of2p_destructor() {
     document.removeEventListener('gestureend', preventDefaultHandler);
     window.removeEventListener("resize", resizeHandler);
 
+    unblockContextMenu();
     enableDoubleTapZoom();
 }
 

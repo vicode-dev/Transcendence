@@ -8,7 +8,7 @@ async function on2p_freeze(msg, gameWebSocket) {
         if (msg.players.length) {
             waitPopup();
             let ul = document.getElementById("playersList");
-            let timer = document.getElementById("timer");
+            const timer = document.getElementById("timer");
             let timeout = 60;
 
             msg.players.forEach((player) => addPlayerToList(player, ul))
@@ -23,6 +23,8 @@ async function on2p_freeze(msg, gameWebSocket) {
     }
     else if (msg.state == false) {
         let modal = document.getElementById("modal")
+        if (modal == null)
+            return
         modal.style.display = "none";
         loopBreaker = false;
         await startAnimation();
@@ -51,7 +53,9 @@ function on2p_GameEnd(score, winner) {
     showNavbar();
     navBarManualOverride = false;
     loopBreaker = true;
-    if (score == 10)
+    if (on_index == null)
+        endPopup("typeVictory", winner);
+    else if (score[on_index] == 10)
         endPopup("typeVictory", winner);
     else
         endPopup("typeDefeat", winner);
@@ -96,6 +100,8 @@ function on2p_ballReachObstacle(ball, x, y) {
 }
 
 function on2p_ballMovement(ball) {
+    if (ball == null)
+        return;
     if (hitWall(ball.x)) {
         ball.angle = (ball.x - BALL_SIZE <= 0) ? 0 : 180;
         ball.x = 4.5;
@@ -116,6 +122,8 @@ function on2p_ballMovement(ball) {
 function on2p_drawPaddle() {
     let leftPaddle = document.getElementById("leftPaddle");
     let rightPaddle = document.getElementById("rightPaddle");
+    if (leftPaddle == null || rightPaddle == null)
+        return;
     leftPaddle.setAttribute("y", p1.y);
     rightPaddle.setAttribute("y", p2.y);
 }
@@ -158,15 +166,20 @@ function on2p_init(playersList) {
 }
 
 function on2p_keydownEvent(event) {
-    if (event.key === "ArrowLeft") {
-        paddleMove = -1;
-    } else if (event.key === "ArrowRight") {
-        paddleMove = 1;
-    }    
+    if (on_index == 1)
+        move = -1;
+    else
+        move = 1;
+    if (event.key == "ArrowLeft") 
+        paddleMove = -move;
+    else if (event.key == "ArrowRight")
+        paddleMove = move; 
 }
 
 function on2p_closeEvent() {
     let SVGBall = document.getElementById("ball");
+    if (SVGBall == null)
+        return;
     SVGBall.style.display = "none";
     loopBreak = true;
     if (error == true) {
@@ -176,13 +189,15 @@ function on2p_closeEvent() {
 
 function on2p_openEvent() {
     gameWebSocket.send(JSON.stringify({'type':'refresh'}));
+    gameWebSocket.send(JSON.stringify({'type':'index'}));
+
 }
 
 function on2p_messageEvent(event) {
     let msg = JSON.parse(event.data)
     switch (msg.type) {
         case "init":
-            on2p_init(msg['playersList']);
+            on2p_init(msg.playersList);
             break;
         case "tick_data":
             on2p_UpdateGameData(msg);
@@ -196,12 +211,18 @@ function on2p_messageEvent(event) {
             on2p_UpdateScore(msg);
             break;
         case "game_end":
-            on2p_GameEnd(msg['score'], msg['winner']);
+            on2p_GameEnd(msg.score, msg.winner);
             error = false;
             break;
         case "freeze":
             state = msg.state;
             on2p_freeze(msg, gameWebSocket);
+            break;
+        case "index":
+            on_index = msg.index;
+            console.log("Index is " + on_index);
+            on_rotate(on_index);
+            break;
     }
 
 }
@@ -221,20 +242,17 @@ function mainGameLoop2pOnline() {
     gameWebSocket.addEventListener("close", on2p_closeEvent);
     document.addEventListener("keydown", on2p_keydownEvent);
     gameWebSocket.addEventListener('open', on2p_openEvent);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function on2p_destructor() {
-    p1 = null;
-    p2 = null;
-    ball = null;
     document.removeEventListener("keydown", on2p_keydownEvent);
     gameWebSocket.removeEventListener("close", on2p_closeEvent);
     gameWebSocket.removeEventListener('open', on2p_openEvent);
     gameWebSocket.removeEventListener("message", on2p_messageEvent);
+    unblockContextMenu();
     enableDoubleTapZoom();
-    window.removeEventListener("resize", resizeHandler);
     gameWebSocket.close();
+    // console.log("pong online 2p destructor")
 }
 
 addMain(mainGameLoop2pOnline);

@@ -5,7 +5,6 @@ let playerBtn2;
 let player1Score;
 let player2Score;
 
-
 // document.addEventListener('DOMContentLoaded', function () {
 
 function ofc_dropPiece(col) {
@@ -128,6 +127,7 @@ function ofc_c7Drop() {
 }
 
 function mainConnectOffline() {
+    updateThemeColors();
     document.getElementById("win-msg").style.visibility = "hidden";
     document.getElementById("draw-msg").style.visibility = "hidden";
     board = new Array(ROWS);
@@ -146,8 +146,8 @@ function mainConnectOffline() {
     document.getElementById("start-again").style.visibility = "hidden";
     document.getElementById("player1-score").innerHTML = 0;
     document.getElementById("player2-score").innerHTML = 0;
-    playerBtn1.style.backgroundColor = accentColor;
 
+    playerBtn1.style.backgroundColor = accentColor;
     c1.addEventListener('click', ofc_c1Drop);
     c2.addEventListener('click', ofc_c2Drop);
     c3.addEventListener('click', ofc_c3Drop);
@@ -167,6 +167,7 @@ function ofc_destructor() {
     c5.removeEventListener('click', ofc_c5Drop);
     c6.removeEventListener('click', ofc_c6Drop);
     c7.removeEventListener('click', ofc_c7Drop);
+    console.log("connect4 local destructor")
 }
 
 addMain(mainConnectOffline);

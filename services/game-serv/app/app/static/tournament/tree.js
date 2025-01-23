@@ -84,28 +84,6 @@ function addPlayer(svg, id, x, y) {
 
 }
 
-// function createTree(svg, players, length, depth) {
-//     h = 300 / (length + 1);
-//     w = (300 / (players.height + 1)) * (players.height - depth);
-    
-//     for (i = 0; i < length; i++) {
-//         id = players.players[i + length - 1];
-//         x = w + (300 / ((players.height + 1) * 2));
-//         y = h * (length - i);
-//         addPlayer(svg, id, x, y);
-//         if (length > 1) {
-//             oldLength = Math.ceil(length / 2) + 1;
-//             if (i % 2 != 0)
-//                 addBranch(svg, x, y, x + (300 / (players.height + 1)), 300 / oldLength * (oldLength - ((i + 1) / 2)));
-//             else
-//                 addBranch(svg, x, y, x + (300 / (players.height + 1)),  300 / oldLength * (oldLength - ((i + 2) / 2)));
-//         }
-//     }
-//     if (length != players.leaves) {
-//         createTree(svg, players, length * 2, depth + 1);
-//     }
-// }
-
 function createTree2(svg, tree, length, depth, oldbot) {
     h = 300 / ((length - tree.bot) + 1);
     w = (300 / (tree.height + 1)) * (tree.height - depth);
@@ -130,16 +108,7 @@ function createTree2(svg, tree, length, depth, oldbot) {
 }
 
 function playersTree(data) {
-    // return
-    // data.players = [1, 2, 3]
-    // data.players = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    // data.players = [1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, 1, null, null]
-    // data.players = [1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, null, null, null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, null, null, null, null, null]
-    // data.players = [1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, 1, null, null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, null, null, null]
-    // data.players = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, null, null]
     let players = new Tree(data.players);
     let tree = document.getElementById("tree");
-    // tree.innerHTML = '';
-    // createTree(tree, players, 1, 0);
     createTree2(tree, players, players.leaves, players.height, 0);
 }

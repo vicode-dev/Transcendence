@@ -44,6 +44,11 @@
 //     document.documentElement.style.setProperty('--fourth-color', darkenColor(backgroundColor, 10));
 // }
 
+function clickCustomColor() {
+    const customColorRadio = document.getElementById("colorscheme0");
+    customColorRadio.checked = true;
+    clickColor();
+}
 
 function clickColor()
 {

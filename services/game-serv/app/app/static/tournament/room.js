@@ -25,18 +25,10 @@ function tournament_refresh(data) {
 }
 
 
-function handleVisibility() {
-    const status = document.getElementById('private');
-    const currentURL = new URL(window.location.href);
-    if (status.checked)
-        currentURL.searchParams.append('private', '1');
-    else
-        currentURL.searchParams.append('private', '0');
-    postData(currentURL.href)
-}
-
 
 function addPlayerToList(playerId, ul) {
+    if (playerId == null)
+        return;
     fetch("/api/player/" + playerId + "/html/")
         .then(data => {
             return data.text();

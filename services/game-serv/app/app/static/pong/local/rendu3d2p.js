@@ -70,26 +70,28 @@ function of3d2p_generateScene(scene) {
 //     }
 // }
 
-function clickDown3d2p(move, buttonId) {
-    resetClick(buttonId);
-    timers[buttonId] = setInterval(function() {
-        if (move === "ArrowUp" && p2.y > 0)
-            p2.y -= 0.25;
-        else if (move === "ArrowDown" && p2.y < SIZE - PADDLE_SIZE)
-            p2.y += 0.25;
-        else if (move === "w" && p1.y > 0)
-            p1.y -= 0.25;
-        else if (move === "s" && p1.y < SIZE - PADDLE_SIZE)
-            p1.y += 0.25;
-    }, 50);
-}
-
 // function clickDown3d2p(move, buttonId) {
 //     resetClick(buttonId);
 //     timers[buttonId] = setInterval(function() {
-//         TwoPlayerMovement(move);
+//         if (move === "ArrowUp" && p2.y > 0)
+//             p2.y -= 0.25;
+//         else if (move === "ArrowDown" && p2.y < SIZE - PADDLE_SIZE)
+//             p2.y += 0.25;
+//         else if (move === "w" && p1.y > 0)
+//             p1.y -= 0.25;
+//         else if (move === "s" && p1.y < SIZE - PADDLE_SIZE)
+//             p1.y += 0.25;
 //     }, 50);
 // }
+
+function clickDown3d2p(move) {
+    if (p2 && p1) {
+        resetClick(move);
+        timers[move] = setInterval(function() {
+            TwoPlayerMovement(move);
+        }, 50);
+    }
+}
 
 function TwoPlayerMovement(key) {
     if (key === "ArrowUp" && p2.y > 0)
@@ -118,6 +120,10 @@ function of3d2p_GameEnd(scores) {
     box.innerHTML = winner;
     document.getElementById("winner-msg-content").style.visibility = "visible";
     exitFullScreen();
+    if (renderer) {
+        const canva = renderer.domElement;
+        canva.parentNode.removeChild(canva);
+    }   
 }
 
 function of3d2p_initPos() {
@@ -137,6 +143,7 @@ async function of3d2p_gameLoop() {
 
     let scores = [0, 0];
     document.getElementById("start-btn").style.visibility = "hidden";
+    document.getElementById("winner-msg-content").style.visibility = "hidden";
     root = document.documentElement;
     style = getComputedStyle(root);
     background = style.getPropertyValue('--background-color').trim(); // Retrieve the CSS variable
@@ -175,6 +182,7 @@ async function of3d2p_gameLoop() {
     setupScene();
 	setupLight(scene);
 	of3d2p_generateScene(scene);
+    window.addEventListener("resize", resizeHandler);
     destructors.push(of3d2p_destructor);
     of3d2p_initPos();
 
@@ -189,13 +197,11 @@ async function of3d2p_gameLoop() {
         const EndTime = Date.now();
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
-        if (scores[0] == 10 || scores[1] == 10)
+        if (scores[0] == 10 || scores[1] == 10 || ball == null || p1 == null || p2 == null)
             break;
     }
     document.getElementById("start-btn").style.visibility = "visible";
     of3d2p_GameEnd(scores);
-    const canva = renderer.domElement;
-    canva.parentNode.removeChild(canva);
 }
 
 function of3d2p_keydownEvent(event) {
@@ -217,10 +223,13 @@ function mainRendu3d2pOffline() {
     document.addEventListener('gesturestart', preventDefaultHandler);
     document.addEventListener('gesturechange', preventDefaultHandler);
     document.addEventListener('gestureend', preventDefaultHandler);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function of3d2p_destructor() {
+    if (renderer) {
+        const canva = renderer.domElement;
+        canva.parentNode.removeChild(canva);
+    }
     p1 = null;
     p2 = null;
     ball = null;
@@ -247,8 +256,8 @@ function of3d2p_destructor() {
     window.removeEventListener("resize", resizeHandler);
 
     // removeResizeListener();
+    unblockContextMenu();
     enableDoubleTapZoom();
-    console.log('of3d2p_destructor')
 }
 
 addMain(mainRendu3d2pOffline);

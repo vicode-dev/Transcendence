@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% get_language_info_list for available_languages as langs %}
-<label for="language">{% translate "Select your language:" %}</label><br/>
+<h3 style="color: var(--accent-color);" class="section-title rounded-2 px-2 py-1">{% translate "Select your language:" %}</h3>
 <select id="language" name="language" oninput="handle_language(this.value)">
 {% for lang in langs %}
   <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>{{ lang.name_local }} ({{ lang.name }})</option>

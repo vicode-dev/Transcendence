@@ -42,11 +42,10 @@ function on4p_UpdateGameData(data) {
 }
 
 function on4p_UpdateScore(score) {
-    let score1 = document.getElementById("score1");
-    let score2 = document.getElementById("score2");
-    let score3 = document.getElementById("score3");
-    let score4 = document.getElementById("score4");
-    scores2d = score;
+    let score1 = document.getElementById("score3");
+    let score2 = document.getElementById("score4");
+    let score3 = document.getElementById("score2");
+    let score4 = document.getElementById("score1");
     ball.angle = score.angle;
     if (score[0] >= 0)
         score1.textContent = score[0];
@@ -63,7 +62,9 @@ function on4p_GameEnd(score, winner) {
     navBarManualOverride = false;
     loopBreaker = true;
     console.log("winner, score", winner, score);
-    if (score == 1)
+    if (on_index == null)
+        endPopup("typeVictory", winner);
+    else if (score[on_index] == 1)
         endPopup("typeVictory", winner);
     else
         endPopup("typeDefeat", winner);
@@ -133,6 +134,8 @@ function on4p_ballReachObstacle(ball, x, y) {
 }
 
 function on4p_ballMovement(ball) {
+    if (ball == null)
+        return;
     if (hitWall(ball.x) || hitWall(ball.y))
     {
         let playersAreWall = true;
@@ -178,19 +181,22 @@ function on4p_drawPaddle() {
     let rightPaddle = document.getElementById("rightPaddle");
     let topPaddle = document.getElementById("topPaddle");
     let bottomPaddle = document.getElementById("bottomPaddle");
-    if (scores2d[0] > 0)
+    if (leftPaddle == null || rightPaddle == null || topPaddle == null || bottomPaddle == null)
+        return;
+    let idxBoard = [0, 1, 2, 3]
+    if (scores2d[idxBoard[0]] > 0)
         leftPaddle.setAttribute("y", p1.y);
     else
         leftPaddle.style.display = 'none';
-    if (scores2d[1] > 0)
+    if (scores2d[idxBoard[1]] > 0)
         rightPaddle.setAttribute("y", p2.y);
     else
         rightPaddle.style.display = 'none';
-    if (scores2d[2] > 0)
+    if (scores2d[idxBoard[2]] > 0)
         topPaddle.setAttribute("x", p3.x);
     else
         topPaddle.style.display = 'none';
-    if (scores2d[3] > 0)
+    if (scores2d[idxBoard[3]] > 0)
         bottomPaddle.setAttribute("x", p4.x);
     else
         bottomPaddle.style.display = 'none';
@@ -216,11 +222,14 @@ async function on4p_gameLoop(gameWebSocket) {
 }
 
 function on4p_keydownEvent(event) {
-    if (event.key === "ArrowUp" || event.key == "ArrowLeft") {
-        paddleMove = -1;
-    } else if (event.key === "ArrowDown" || event.key == "ArrowRight") {
-        paddleMove = 1;
-    }
+    if (on_index == 1 || on_index == 2)
+        move = -1;
+    else
+        move = 1;
+    if (event.key == "ArrowLeft") 
+        paddleMove = -move;
+    else if (event.key == "ArrowRight")
+        paddleMove = move;
 }
 
 function on4p_init(msg) {
@@ -252,6 +261,7 @@ function on4p_closeEvent() {
 
 function on4p_openEvent() {
     gameWebSocket.send(JSON.stringify({'type':'refresh'}));
+    gameWebSocket.send(JSON.stringify({'type':'index'}));
 }
 
 function on4p_messageEvent(event) {
@@ -265,19 +275,44 @@ function on4p_messageEvent(event) {
             if (state == false)
                 {
                     drawBall();
-                    on2p_drawPaddle();
+                    on4p_drawPaddle();
                 }
             break;
         case "score_update":
-            on4p_UpdateScore(msg['scores']);
+            scores2d[0] = msg.scores[0];
+            scores2d[1] = msg.scores[1];
+            scores2d[2] = msg.scores[2];
+            scores2d[3] = msg.scores[3];
+            if(on_index != null)
+            {
+                let diff;
+                let keep = [msg.scores[0], msg.scores[2], msg.scores[1], msg.scores[3]];
+                if (on_index == 0 || on_index == 3)
+                    diff = 3 - on_index;
+                else
+                    diff = on_index;
+                for (let i = 0; i < 4; i++) {
+                    msg.scores[(i + diff) % 4] = keep[i];
+                }
+                let save = msg.scores[1]
+                msg.scores[1] = msg.scores[2];
+                msg.scores[2] = save;
+            }
+            on4p_UpdateScore(msg.scores);
             break;
         case "game_end":
-            on4p_GameEnd(msg['score'], msg['winner']);
+            on4p_GameEnd(msg.score, msg.winner);
             error = false;
             break;
         case "freeze":
             state = msg.state;
             on4p_freeze(msg, gameWebSocket);
+            break;
+        case "index":
+            on_index = msg.index;
+            on_rotate(on_index);
+            console.log("Index is " + on_index);
+            break;
     }
 }
 
@@ -305,7 +340,6 @@ function mainGameLoop4pOnline()
     gameWebSocket.addEventListener("close", on4p_closeEvent);
     gameWebSocket.addEventListener('open', on4p_openEvent);
     document.addEventListener("keydown", on4p_keydownEvent);
-    window.addEventListener("resize", resizeHandler);
 }
 
 function on4p_destructor() {
@@ -320,8 +354,8 @@ function on4p_destructor() {
     gameWebSocket.removeEventListener('open', on4p_openEvent);
     gameWebSocket.removeEventListener("message", on4p_messageEvent);
     document.removeEventListener("keydown", on4p_keydownEvent);
+    unblockContextMenu();
     enableDoubleTapZoom();
-    window.removeEventListener("resize", resizeHandler);
 }
 
 addMain(mainGameLoop4pOnline);

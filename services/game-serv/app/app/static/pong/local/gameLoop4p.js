@@ -183,6 +183,7 @@ async function of4p_gameLoop() {
         let paddle = document.getElementById(paddles[i]);
         paddle.style.display = 'block';
     }
+    window.addEventListener("resize", resizeHandler);
     destructors.push(of4p_destructor);
     while(1) {
         const startTime = Date.now();
@@ -193,6 +194,8 @@ async function of4p_gameLoop() {
         const EndTime = Date.now();
         let elapsedTime = startTime - EndTime;
         await sleep(Math.max(0, TICK_RATE - (elapsedTime / 1000)) * 1000)
+        if (ball == null || p1 == null || p2 == null || p3 == null || p4 == null)
+            break;
     }
     of4p_GameEnd(scores);
     document.getElementById("start-btn").style.visibility = "visible";
@@ -220,7 +223,6 @@ function mainPong4pOffline() {
     document.addEventListener('gesturechange', preventDefaultHandler);
     document.addEventListener('gestureend', preventDefaultHandler);
     // document.getElementById("winner-msg-content").style.visibility = "hidden";
-    window.addEventListener("resize", resizeHandler);
 }
 
 function of4p_destructor() {
@@ -236,6 +238,7 @@ function of4p_destructor() {
     document.removeEventListener('gestureend', preventDefaultHandler);
     window.removeEventListener("resize", resizeHandler);
 
+    unblockContextMenu();
     enableDoubleTapZoom();
 }
 

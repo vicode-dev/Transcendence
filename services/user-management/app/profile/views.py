@@ -77,7 +77,7 @@ def addTournament(request):
     tournament = json.loads(request.body.decode('utf-8'))
     for i in range(len(tournament["playersId"])):
         if tournament["playersId"][i] == None:
-            tournament["playersId"][i] = -1
+            tournament["playersId"][i] = 0
     tx_receipt = blockchain.addTournament(tournament["gamesId"], tournament["playersId"])
     return JsonResponse({"tournamentId": tx_receipt})
 
@@ -117,14 +117,22 @@ def getGameById(request, id):
     jwtData = get_jwt_data(request)
     if "error" in jwtData:
         return HttpResponse(jwtData["error"], status=401)
-    return JsonResponse(blockchain.getGameById(id).to_dict())
+    try:
+        game = blockchain.getGameById(id).to_dict()
+        return JsonResponse(game)
+    except Exception as e:
+        raise Http404("Game not found")
 
 @require_http_methods(["GET"])
 def getTournamentById(request, id):
     jwtData = get_jwt_data(request)
     if "error" in jwtData:
         return HttpResponse(jwtData["error"], status=401)
-    return JsonResponse(blockchain.getTournamentById(id))
+    try:
+        games = blockchain.getTournamentById(id)
+        return JsonResponse(games.to_dict())
+    except:
+        raise Http404("Tournament not found")
 
 @require_http_methods(["GET"])
 def getPlayerById(request, playerId):
@@ -260,6 +268,7 @@ def PlayerUsername(request, playerId):
         request_body = json.loads(request.body.decode('utf-8'))
         if "username" in request_body:
             username = request_body["username"]
+            username = username.strip()
             if len(username) < 4 or len(username) > 19:
                 return HttpResponseBadRequest("Username size must be between 8 and 19 characters.")
             User.objects.filter(pk=playerId).update(username=username)
@@ -393,7 +402,11 @@ def tournament(request, tournamentId):
     if redirect:
         return redirect
     games = []
-    for i in blockchain.getTournamentById(tournamentId)["gamesId"]:
+    try:
+        tournament = blockchain.getTournamentById(tournamentId)["gamesId"]
+    except:
+        raise Http404("Tournament not found")
+    for i in tournament:
         games.append(blockchain.getGameById(i))
     for i in range(len(games)):
         games[i].combined = list(zip(games[i].playerIds, games[i].score))

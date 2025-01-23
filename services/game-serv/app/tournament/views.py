@@ -39,7 +39,8 @@ def index(request):
         return redirectObject
     return render(request, 'tournament/index.html')
 
-def getRoom(request, room_name, jwtData):
+@require_http_methods(["GET"])
+def room(request, room_name):
     redirectObject = render_redirect(request)
     if redirectObject:
         return redirectObject
@@ -47,44 +48,7 @@ def getRoom(request, room_name, jwtData):
         raise Http404("Tournament does not exist")
     if Tournament.objects.filter(pk=room_name).values_list("state", flat=True).first():
         return redirect(f"/tournament/{room_name}/dashboard/")
-    # game = Tournament.objects.get(pk=room_name)
-    # admin = False
-    # if jwtData["id"] == game.admin or jwtData["role"] == "A":
-    #     admin = True
     return render(request, "tournament/room.html", {"room_name": room_name, "playercount": 0})
-
-def postRoom(request, room_name, jwtData):
-    if (not Game.objects.filter(pk=room_name, state=False).exists()):
-        raise Http404("Lobby does not exist")
-    newGame = Game.objects.get(pk=room_name)
-    if jwtData["id"] == newGame.admin or jwtData["role"] == "A":
-        maxPlayers = request.GET.get('maxPlayers', 0)
-        if maxPlayers == '2' or maxPlayers == '4':
-            newGame.maxPlayers = maxPlayers
-            newGame.save()
-        private = request.GET.get('private', 3)
-        if private == 0:
-            newGame.private = False
-            newGame.save()
-        elif private == 1:
-            newGame.private = True
-            newGame.save()
-        async_to_sync(get_channel_layer().group_send)(f"lobby_{str(room_name)}",
-            {
-                'type': 'lobby_game',
-                'players': newGame.players,
-                'maxPlayers': newGame.maxPlayers
-            })
-        return HttpResponse(status=204)
-    return HttpResponseNotAllowed()
-
-@require_http_methods(["POST", "GET"])
-def room(request, room_name):
-    jwtData = get_jwt_data(request)
-    if request.method == "GET":
-        return getRoom(request, room_name, jwtData)
-    else:
-        return postRoom(request, room_name, jwtData)
 
 @require_http_methods(["POST"])
 def create(request):

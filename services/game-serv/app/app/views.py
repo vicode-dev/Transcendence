@@ -65,11 +65,13 @@ def localgame(request):
 @require_http_methods(["POST"])
 def matchmaking(request):
     jwtData = get_jwt_data(request)
+    if "error" in jwtData:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
     maxPlayers = int(request.GET.get('maxPlayers', 2))
     gameType = 1 if request.GET.get('gameType', "false") == "true" else 0
     gamesQueried = Game.objects.filter(gameType=gameType, maxPlayers=maxPlayers, state=False, private=False)
     if not gamesQueried.exists():
-        NewGame = Game(players=[], admin=jwtData["id"], score=[], maxPlayers=maxPlayers, gameType=gameType)
+        NewGame = Game(players=[], admin=jwtData["id"], score=[0 if maxPlayers == 2 else 5 for i in range(maxPlayers)], maxPlayers=maxPlayers, gameType=gameType)
         NewGame.save()
         return JsonResponse({"gameId": NewGame.gameId})
     bestMatch = gamesQueried[0]

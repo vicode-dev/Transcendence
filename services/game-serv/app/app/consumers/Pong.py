@@ -69,11 +69,17 @@ class PongConsumer(AsyncWebsocketConsumer):
             'type':'init',
             'playersList':event["playersList"]
         }))
+    async def send_index(self, event):
+        await self.send(text_data=json.dumps({
+            'type':'index',
+            'index': await self.get_index()
+        }))
 
     async def get_index(self):
         for i in range(len(GGDD[self.room_name].playersOrder)):
             if GGDD[self.room_name].playersOrder[i] == self.scope["token_check"]["id"]:
                 return i
+        return None
 
     async def game_end(self, event):
         winner = 0 
@@ -87,9 +93,10 @@ class PongConsumer(AsyncWebsocketConsumer):
                     break
         await self.send(text_data=json.dumps({
             'type':'game_end',
-            'score':GGDD[self.room_name].score[self.index],
+            'score': GGDD[self.room_name].score,
             'winner':GGDD[self.room_name].playersOrder[winner]
         }))
+
 
 class Ball:
 
@@ -276,12 +283,11 @@ def victory(room_name, nb_players):
                 count += 1
             else:
                 win = i
-            if (count == 3):
-                score[win] = 1
-                newPoint(score, win)
-                GGDD[room_name].score = [(i * -1) + 1 for i in score]
-                # logger.debug(score)
-                return True
+        if (count == 3):
+            score[win] = 1
+            newPoint(score, win)
+            GGDD[room_name].score = [(i * -1) + 1 for i in score]
+            return True
     return False
 
 
@@ -298,7 +304,6 @@ async def gameLoop(room_name, nb_players, ballMovement):
     while not GGDD[room_name].freeze:
         startTime = time.time()
         if victory(room_name, nb_players) == True:
-            # await get_channel_layer().group_send(f'game_{room_name}', {'type': 'freeze','state': True})
             await get_channel_layer().group_send(f'game_{room_name}', {'type': 'game_end'})
             break
         paddleMove(room_name)

@@ -83,6 +83,10 @@ input[type="radio"] {
   border: solid 1px var(--secondary-color);
 }
 
+#custom-color-label:hover {
+  border: solid 1px transparent;
+}
+
 input[type="radio"]:checked + .input-label {
   background-color: var(--fourth-color);
   border: solid 1px var(--secondary-color);
