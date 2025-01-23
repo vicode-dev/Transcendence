@@ -180,11 +180,12 @@ def defeat(score):
             count += 1
         else:
             win = i
-        if (count == 3):
-            score[win] -= score[win] - 1
-            newPoint(score, win)
-            score = [i * -1 for i in score]
-            return True
+    if (count == 3):
+        score[win] = 1
+        newPoint(score, win)
+        score = [(i * -1) + 1 for i in score]
+        return True
+    return False
 
 def gameLoop4P(win, stdscr, pad, scale):
     p1 = Player(0, 3.75)
@@ -200,11 +201,11 @@ def gameLoop4P(win, stdscr, pad, scale):
     while True:
         if defeat(gameData._score) == True:
             pad.clear()
-            if gameData._score[0] > 0:
+            if gameData._score[0] == 1:
                 pad.addstr(0, 0, "Player 1 won! Congratulations!")
-            elif gameData._score[1] > 0:
+            elif gameData._score[1] == 1:
                 pad.addstr(0, 0, "Player 2 won! Congratulations!")
-            elif gameData._score[2] > 0:
+            elif gameData._score[2] == 1:
                 pad.addstr(0, 0, "Player 3 won! Congratulations!")
             else:
                 pad.addstr(0, 0, "Player 4 won! Congratulations!")

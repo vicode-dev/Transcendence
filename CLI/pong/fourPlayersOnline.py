@@ -196,7 +196,7 @@ def defeat(score):
     if (count == 3):
         score[win] = 1
         newPoint(score, win)
-        score = [i * -1 for i in score]
+        score = [(i * -1) + 1 for i in score]
         return True
     return False
 
