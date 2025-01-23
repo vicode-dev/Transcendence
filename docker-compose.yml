@@ -69,8 +69,6 @@ services:
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
       DJANGO_SECRET: ${DJANGO_SECRET}
-    volumes:
-      - game-serv-migrations:/app/app/migrations
     develop:
       watch:
         - path: ./services/game-serv/app/
