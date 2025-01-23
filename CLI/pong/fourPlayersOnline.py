@@ -185,7 +185,8 @@ def drawScore(pad, gameData):
         + " | Player 3: " + score3 + " | Player 4: " + score4
     pad.addstr(0, 0, s)
 
-def defeat(score):
+def defeat(gameData):
+    score = gameData._score
     count = 0
     win = 0
     for i in range(4):    
@@ -196,7 +197,7 @@ def defeat(score):
     if (count == 3):
         score[win] = 1
         newPoint(score, win)
-        score = [(i * -1) + 1 for i in score]
+        score = [-i + 1 for i in score]
         return True
     return False
 

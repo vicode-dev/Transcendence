@@ -172,7 +172,8 @@ def drawScore(pad, gameData):
         + " | Player 3: " + score3 + " | Player 4: " + score4
     pad.addstr(0, 0, s)
 
-def defeat(score):
+def defeat(gameData):
+    score = gameData._score
     count = 0
     win = 0
     for i in range(4):    
@@ -183,7 +184,7 @@ def defeat(score):
     if (count == 3):
         score[win] = 1
         newPoint(score, win)
-        score = [(i * -1) + 1 for i in score]
+        gameData._score = [-i + 1 for i in score]
         return True
     return False
 
@@ -199,7 +200,7 @@ def gameLoop4P(win, stdscr, pad, scale):
     stdscr.nodelay(True)
     stdscr.border()
     while True:
-        if defeat(gameData._score) == True:
+        if defeat(gameData) == True:
             pad.clear()
             if gameData._score[0] == 1:
                 pad.addstr(0, 0, "Player 1 won! Congratulations!")
@@ -208,7 +209,7 @@ def gameLoop4P(win, stdscr, pad, scale):
             elif gameData._score[2] == 1:
                 pad.addstr(0, 0, "Player 3 won! Congratulations!")
             else:
-                pad.addstr(0, 0, "Player 4 won! Congratulations!")
+                pad.addstr(0, 0, str(gameData._score[0]) + str(gameData._score[1]) + str(gameData._score[2]) + str(gameData._score[3]) + "Player 4 won! Congratulations!")
             pad.refresh(0, 0, 0, 0, 2, win.getmaxyx()[1])
             stdscr.nodelay(False)
             key = stdscr.getch()
