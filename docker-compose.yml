@@ -1,18 +1,4 @@
 services:
-#Postgresql (SQL database software) used for storing app data
-  postgres:
-    image: postgres:alpine
-    container_name: postgres
-    restart: unless-stopped
-    env_file:
-    - .env
-    volumes:
-    - postgres_data:/var/lib/postgresql/data
-#Redis (in memory database software) used for caching Django dynamic page
-  redis:
-    image: redis:alpine
-    container_name: redis
-    restart: unless-stopped
 # Authentication
   authentication:
     build:
@@ -28,10 +14,7 @@ services:
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       SALT : ${SALT}
       DJANGO_SECRET: ${DJANGO_SECRET}
-    # volumes:
-      # - authentication-migrations:/app/ft_auth/migrations
     depends_on:
-    - postgres
     - user-management
 # Django app
   user-management:
@@ -55,7 +38,6 @@ services:
      - ./services/user-management/static:/static
      - ./services/blockchain/artifacts:/artifacts
     depends_on:
-    - postgres
     - hardhat
 # Game 1
   game-serv:
@@ -74,8 +56,6 @@ services:
         - path: ./services/game-serv/app/
           target: /app/
           action: sync
-    depends_on:
-    - postgres
   game-cron:
     image: game-serv
     container_name: game-cron
@@ -88,14 +68,6 @@ services:
       DJANGO_SECRET: ${DJANGO_SECRET}
     depends_on:
     - game-serv
-    # volumes:
-    #   - game-serv-migrations:/app/app/migrations
-  adminer:
-    build: ./services/adminer
-    container_name:  adminer
-    volumes:
-      - adminer_data:/home/container/adminer
-    restart: always
 #Ethereum Blockchain emulator
   hardhat:
     build:
@@ -105,117 +77,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./services/blockchain/artifacts:/app/artifacts
-#Grafana (Dashboard web tools) used for visualition of Prometheus data
-  grafana:
-    image: grafana/grafana:11.1.4
-    container_name: grafana
-    restart: unless-stopped
-    volumes:
-    - ./services/grafana:/var/lib/grafana
-    ports:
-    - 3000:3000
-    depends_on:
-      - prometheus
-    user: root
-#Prometheus (monitoring toolkit)
-  prometheus:
-    image: prom/prometheus:v2.53.2
-    container_name: prometheus
-    restart: unless-stopped
-    volumes:
-    - prometheus_data:/prometheus
-    - ./services/prometheus/:/etc/prometheus/
-    ports:
-    - 9090:9090
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    depends_on:
-      - alert-manager
-#Prometheus alert-manager(alerting toolkit for prometheus)
-  alert-manager:
-    image: prom/alertmanager:v0.27.0
-    container_name: alert-manager
-    restart: unless-stopped
-    volumes:
-      - ./services/alertmanager/config.yml:/etc/alertmanager/alertmanager.yml
-#Prometheus exporter for postgresql
-  postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter
-    container_name: postgres-exporter
-    restart: unless-stopped
-    environment:
-      - DATA_SOURCE_URI=postgres:5432/postgres?sslmode=disable
-      - DATA_SOURCE_USER=postgres
-      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
-    depends_on:
-      - postgres
-#Prometheus exporter for redis
-  redis-exporter:
-    image: oliver006/redis_exporter:alpine
-    container_name: redis-exporter
-    restart: unless-stopped
-    environment:
-      REDIS_ADDR: redis://redis:6379
-    depends_on:
-      - redis
-#Prometheus exporter for elasticsearch
-  elasticsearch-exporter:
-    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.7.0
-    container_name: elasticsearch-exporter
-    command:
-     - '--es.uri=http://elastic:${ELASTIC_PASSWORD}@elasticsearch:9200'
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
-#Elasticsearch (search engine) store logs data
-  elasticsearch:
-    image: elasticsearch:8.15.0
-    container_name: elasticsearch
-    restart: unless-stopped
-    environment:
-      discovery.type: single-node
-      xpack.security.enrollment.enabled: false
-      xpack.security.transport.ssl.enabled: false
-      xpack.security.http.ssl.enabled: false
-      xpack.security.enabled: false
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-    mem_limit: 4g
-    volumes:
-      - ./services/elasticsearch:/usr/share/elasticsearch/data
-    networks:
-      - elk
-  logstash:
-    image: logstash:8.15.0
-    container_name: logstash
-    restart: unless-stopped
-    environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-    volumes:
-      - ./services/logstash:/usr/share/logstash/pipeline:ro
-    networks:
-      - elk
-  kibana:
-    image: kibana:8.15.0
-    container_name: kibana
-    restart: unless-stopped
-    environment:
-      XPACK_SECURITY_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY}
-      SERVER_BASEPATH: "/kibana"
-    networks:
-      - elk
-  filebeat:
-    image: elastic/filebeat:8.15.0
-    container_name: filebeat
-    restart: unless-stopped
-    user: root
-    volumes:
-      - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ${DOCKER_PATH}/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - elk
-    depends_on:
-      - logstash
 #Nginx (Proxy server) for all external acces
   nginx:
     container_name: nginx
@@ -226,20 +87,11 @@ services:
          KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
         - 80:80
-        - 443:443
+        - 800:443
     volumes:
-        # - ./services/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
         - ./services/nginx/certificates/:/etc/certificates/
         - adminer_data:/home/container/adminer
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     networks:
-      - elk
       - default
-volumes:
-  postgres_data:
-  prometheus_data:
-  adminer_data:
-
-networks:
-  elk:

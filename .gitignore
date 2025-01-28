@@ -170,9 +170,3 @@ services/alertmanager/config.yml
 #Hardhat
 artifacts/
 cache/
-
-#ElasticSearch
-
-services/elasticsearch/indices
-services/elasticsearch/_state/
-services/elasticsearch/snapshot_cache/
