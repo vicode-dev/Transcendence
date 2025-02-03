@@ -1,0 +1,16 @@
+#tournament-content {
+    margin-top: .5rem;
+}
+
+#tournament-btn {
+    margin-top: 18.5vh;
+}
+
+@media (min-width: 488px) {
+    #tournament-content {
+        margin-top: 30vh;
+    }
+    #tournament-btn {
+        margin-top: 0;
+    }
+}

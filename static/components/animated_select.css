@@ -1,0 +1,68 @@
+.content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.animated-select {
+    grid-column: 5/13;
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    
+    .item {
+        background-color: tomato;
+        /* background-position: center top; */
+        /* background-size: auto 100%; */
+        border-radius: .5rem;
+        flex-grow: 1;
+        transition: width 300ms ease;
+        /* width: 33%; */
+        width: 50%;
+    }
+
+    /* .item:hover {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .item.active {
+        width: 100%;
+    } */
+
+    .item a {
+        display: block;
+        height: 100%;
+        width: 100%;
+        /* text-decoration: none; */
+        color: inherit;
+    }
+
+    .item input {
+        display: none; /* Hide the radio buttons */
+    }
+    
+    .item input:checked + .item {
+        width: 200%; /* Expand the clicked item */
+    }
+    
+    .item input:checked ~ .item {
+        width: 0%; /* Collapse all other items */
+        visibility: hidden;
+    }
+    
+    .item:hover {
+        width: 100%; /* Expand on hover */
+    }
+
+    /* .item input[type="checkbox"] {
+        display: none;
+    }
+    
+    .item input[type="checkbox"]:checked + .content {
+        width: 100%;
+    }
+    
+    .item input[type="checkbox"]:checked {
+        width: 100%;
+    } */
+}

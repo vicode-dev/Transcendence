@@ -1,0 +1,9 @@
+#username:disabled {
+    background-color: var(--fourth-color);
+    color: var(--secondary-color);
+    border: none;
+}
+
+#username::placeholder {
+    color: var(--secondary-color);
+}

@@ -1,0 +1,204 @@
+#user-title {
+	margin-top: 1rem;
+	/* margin-bottom: 6.3rem; */
+}
+
+#profile {
+	margin-left: 1vw;
+	margin-right: auto;
+}
+@media (max-width: 350px) {
+	#profile {
+		width: 98%;
+		margin: auto;
+	}
+}
+
+/* #profil-picture:hover {
+	opacity: 60%;
+	cursor: pointer;
+} */
+
+/* #settings {
+	border: solid var(--background-color) 1px;
+} */
+#friends {
+	margin-bottom: 2rem;
+	/* border: solid black 1px; */
+}
+#friends-list {
+	margin-top: .7rem;
+	max-height: 7rem;
+}
+
+#games-list, #tournament-list {
+	margin-top: .7rem;
+	max-height: 15rem;
+}
+
+#friends-list, #games-list, #tournament-list {
+	overflow-y: scroll;
+}
+
+.one-game {
+	width: fit-content;
+	border-bottom: solid var(--fourth-color) 2px;
+	/* background-color: #E1E0DD; */
+	/* opacity: 50%; */
+	/* box-shadow: 0 0 9999px 9999px rgba(0, 0, 0, 0.5); */
+	/* margin: 1rem; */
+	/* border: solid #E1E0DD 2px; */
+	padding: .2rem;
+}
+
+@media (max-width: 356px) {
+	/* #friends h3 {
+		font-size: .1rem;
+	}
+	.section-title {
+		font-size: 1.1rem;
+	} */
+	.one-game h3 {
+		font-size: 1.1rem;
+	}
+	.one-game {
+		font-size: .9rem;
+	}
+}
+
+.ennemy-profile {
+	margin-bottom: 0rem;
+	/* background-color: #ECEBE8; */
+	/* border: solid #ECEBE8 2px; */
+	border: solid var(--fourthColor) 2px;
+	padding: .1rem;
+	padding-left: .5rem;
+	padding-right: .5rem;
+	margin-top: .2rem;
+	margin-right: 3px;
+}
+
+.ennemy-profile:hover {
+	/* opacity: 60%; */
+	/* cursor: pointer; */
+	/* background-color: #E1E0DD; */
+	background-color: var(--fourthColor);
+}
+
+.against {
+	margin-bottom: 0rem;
+}
+
+/* .userComponent {
+	margin-bottom: 0rem;
+}
+
+#userComponent:hover {
+	background-color: #E1E0DD;
+	opacity: 60%;
+} */
+
+#settings:hover {
+	opacity: 70%;
+}
+
+.friends:hover {
+	opacity: 60%;
+}
+
+.friendButton {
+	margin-top: 5px;
+	padding: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border: transparent solid 1px;
+}
+
+.removeFriendBtn {
+	background-color: var(--accent-color);
+	border: solid var(--background-color) 1px;
+}
+
+.friendButton:hover {
+	border: solid var(--background-color) 1px;
+}
+
+.removeFriendBtn:hover {
+	background-color: var(--secondary-color);
+	border: transparent solid 1px;
+}
+
+.game-title-text {
+	color: var(--accent-color);
+	margin-left: .5rem;
+	/* line-height: 1; */
+	font-size: 1.1rem;
+	margin-bottom: .1rem;
+	margin-right: .2rem;
+}
+
+.game-title-icon {
+	/* line-height: 1.5; */
+	margin-bottom: .1rem;
+}
+
+.game-status {
+	padding: .3rem;
+	/* line-height: 1.4; */
+	padding-top: .05rem;
+	padding-bottom: .05rem;
+	/* margin-bottom: .1rem; */
+	border: transparent solid 1.5px;
+}
+
+.game-status-won {
+	/* background-color: var(--secondary-color);
+	color: var(--background-color); */
+	background-color: var(--accent-color);
+}
+
+.game-status-lost {
+	/* background-color: var(--accent-color); */
+	background-color: var(--secondary-color);
+	color: var(--background-color);
+}
+
+.game-status-draw {
+	background-color: var(--fourth-color);
+	color: var(--secondary-color);
+	border: var(--secondary-color) solid 1.5px;
+}
+
+.bar {
+	background-color: var(--accent-color);
+	z-index: 999;
+}
+
+.one-tournament {
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+	border: 1px solid var(--secondary-color);
+}
+
+.one-tournament:hover {
+	opacity: 60%;
+	cursor: pointer;
+}
+
+.tournament-div {
+	margin-right: 2px;
+	margin-left: 2px;
+	color: var(--secondary-color);
+}
+
+.scores {
+	margin-top: .1rem;
+}
+
+/* 
+@media (max-width: 700px) {
+	.one-game {
+		flex-wrap: wrap;
+	}
+} */

@@ -1,0 +1,87 @@
+#messageArea  {
+    max-height: 50vh;
+    overflow-y: scroll;
+    font-size: 0.8rem;
+    margin: 0 0.5rem 0 0.5rem;
+}
+
+#chat-message-input {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: 0 0.5rem 0 0.5rem;
+    width: 100%;
+    color: var(--accent-color);
+}
+
+#chat-message-input::placeholder {
+    color: var(--background-color);
+}
+
+#chat-message-input:focus {
+    background-color: var(--secondary-color);
+    outline: 2px solid var(--accent-color);
+    width: 100%;
+}
+
+#sendButton {
+    background-color: var(--accent-color);
+    color: var(--fourth-color);
+    border: none;
+    border-radius: var(--bs-border-radius);
+    padding: 0.5rem;
+    margin: auto;
+    margin-left: 0.5rem;
+
+}
+
+#chat {
+    --bottom-margin: 0px;
+    padding: 1rem;
+    /* margin: auto; */
+    margin-bottom: var(--bottom-margin);
+    background-color: var(--fourth-color);
+}
+@media screen and (max-width: 600px) {
+    #chat {
+        width: 98%;
+    }
+    
+}
+.messageComponent {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    border: 2px solid;
+    padding: 0.5rem;
+    width: 100%;
+    border-radius: var(--bs-border-radius);
+    border-color: var(--accent-color);
+    overflow-x: hidden;
+}
+
+.messageComponent .usr-img {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.messageComponent .message-content {
+    flex: 1;
+
+}
+
+.messageComponent .username {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.messageComponent .message-date {
+    font-size: 0.8rem;
+    /* color: #888; */
+}
+
+.messageComponent .message-text {
+    margin-bottom: 0;
+    width: 100%;
+}

@@ -19,9 +19,7 @@
         index index.php index.html index.htm;
 
         location /favicon.ico {
-            proxy_pass http://game-serv:8000/static/icon/favicon.ico;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
+            root /static/icon/favicon.ico;
         }
         location /ws {
             proxy_pass http://game-serv:8000/ws;
@@ -96,51 +94,7 @@
             proxy_set_header Host $host;
         }
         location /static {
-            location /static/lobby {
-            proxy_pass http://game-serv:8000/static/lobby;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/chat {
-            proxy_pass http://game-serv:8000/static/chat;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/app {
-            proxy_pass http://game-serv:8000/static/app;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/pong {
-            proxy_pass http://game-serv:8000/static/pong;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/connect4 {
-            proxy_pass http://game-serv:8000/static/connect4;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/components {
-            proxy_pass http://game-serv:8000/static/components;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-            location /static/user-management {
-            proxy_pass http://user-management:8000/static/user-management;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-			location /static/authentication {
-            proxy_pass http://authentication:8000/static/authentication;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
-			location /static/tournament {
-            proxy_pass http://game-serv:8000/static/tournament;
-            proxy_set_header Host $host;
-            proxy_cache                     off;
-            }
+            root /static
         }
         location /lobby {
             proxy_pass http://game-serv:8000/lobby;

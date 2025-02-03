@@ -23,7 +23,7 @@ from os import environ
 SECRET_KEY = environ.get('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'authentication', 
@@ -71,10 +71,10 @@ WSGI_APPLICATION = 'ft_auth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'HOST': 'postgres',
+        'HOST': environ.get('POSTGRES_HOST'),
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'transcendence',
+        'USER': environ.get('POSTGRES_USER'),
         'PASSWORD': environ.get('POSTGRES_PASSWORD'),
     }
 }

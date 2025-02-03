@@ -26,7 +26,7 @@ environ.Env.read_env()
 SECRET_KEY = env('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'game-serv', 
@@ -108,10 +108,10 @@ LOGGING = {
 
 DATABASES = {
     'default': {
-        'HOST': 'postgres',
+        'HOST': env('POSTGRES_HOST'),
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'transcendence',
+        'USER': env('POSTGRES_USER'),
         'PASSWORD': env('POSTGRES_PASSWORD'),
     }
 }

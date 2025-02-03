@@ -1,0 +1,75 @@
+.Piece{
+    animation: 0.5s cubic-bezier(1, 0, 1.0, 1.0) 0s fall
+}
+
+@keyframes fall {
+    from {
+        cy: 0;
+    }
+}
+
+.end-msg {
+    padding: 0;
+    margin: auto;
+    margin-bottom: 0;
+    width: fit-content;
+    /* visibility: hidden; */
+}
+#end_msg {
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+#players {
+    /* margin-top: 3rem; */
+    margin-top: 15vh;
+}
+
+#connect4-main-content {
+    margin: 1.5rem;
+    padding: 1rem;
+    padding-top: 0;
+}
+
+.player-btn {
+    font-size: .9rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    -webkit-user-select: none;       
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.player-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+}
+
+#start-again {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: solid 2px var(--accent-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+@media (max-width: 600px) {
+    #players {
+        margin-top: 1rem;
+    }
+    .player-btn {
+        padding: .5rem;
+    }
+    #connect4-main-content {
+        margin: 0rem;
+        /* padding-top: .8rem; */
+        padding-bottom: 0rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .player-btn {
+        font-size: .9rem;
+    }
+}

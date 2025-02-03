@@ -90,7 +90,7 @@ services:
         - 800:443
     volumes:
         - ./services/nginx/certificates/:/etc/certificates/
-        - adminer_data:/home/container/adminer
+        - ./static:/static/:ro
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     networks:
