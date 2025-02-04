@@ -5,3 +5,4 @@ psycopg[binary]
 requests
 web3
 PyJWT
+gunicorn

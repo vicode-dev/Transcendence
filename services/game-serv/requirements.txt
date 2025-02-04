@@ -5,3 +5,4 @@ psycopg[binary]
 requests
 channels[daphne]
 PyJWT
+daphne

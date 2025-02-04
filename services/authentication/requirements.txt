@@ -8,3 +8,4 @@ pyotp
 qrcode
 datetime
 Pillow
+gunicorn
