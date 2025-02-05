@@ -62,7 +62,7 @@ function stats(data) {
     if (getSplitUrl().length == 4) {
         tournament_refresh(data);
     } 
-    else if (getSplitUrl().length == 5 && getSplitUrl()[5] == "dashboard") {
+    else if (getSplitUrl().length == 5) {
         playersTree(data);
         gameList(data);
     }
