@@ -1,4 +1,17 @@
 services:
+#Database
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: unless-stopped
+    env_file:
+    - .env
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
 # Authentication
   authentication:
     build:
@@ -7,6 +20,8 @@ services:
     restart: unless-stopped
     image: authentication
     environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DOMAIN_NAME: ${DOMAIN_NAME}
       CLIENT_42_ID: ${CLIENT_42_ID}
@@ -24,6 +39,8 @@ services:
     restart: unless-stopped
     image: user-management
     environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
@@ -47,6 +64,8 @@ services:
     restart: unless-stopped
     image: game-serv
     environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
@@ -62,6 +81,8 @@ services:
     user: root
     command: ./cron.sh
     environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET_KEY : ${JWT_SECRET_KEY}
       DOMAIN_NAME: ${DOMAIN_NAME}
@@ -86,8 +107,7 @@ services:
       args:
          KIBANA_PASSWD: ${KIBANA_PASSWD}
     ports:
-        - 80:80
-        - 800:443
+        - 8081:80
     volumes:
         - ./services/nginx/certificates/:/etc/certificates/
         - ./static:/static/:ro
@@ -95,3 +115,5 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
     networks:
       - default
+volumes:
+  postgres_data:

@@ -1,18 +1,9 @@
-    # always redirect to https
     server {
         listen 80;
-
-        server_name _;
-
-        return 301 https://$host$request_uri;
-    }
-
-    server {
-        listen 443 ssl;
         # use the certificates
-		ssl_protocols TLSv1.2 TLSv1.3;
-        ssl_certificate     /etc/certificates/$DOMAIN_NAME/fullchain1.pem;
-        ssl_certificate_key /etc/certificates/$DOMAIN_NAME/privkey1.pem;
+	#ssl_protocols TLSv1.2 TLSv1.3;
+        #ssl_certificate     /etc/certificates/$DOMAIN_NAME/fullchain1.pem;
+        #ssl_certificate_key /etc/certificates/$DOMAIN_NAME/privkey1.pem;
 
         server_name $DOMAIN_NAME;
         #root /home/container;
@@ -31,7 +22,6 @@
     		proxy_set_header Host $host;
 			proxy_set_header Cookie $http_cookie;
     		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            ##proxy_set_header Origin $http_origin;
         }
         location / {
             proxy_pass http://game-serv:8000/;
@@ -59,28 +49,7 @@
                 proxy_pass http://authentication:8000/api;
                 proxy_set_header Host $host;
 			}
-        }
-		location /adminer {
-			root /home/container/;
-			fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-			index index.php;
-
-		    try_files $uri $uri/ =404;
-
-			set $path_info $fastcgi_path_info;
-			fastcgi_param PATH_INFO $path_info;
-
-			fastcgi_index index.php;
-			include fastcgi.conf;
-
-			fastcgi_pass adminer:9000;
-			fastcgi_param SCRIPT_FILENAME /home/container$fastcgi_script_name;
-    		fastcgi_param DOCUMENT_ROOT /home/container/;
-        }
-        location /grafana {
-            proxy_pass http://grafana:3000/;
-            proxy_set_header Host $host;
-        }
+       }
         location /home {
             proxy_pass http://user-management:8000/home;
             proxy_set_header Host $host;
@@ -94,7 +63,7 @@
             proxy_set_header Host $host;
         }
         location /static {
-            root /static
+            root /;
         }
         location /lobby {
             proxy_pass http://game-serv:8000/lobby;
@@ -160,15 +129,5 @@
             proxy_pass http://authentication:8000/42-oauth2;
             proxy_set_header Host $host;
             proxy_cache                     off;
-        }
-        location /kibana/ {
-            proxy_pass http://kibana:5601/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection $http_connection;
-            auth_basic "Restricted";
-            auth_basic_user_file  /etc/nginx/.htpasswd;
-            proxy_cache off;
         }
     }

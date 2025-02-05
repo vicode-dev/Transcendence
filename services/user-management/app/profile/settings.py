@@ -96,7 +96,7 @@ DATABASES = {
     'default': {
         'HOST': env('POSTGRES_HOST'),
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'transcendence',
+        'NAME': 'postgres',
         'USER': env('POSTGRES_USER'),
         'PASSWORD': env('POSTGRES_PASSWORD'),
     }

@@ -73,7 +73,7 @@ DATABASES = {
     'default': {
         'HOST': environ.get('POSTGRES_HOST'),
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'transcendence',
+        'NAME': 'postgres',
         'USER': environ.get('POSTGRES_USER'),
         'PASSWORD': environ.get('POSTGRES_PASSWORD'),
     }
