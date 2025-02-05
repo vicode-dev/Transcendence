@@ -1,7 +1,11 @@
 # 🏓 Transcendence - 42Cursus Project
 
 Welcome to **Transcendence**, the final project of the 42Cursus common core program. 
-
+<h1 align="center">
+  <a href="https://transcendence.vicode.dev" target="_blank">🔴 Transcendence Demo 🔴</a>
+</h1>
+<img src="https://uptime.vicode.dev/api/badge/10/uptime?style=for-the-badge" alt="Uptime Badge" />
+<img src="https://uptime.vicode.dev/api/badge/10/status?style=for-the-badge" alt="Uptime Badge" />
 ## ✨ Project Overview
 
 **Transcendence** is about making a website that allows users to play pong.
