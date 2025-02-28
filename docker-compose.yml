@@ -2,7 +2,6 @@ services:
 #Database
   postgres:
     image: postgres:alpine
-    container_name: postgres
     restart: unless-stopped
     env_file:
     - .env
@@ -10,13 +9,11 @@ services:
     - postgres_data:/var/lib/postgresql/data
   redis:
     image: redis:alpine
-    container_name: redis
     restart: unless-stopped
 # Authentication
   authentication:
     build:
       context: ./services/authentication
-    container_name: authentication
     restart: unless-stopped
     image: authentication
     environment:
@@ -35,7 +32,6 @@ services:
   user-management:
     build:
       context: ./services/user-management
-    container_name: user-management
     restart: unless-stopped
     image: user-management
     environment:
@@ -60,7 +56,6 @@ services:
   game-serv:
     build:
       context: ./services/game-serv
-    container_name: game-serv
     restart: unless-stopped
     image: game-serv
     environment:
@@ -77,7 +72,6 @@ services:
           action: sync
   game-cron:
     image: game-serv
-    container_name: game-cron
     user: root
     command: ./cron.sh
     environment:
@@ -94,13 +88,11 @@ services:
     build:
       context: ./services/blockchain
     image: hardhat
-    container_name: hardhat
     restart: unless-stopped
     volumes:
       - ./services/blockchain/artifacts:/app/artifacts
 #Nginx (Proxy server) for all external acces
   nginx:
-    container_name: nginx
     restart: unless-stopped
     build:
       context: ./services/nginx
