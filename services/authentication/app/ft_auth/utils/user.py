@@ -41,7 +41,6 @@ def user_login(login, password, by_id=False):
 def get_user_by_id(id):
 	try:
 		user = User.objects.get(id=id)
-		# print(user)
 		return user
 	except User.DoesNotExist:
 		return None
@@ -49,7 +48,6 @@ def get_user_by_id(id):
 def get_user_by_42_id(ft_id):
 	try:
 		user = User.objects.get(ft_id=ft_id)
-		# print(user)
 		return user
 	except User.DoesNotExist:
 		return None
@@ -196,7 +194,9 @@ def check_user_password(id, oldpassword, newpassword = False):
 			}
 		length = len(newpassword)
 		if length < 8 or length > 32:
-			return _("Password size must be between 8 and 32 characters.")
+			return {
+				"error":_("Password size must be between 8 and 32 characters.")
+			}
 	return {
 		"user": user
 	}
