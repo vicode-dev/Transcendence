@@ -21,6 +21,7 @@ Welcome to **Transcendence**, the final project of the 42Cursus common core prog
 - [x] [Use a framework or a toolkit to build the frontend](#framework-for-front-end)
 - [x] [Use a database for the backend](#database-for-backend)
 - [x] [Store the score of a tournament in the Blockchain](#blockchain)
+- [x] [Single-Page Application development](#single-page-application)
 
 #### User Management
 - [x]  [Standard user management, authentication, user across tournaments](#standard-user-management)
@@ -69,13 +70,16 @@ Welcome to **Transcendence**, the final project of the 42Cursus common core prog
 We used Django for our backend development.
 
 ##### <i>Framework for front-end</i>
-We used Bootstrap toolkit in addition of the vanilla Javascript for our frontend
+We used Bootstrap toolkit in addition of the vanilla Javascript for our frontend.
 
 ##### <i>Database for backend</i>
 We used a database for our backend. The database itself is PostgresSQL.
 
 ##### <i>Blockchain</i>
-We store the tournament scores on a blockchain. The blockchain is Ethereum and the language used for smart contract development is Solidity. 
+We store the tournament scores on a blockchain. The blockchain is Ethereum and the language used for smart contract development is Solidity.
+
+##### <i>Single Page Application</i>
+The website was developed as a Single-Page Application (SPA) with fully working history state.
 
 #### User Management
 
@@ -150,7 +154,7 @@ We developed a Command-Line Interface (CLI) that allows users to play pong again
 ### Out of scope
 
 We added a system of tournament that allows distant players to play together.
-Users can pick a theme. 
+Users can pick a default theme or create a custom one. 
 
 
 ## 🛠️ Installation & Compilation Guide
