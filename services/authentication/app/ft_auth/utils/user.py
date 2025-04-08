@@ -196,7 +196,10 @@ def check_user_password(id, oldpassword, newpassword = False):
 			}
 		length = len(newpassword)
 		if length < 8 or length > 32:
-			return _("Password size must be between 8 and 32 characters.")
+			return {
+                    "error":
+                        _("Password size must be between 8 and 32 characters."),
+                }
 	return {
 		"user": user
 	}
